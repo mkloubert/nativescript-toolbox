@@ -2,3 +2,4 @@
 /demo/platforms
 /plugin/*.map
 /plugin/enumerable/*.map
+/pushall.sh
