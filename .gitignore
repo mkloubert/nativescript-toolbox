@@ -3,3 +3,4 @@
 /plugin/*.map
 /plugin/enumerable/*.map
 /pushall.sh
+/plugin/stringformat/*.map

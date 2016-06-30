@@ -10,6 +10,7 @@ The module contains the following sub modules:
 | Name | Description |
 | ---- | --------- |
 | [nativescript-enumerable](https://github.com/mkloubert/nativescript-enumerable) | Provides LINQ style extensions for handling arrays and lists. |
+| [nativescript-stringformat](https://github.com/mkloubert/nativescript-stringformat) | Helpers for handling strings. |
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X493PDBNGKAGG)
 
@@ -31,3 +32,19 @@ tns plugin add nativescript-toolbox
 ```
 
 inside your app project to install the module.
+
+## Usage
+
+### Sub modules
+
+#### nativescript-enumerable
+
+```typescript
+import Enumerable = require('nativescript-toolbox/enumerable');
+```
+
+#### nativescript-stringformat
+
+```typescript
+import StringFormat = require('nativescript-toolbox/stringformat');
+```
