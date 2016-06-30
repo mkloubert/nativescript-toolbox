@@ -20,14 +20,14 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-import ApiClient = require('./apiclient/index');
-import Batch = require('./batch/index');
-import BitmapFactory = require('./bitmap-factory/index');
+import ApiClient = require('./apiclient');
+import Batch = require('./batch');
+import BitmapFactory = require('./bitmap-factory');
 var Device = require('./Device');
-import Enumerable = require('./enumerable/index');
+import Enumerable = require('./enumerable');
 import {ObservableArray} from 'data/observable-array';
-import StringFormat = require('./stringformat/index');
-var Sqlite = require('./sqlite/sqlite');
+import StringFormat = require('./stringformat');
+var Sqlite = require('./sqlite');
 import TypeUtils = require("utils/types");
 import {VirtualArray} from 'data/virtual-array';
 

@@ -20,14 +20,14 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 "use strict";
-var ApiClient = require('./apiclient/index');
-var Batch = require('./batch/index');
-var BitmapFactory = require('./bitmap-factory/index');
+var ApiClient = require('./apiclient');
+var Batch = require('./batch');
+var BitmapFactory = require('./bitmap-factory');
 var Device = require('./Device');
-var Enumerable = require('./enumerable/index');
+var Enumerable = require('./enumerable');
 var observable_array_1 = require('data/observable-array');
-var StringFormat = require('./stringformat/index');
-var Sqlite = require('./sqlite/sqlite');
+var StringFormat = require('./stringformat');
+var Sqlite = require('./sqlite');
 var TypeUtils = require("utils/types");
 var virtual_array_1 = require('data/virtual-array');
 /**
