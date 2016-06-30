@@ -1,7 +1,7 @@
 {
 	"name": "nativescript-toolbox",
 	"description": "A NativeScript module that is a composition of useful classes, tools and helpers.",
-	"version": "1.11.0",
+	"version": "1.11.1",
 	"nativescript": {
 		"platforms": {
 			"ios": "1.0.0",
@@ -16,7 +16,32 @@
 		"NativeScript",
 		"Tools",
 		"Toolbox",
-		"Helpers"
+		"Helpers",
+        "Classes",
+        "Android",
+        "iOS",
+        "Strings",
+        "Formatting",
+        "Router",
+        "Routes",
+        "States",
+        "Values",
+        "Enumerables",
+        "Arrays",
+        "Lists",
+        "Collections",
+        "Sequences",
+        "LINQ",
+        "Bitmaps",
+        "Images",
+        "Functions",
+        "Batches",
+        "Executions",
+        "API",
+        "HTTP",
+        "REST",
+        "JSON",
+        "XML"
 	],
 	"author": {
 		"name": "Marcel Joachim Kloubert",
