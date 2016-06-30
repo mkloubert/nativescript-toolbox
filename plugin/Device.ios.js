@@ -28,6 +28,13 @@ function getAppContext() {
 }
 exports.getAppContext;
 
+function getPlatformData() {
+    return {
+        type: 2
+    };
+}
+exports.getPlatformData;
+
 function isInDebugMode() {
     if (!TypeUtils.isNullOrUndefined(DEBUG_BUILD)) {
         return 1 == DEBUG_BUILD;

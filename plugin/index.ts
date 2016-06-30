@@ -26,6 +26,62 @@ import BitmapFactory = require('./bitmap-factory/index');
 var Device = require('./Device');
 import Enumerable = require('./enumerable/index');
 import StringFormat = require('./stringformat/index');
+import TypeUtils = require("utils/types");
+
+/**
+ * Configuration for 'invokeForPlatform()' function.
+ */
+export interface IInvokeForPlatformConfig {
+    /**
+     * Callback that is invoked on Android.
+     */
+    android?: (platform: IPlatformData) => any;
+
+    /**
+     * Callback that is invoked on iOS.
+     */
+    ios?: (platform: IPlatformData) => any;
+}
+
+/**
+ * Stores platform data.
+ */
+export interface IPlatformData {
+    /**
+     * Gets if the app runs on Android or not.
+     */
+    android: boolean;
+
+    /**
+     * The application context.
+     */
+    context: any;
+
+    /**
+     * Gets if the app runs on iOS or not.
+     */
+    ios: boolean;
+
+    /**
+     * Gets the type of the platform
+     */
+    type: Platform;
+}
+
+/**
+ * List of known platforms.
+ */
+export enum Platform {
+    /**
+     * Android
+     */
+    Android = 1,
+
+    /**
+     * iOS
+     */
+    iOS = 2,
+}
 
 /**
  * Returns a value as bitmap object.
@@ -93,6 +149,48 @@ export function format(formatStr: string, ...args: any[]): string {
  */
 export function formatArray(formatStr: string, args: any[]): string {
     return StringFormat.formatArray(formatStr, args);
+}
+
+/**
+ * Returns data of the current platform.
+ */
+export function getPlatform(): IPlatformData {
+    var pd = Device.getPlatformData();
+    
+    // android
+    Object.defineProperty(pd, 'android', {
+        get: function() { return 1 === this.type; }
+    });
+
+    // ios
+    Object.defineProperty(pd, 'ios', {
+        get: function() { return 2 === this.type; }
+    });
+
+    return pd;
+}
+
+/**
+ * Invokes an action for a specific platform.
+ * 
+ * @param {IInvokeForPlatformContext} cfg The config data.
+ * 
+ * @return any The result of the invoked callback.
+ */
+export function invokeForPlatform(cfg: IInvokeForPlatformConfig): any {
+    var platform = getPlatform();
+
+    var callback: (platform: IPlatformData) => any;
+    if (platform.android) {
+        callback = cfg.android;
+    }
+    else if (platform.ios) {
+        callback = cfg.ios;
+    }
+
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        return callback(platform);
+    }
 }
 
 /**

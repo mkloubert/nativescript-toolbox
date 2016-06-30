@@ -26,6 +26,21 @@ var BitmapFactory = require('./bitmap-factory/index');
 var Device = require('./Device');
 var Enumerable = require('./enumerable/index');
 var StringFormat = require('./stringformat/index');
+var TypeUtils = require("utils/types");
+/**
+ * List of known platforms.
+ */
+(function (Platform) {
+    /**
+     * Android
+     */
+    Platform[Platform["Android"] = 1] = "Android";
+    /**
+     * iOS
+     */
+    Platform[Platform["iOS"] = 2] = "iOS";
+})(exports.Platform || (exports.Platform = {}));
+var Platform = exports.Platform;
 /**
  * Returns a value as bitmap object.
  *
@@ -100,6 +115,43 @@ function formatArray(formatStr, args) {
     return StringFormat.formatArray(formatStr, args);
 }
 exports.formatArray = formatArray;
+/**
+ * Returns data of the current platform.
+ */
+function getPlatform() {
+    var pd = Device.getPlatformData();
+    // android
+    Object.defineProperty(pd, 'android', {
+        get: function () { return 1 === this.type; }
+    });
+    // ios
+    Object.defineProperty(pd, 'ios', {
+        get: function () { return 2 === this.type; }
+    });
+    return pd;
+}
+exports.getPlatform = getPlatform;
+/**
+ * Invokes an action for a specific platform.
+ *
+ * @param {IInvokeForPlatformContext} cfg The config data.
+ *
+ * @return any The result of the invoked callback.
+ */
+function invokeForPlatform(cfg) {
+    var platform = getPlatform();
+    var callback;
+    if (platform.android) {
+        callback = cfg.android;
+    }
+    else if (platform.ios) {
+        callback = cfg.ios;
+    }
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        return callback(platform);
+    }
+}
+exports.invokeForPlatform = invokeForPlatform;
 /**
  * Checks if the device is in debug mode or not.
  *

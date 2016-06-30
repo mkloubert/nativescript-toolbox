@@ -49,6 +49,13 @@ function getAppContext() {
 }
 exports.getAppContext;
 
+function getPlatformData() {
+    return {
+        type: 1
+    };
+}
+exports.getPlatformData;
+
 function isInDebugMode() {
     return BuildConfig.DEBUG;
 }
