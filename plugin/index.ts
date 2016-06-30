@@ -21,6 +21,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 import ApiClient = require('./apiclient/index');
+import Batch = require('./batch/index');
 import Enumerable = require('./enumerable/index');
 import StringFormat = require('./stringformat/index');
 
@@ -75,6 +76,15 @@ export function formatArray(formatStr: string, args: any[]): string {
  */
 export function isEnumerable(v: any): boolean {
     return Enumerable.isEnumerable(v);
+}
+
+/**
+ * Creates a new batch.
+ * 
+ * @return {IBatchOperation} The first operation of the created batch.
+ */
+export function newBatch(firstAction: (ctx : Batch.IBatchOperationContext) => void): Batch.IBatchOperation {
+    return Batch.newBatch(firstAction);
 }
 
 /**

@@ -5,3 +5,4 @@
 /pushall.sh
 /plugin/stringformat/*.map
 /plugin/apiclient/*.map
+/plugin/batch/*.map
