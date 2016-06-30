@@ -55,19 +55,19 @@ function getAppContext() {
 
     return ctx;
 }
-exports.getAppContext;
+exports.getAppContext = getAppContext;
 
 function getAppView() {
     return Application.android.foregroundActivity || Application.android.startActivity;
 }
-exports.getAppView;
+exports.getAppView = getAppView;
 
 function getPlatformData() {
     return {
         type: 1
     };
 }
-exports.getPlatformData;
+exports.getPlatformData = getPlatformData;
 
 function isInDebugMode() {
     return BuildConfig.DEBUG;

@@ -26,19 +26,19 @@ var TypeUtils = require("utils/types");
 function getAppContext() {
     return Application.ios.delegate;
 }
-exports.getAppContext;
+exports.getAppContext = getAppContext;
 
 function getAppView() {
     return Application.ios.rootController;
 }
-exports.getAppView;
+exports.getAppView = getAppView;
 
 function getPlatformData() {
     return {
         type: 2
     };
 }
-exports.getPlatformData;
+exports.getPlatformData = getPlatformData;
 
 function isInDebugMode() {
     if (!TypeUtils.isNullOrUndefined(DEBUG_BUILD)) {
@@ -76,6 +76,6 @@ function runOnUIThread(uiAction, state, onError) {
         }
     });
 
-    
+    return true;
 }
 exports.runOnUIThread = runOnUIThread;
