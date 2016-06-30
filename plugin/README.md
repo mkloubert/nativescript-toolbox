@@ -14,6 +14,7 @@ The module contains the following sub modules:
 | [nativescript-bitmap-factory](https://github.com/mkloubert/nativescript-bitmap-factory) | Create and manipulate bitmap images. |
 | [nativescript-enumerable](https://github.com/mkloubert/nativescript-enumerable) | Provides LINQ style extensions for handling arrays and lists. |
 | [nativescript-routed-values](https://github.com/mkloubert/nativescript-routed-values) | Implement routed value graphs. |
+| [nativescript-sqlite (free)](https://github.com/nathanaela/nativescript-sqlite) | Provides sqlite actions. |
 | [nativescript-stringformat](https://github.com/mkloubert/nativescript-stringformat) | Helpers for handling strings. |
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X493PDBNGKAGG)
@@ -92,6 +93,12 @@ import Enumerable = require('nativescript-toolbox/enumerable');
 
 ```typescript
 import RoutedValues = require('nativescript-toolbox/routed-values');
+```
+
+#### nativescript-sqlite
+
+```typescript
+var SQLite = require('nativescript-toolbox/sqlite');
 ```
 
 #### nativescript-stringformat
