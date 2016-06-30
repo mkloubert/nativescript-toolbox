@@ -50,23 +50,34 @@ var SQLiteConnection = (function () {
         this._name = name;
     }
     SQLiteConnection.prototype.asArray = function (v) {
+        if (v instanceof Array) {
+            return v;
+        }
         if (TypeUtils.isNullOrUndefined(v)) {
-            return this.asArray([]);
+            return [];
         }
         if (isEnumerable(v)) {
-            return this.asArray(v.toArray());
+            return v.toArray();
         }
+        var wrapper;
         if ((v instanceof observable_array_1.ObservableArray) ||
             (v instanceof virtual_array_1.VirtualArray)) {
-            return {
+            wrapper = {
                 getItem: function (i) { return v.getItem(i); },
                 length: function () { return v.length; },
             };
         }
-        return {
-            getItem: function (i) { return v[i]; },
-            length: function () { return v.length; },
-        };
+        else {
+            wrapper = {
+                getItem: function (i) { return v[i]; },
+                length: function () { return v.length; },
+            };
+        }
+        var arr = [];
+        for (var i = 0; i < wrapper.length(); i++) {
+            arr.push(wrapper.getItem(i));
+        }
+        return arr;
     };
     Object.defineProperty(SQLiteConnection.prototype, "conn", {
         get: function () {

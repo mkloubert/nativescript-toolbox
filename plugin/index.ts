@@ -251,28 +251,42 @@ class SQLiteConnection implements ISQLite {
         this._name = name;
     }
 
-    private asArray(v: any): { length: () => number; getItem: (index: number) => any } {
+    private asArray(v: any): any[] {
+        if (v instanceof Array) {
+            return v;
+        }
+
         if (TypeUtils.isNullOrUndefined(v)) {
-            return this.asArray([]);
+            return [];
         }
 
         if (isEnumerable(v)) {
-            return this.asArray(v.toArray());
+            return v.toArray();
         }
+
+        var wrapper: { length: () => number; getItem: (index: number) => any };
 
         if ((v instanceof ObservableArray) ||
             (v instanceof VirtualArray)) {
             
-            return {
+            wrapper = {
                 getItem: (i) => v.getItem(i),
                 length: () => v.length,
             };    
         }
+        else {
+            wrapper = {
+                getItem: (i) => v[i],
+                length: () => v.length,
+            };
+        }
 
-        return {
-            getItem: (i) => v[i],
-            length: () => v.length,
-        };
+        var arr = [];
+        for (var i = 0; i < wrapper.length(); i++) {
+            arr.push(wrapper.getItem(i));
+        }
+
+        return arr;
     }
 
     public get conn(): any {
