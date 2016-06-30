@@ -6,3 +6,4 @@
 /plugin/stringformat/*.map
 /plugin/apiclient/*.map
 /plugin/batch/*.map
+/plugin/bitmap-factory/*.map

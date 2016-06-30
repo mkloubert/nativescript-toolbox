@@ -3,13 +3,15 @@
 
 # NativeScript Toolbox
 
-A [NativeScript](https://nativescript.org/) that is a composition of useful tools and helpers.
+A [NativeScript](https://nativescript.org/) that is a composition of useful classes, tools and helpers.
 
 The module contains the following sub modules:
 
 | Name | Description |
 | ---- | --------- |
 | [nativescript-apiclient](https://github.com/mkloubert/nativescript-apiclient) | Simply call HTTP based APIs. |
+| [nativescript-batch](https://github.com/mkloubert/nativescript-batch) | Implement batch operations. |
+| [nativescript-bitmap-factory](https://github.com/mkloubert/nativescript-bitmap-factory) | Simply call HTTP based APIs. |
 | [nativescript-enumerable](https://github.com/mkloubert/nativescript-enumerable) | Provides LINQ style extensions for handling arrays and lists. |
 | [nativescript-stringformat](https://github.com/mkloubert/nativescript-stringformat) | Helpers for handling strings. |
 
@@ -42,6 +44,18 @@ inside your app project to install the module.
 
 ```typescript
 import ApiClient = require('nativescript-toolbox/apiclient');
+```
+
+#### nativescript-batch
+
+```typescript
+import Batch = require('nativescript-toolbox/batch');
+```
+
+#### nativescript-bitmap-factory
+
+```typescript
+import BitmapFactory = require('nativescript-toolbox/bitmap-factory');
 ```
 
 #### nativescript-enumerable

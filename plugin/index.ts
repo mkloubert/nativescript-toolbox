@@ -22,8 +22,23 @@
 
 import ApiClient = require('./apiclient/index');
 import Batch = require('./batch/index');
+import BitmapFactory = require('./bitmap-factory/index');
 import Enumerable = require('./enumerable/index');
 import StringFormat = require('./stringformat/index');
+
+/**
+ * Returns a value as bitmap object.
+ * 
+ * @param any v The input value.
+ * @param {Boolean} [throwException] Throw exception if 'v' is invalid or return (false).
+ * 
+ * @throws Input value is invalid.
+ * 
+ * @return {IBitmap} The output value or (false) if input value is invalid.
+ */
+export function asBitmap(v: any, throwException: boolean = true): BitmapFactory.IBitmap {
+    return BitmapFactory.asBitmap(v, throwException);
+}
 
 /**
  * Returns a value as sequence.
@@ -37,6 +52,18 @@ import StringFormat = require('./stringformat/index');
  */
 export function asEnumerable(v: any, throwException: boolean = true): Enumerable.IEnumerable<any> {
     return Enumerable.asEnumerable(v, throwException);
+}
+
+/**
+ * Creates a new bitmap.
+ * 
+ * @param {Number} width The width of the new image.
+ * @param {Number} [height] The optional height of the new image. If not defined, the width is taken as value.
+ * 
+ * @return {IBitmap} The new bitmap.
+ */
+export function createBitmap(width: number, height?: number): BitmapFactory.IBitmap {
+    return BitmapFactory.create(width, height);
 }
 
 /**
