@@ -44,7 +44,7 @@ inside your app project to install the module.
 import Toolbox = require('nativescript-toolbox');
 ```
 
-The module provides the following function that are short hands for the included sub module:
+The module provides the following function that are short hands for the included sub modules:
 
 | Name | Description |
 | ---- | --------- |
