@@ -116,6 +116,17 @@ export function isEnumerable(v: any): boolean {
 }
 
 /**
+ * Tries to return the application context of the current app.
+ * For Android this is an 'android.content.Context' object.
+ * In iOS this is the app delegate.
+ * 
+ * @return any The application context (if available.)
+ */
+export function getApplicationContext(): any {
+    return Device.getAppContext();
+}
+
+/**
  * Creates a new batch.
  * 
  * @return {IBatchOperation} The first operation of the created batch.
@@ -133,4 +144,18 @@ export function newBatch(firstAction: (ctx : Batch.IBatchOperationContext) => vo
  */
 export function newClient(config : ApiClient.IApiClientConfig | string) : ApiClient.IApiClient {
     return ApiClient.newClient(config);
+}
+
+/**
+ * Opens a URL on the device.
+ * 
+ * @param {String} url The URL to open.
+ */
+export function openUrl(url: string): boolean {
+    try {
+        return Device.openUri(url.trim());
+    }
+    catch (e) {
+        return false;
+    }
 }

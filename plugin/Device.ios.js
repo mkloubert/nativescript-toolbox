@@ -20,7 +20,13 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+var Application = require("application");
 var TypeUtils = require("utils/types");
+
+function getAppContext() {
+    return Application.ios.delegate;
+}
+exports.getAppContext;
 
 function isInDebugMode() {
     if (!TypeUtils.isNullOrUndefined(DEBUG_BUILD)) {
@@ -30,3 +36,15 @@ function isInDebugMode() {
     return false;
 }
 exports.isInDebugMode = isInDebugMode;
+
+// Thanks to Nathanael Anderson!
+// 
+// s. https://github.com/NathanaelA/nativescript-openurl
+function openUri(uri) {
+    if (UIApplication.sharedApplication().canOpenURL(uri)) {
+        return UIApplication.sharedApplication().openURL(uri);
+    }
+
+    return false;
+}
+exports.openUri = openUri;

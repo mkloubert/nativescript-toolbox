@@ -121,6 +121,17 @@ function isEnumerable(v) {
 }
 exports.isEnumerable = isEnumerable;
 /**
+ * Tries to return the application context of the current app.
+ * For Android this is an 'android.content.Context' object.
+ * In iOS this is the app delegate.
+ *
+ * @return any The application context (if available.)
+ */
+function getApplicationContext() {
+    return Device.getAppContext();
+}
+exports.getApplicationContext = getApplicationContext;
+/**
  * Creates a new batch.
  *
  * @return {IBatchOperation} The first operation of the created batch.
@@ -140,4 +151,18 @@ function newClient(config) {
     return ApiClient.newClient(config);
 }
 exports.newClient = newClient;
+/**
+ * Opens a URL on the device.
+ *
+ * @param {String} url The URL to open.
+ */
+function openUrl(url) {
+    try {
+        return Device.openUri(url.trim());
+    }
+    catch (e) {
+        return false;
+    }
+}
+exports.openUrl = openUrl;
 //# sourceMappingURL=index.js.map
