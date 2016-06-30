@@ -3,7 +3,7 @@
 
 # NativeScript Toolbox
 
-A [NativeScript](https://nativescript.org/) that is a composition of useful classes, tools and helpers.
+A [NativeScript](https://nativescript.org/) module that is a composition of useful classes, tools and helpers.
 
 The module contains the following sub modules:
 
