@@ -237,8 +237,39 @@ function openUrl(url) {
         return Device.openUri(url.trim());
     }
     catch (e) {
+        console.log('[ERROR] (nativescript-toolbox).openUrl(): ' + e);
         return false;
     }
 }
 exports.openUrl = openUrl;
+/**
+ * Runs an action on the UI thread.
+ *
+ * @param {Function} action The action to invoke.
+ * @param {T} [state] The optional state object for the action.
+ * @param {Function} onError The custom action that is invoked on error.
+ *
+ * @return {Boolean} Operation was successful or not.
+ */
+function runOnUI(action, state, onError) {
+    try {
+        if (!TypeUtils.isNullOrUndefined(action)) {
+            try {
+                Device.runOnUIThread(action, state, onError);
+            }
+            catch (e) {
+                if (TypeUtils.isNullOrUndefined(onError)) {
+                    throw e;
+                }
+                console.log('[ERROR] (nativescript-toolbox).runOnUI(1): ' + e);
+                onError(e, state);
+            }
+        }
+    }
+    catch (e) {
+        console.log('[ERROR] (nativescript-toolbox).runOnUI(0): ' + e);
+        return false;
+    }
+}
+exports.runOnUI = runOnUI;
 //# sourceMappingURL=index.js.map

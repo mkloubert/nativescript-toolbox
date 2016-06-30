@@ -60,3 +60,22 @@ function openUri(uri) {
     return false;
 }
 exports.openUri = openUri;
+
+function runOnUIThread(uiAction, state, onError) {
+    dispatch_async(dispatch_get_main_queue(), function() {
+        try {
+            uiAction(state);
+        }
+        catch (e) {
+            if (TypeUtils.isNullOrUndefined(onError)) {
+                throw e;
+            }
+
+            console.log('[ERROR] (nativescript-toolbox).ios.runOnUI(2): ' + e);
+            onError(e, state);
+        }
+    });
+
+    
+}
+exports.runOnUIThread = runOnUIThread;

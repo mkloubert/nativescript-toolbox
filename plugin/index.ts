@@ -286,6 +286,39 @@ export function openUrl(url: string): boolean {
         return Device.openUri(url.trim());
     }
     catch (e) {
+        console.log('[ERROR] (nativescript-toolbox).openUrl(): ' + e);
+        return false;
+    }
+}
+
+/**
+ * Runs an action on the UI thread.
+ * 
+ * @param {Function} action The action to invoke.
+ * @param {T} [state] The optional state object for the action.
+ * @param {Function} onError The custom action that is invoked on error.
+ * 
+ * @return {Boolean} Operation was successful or not.
+ */
+export function runOnUI<T>(action: (state: T) => void, state?: T,
+                           onError?: (err: any, state: T) => void): boolean {
+    try {
+        if (!TypeUtils.isNullOrUndefined(action)) {
+            try {
+                Device.runOnUIThread(action, state, onError);
+            }
+            catch (e) {
+                if (TypeUtils.isNullOrUndefined(onError)) {
+                    throw e;
+                }
+
+                console.log('[ERROR] (nativescript-toolbox).runOnUI(1): ' + e);
+                onError(e, state);
+            }
+        }
+    }
+    catch (e) {
+        console.log('[ERROR] (nativescript-toolbox).runOnUI(0): ' + e);
         return false;
     }
 }

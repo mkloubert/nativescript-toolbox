@@ -23,6 +23,14 @@
 var Application = require("application");
 var TypeUtils = require("utils/types");
 
+var actionRunnable = java.lang.Runnable.extend({
+    action: undefined,
+    
+    run: function() {
+        this.action();
+    }
+});
+
 function getAppContext() {
     var ctx = Application.android.context;
 
@@ -82,3 +90,28 @@ function openUri(uri) {
     ctx.startActivity(intent);
 }
 exports.openUri = openUri;
+
+function runOnUIThread(uiAction, state, onError) {
+    var activity = getAppView();
+    if (!TypeUtils.isNullOrUndefined(activity)) {
+        var r = new actionRunnable();
+        r.action = () => {
+            try {
+                uiAction(state);
+            }
+            catch (e) {
+                if (TypeUtils.isNullOrUndefined(onError)) {
+                    throw e;
+                }
+
+                console.log('[ERROR] (nativescript-toolbox).android.runOnUI(2): ' + e);
+                onError(e, state);
+            }
+        };
+
+        activity.runOnUiThread(r);
+    }
+
+    return false;
+}
+exports.runOnUIThread = runOnUIThread;
