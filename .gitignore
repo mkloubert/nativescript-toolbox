@@ -8,3 +8,4 @@
 /plugin/batch/*.map
 /plugin/bitmap-factory/*.map
 /plugin/routed-values/*.map
+/demo/app/*.map

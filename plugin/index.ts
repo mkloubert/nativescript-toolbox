@@ -23,6 +23,7 @@
 import ApiClient = require('./apiclient/index');
 import Batch = require('./batch/index');
 import BitmapFactory = require('./bitmap-factory/index');
+var Device = require('./Device');
 import Enumerable = require('./enumerable/index');
 import StringFormat = require('./stringformat/index');
 
@@ -92,6 +93,15 @@ export function format(formatStr: string, ...args: any[]): string {
  */
 export function formatArray(formatStr: string, args: any[]): string {
     return StringFormat.formatArray(formatStr, args);
+}
+
+/**
+ * Checks if the device is in debug mode or not.
+ * 
+ * @return {Boolean} Device runs in debug mode or not.
+ */
+export function isDebug(): boolean {
+    return Device.isInDebugMode();
 }
 
 /**

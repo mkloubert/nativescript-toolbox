@@ -52,7 +52,8 @@ The module provides the following function that are short hands for the included
 | createBitmap | Creates a new bitmap. |
 | format | Formats a string. |
 | formatArray | Formats a string. |
-| isEnumerable |Checks if a value is a sequence. |
+| isDebug | Checks if the device is in debug mode or not. |
+| isEnumerable | Checks if a value is a sequence. |
 | newBatch | Creates a new batch. |
 | newClient | Creates a new API client. |
 

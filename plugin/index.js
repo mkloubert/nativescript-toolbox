@@ -23,6 +23,7 @@
 var ApiClient = require('./apiclient/index');
 var Batch = require('./batch/index');
 var BitmapFactory = require('./bitmap-factory/index');
+var Device = require('./Device');
 var Enumerable = require('./enumerable/index');
 var StringFormat = require('./stringformat/index');
 /**
@@ -99,6 +100,15 @@ function formatArray(formatStr, args) {
     return StringFormat.formatArray(formatStr, args);
 }
 exports.formatArray = formatArray;
+/**
+ * Checks if the device is in debug mode or not.
+ *
+ * @return {Boolean} Device runs in debug mode or not.
+ */
+function isDebug() {
+    return Device.isInDebugMode();
+}
+exports.isDebug = isDebug;
 /**
  * Checks if a value is a sequence.
  *

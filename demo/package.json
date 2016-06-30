@@ -4,7 +4,10 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.NativeScriptToolboxDemo"
+    "id": "org.nativescript.NativeScriptToolboxDemo",
+    "tns-android": {
+      "version": "2.1.1"
+    }
   },
   "dependencies": {
     "nativescript-dev-typescript": "^0.3.2",
