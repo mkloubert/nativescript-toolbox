@@ -70,7 +70,12 @@ function getPlatformData() {
 exports.getPlatformData = getPlatformData;
 
 function isInDebugMode() {
-    return BuildConfig.DEBUG;
+    var ctx = getAppContext();
+    if (TypeUtils.isNullOrUndefined(ctx)) {
+        return null;
+    }
+
+    return (0 != (ctx.getApplicationInfo().flags &= android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE));
 }
 exports.isInDebugMode = isInDebugMode;
 
