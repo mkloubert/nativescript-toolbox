@@ -49,6 +49,11 @@ function getAppContext() {
 }
 exports.getAppContext;
 
+function getAppView() {
+    return Application.android.foregroundActivity || Application.android.startActivity;
+}
+exports.getAppView;
+
 function getPlatformData() {
     return {
         type: 1

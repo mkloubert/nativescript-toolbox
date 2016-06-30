@@ -66,6 +66,11 @@ export interface IPlatformData {
      * Gets the type of the platform
      */
     type: Platform;
+
+    /**
+     * The native view.
+     */
+    view: any;
 }
 
 /**
@@ -152,10 +157,41 @@ export function formatArray(formatStr: string, args: any[]): string {
 }
 
 /**
- * Returns data of the current platform.
+ * Tries to return the application context of the current app.
+ * For Android this is an 'android.content.Context' object.
+ * In iOS this is the app delegate.
+ * 
+ * @return any The application context (if available.)
+ */
+export function getApplicationContext(): any {
+    return Device.getAppContext();
+}
+
+/**
+ * Returns the native view of the app.
+ * For Android this is an activity.
+ * For iOS this the the root view controller.
+ * 
+ * @return any The view object.
+ */
+export function getNativeView(): any {
+    var view = Device.getAppView();
+    if (!view) {
+        view = undefined;
+    }
+
+    return view;
+}
+
+/**
+ * Returns information of the current platform.
+ * 
+ * @return {IPlatformData} The platform information.
  */
 export function getPlatform(): IPlatformData {
     var pd = Device.getPlatformData();
+
+    var nativeView = getNativeView();
     
     // android
     Object.defineProperty(pd, 'android', {
@@ -165,6 +201,11 @@ export function getPlatform(): IPlatformData {
     // ios
     Object.defineProperty(pd, 'ios', {
         get: function() { return 2 === this.type; }
+    });
+
+    // view
+    Object.defineProperty(pd, 'view', {
+        get: function() { return nativeView; }
     });
 
     return pd;
@@ -214,17 +255,6 @@ export function isEnumerable(v: any): boolean {
 }
 
 /**
- * Tries to return the application context of the current app.
- * For Android this is an 'android.content.Context' object.
- * In iOS this is the app delegate.
- * 
- * @return any The application context (if available.)
- */
-export function getApplicationContext(): any {
-    return Device.getAppContext();
-}
-
-/**
  * Creates a new batch.
  * 
  * @return {IBatchOperation} The first operation of the created batch.
@@ -248,6 +278,8 @@ export function newClient(config : ApiClient.IApiClientConfig | string) : ApiCli
  * Opens a URL on the device.
  * 
  * @param {String} url The URL to open.
+ * 
+ * @return {Boolean} Operation was successful or not.
  */
 export function openUrl(url: string): boolean {
     try {

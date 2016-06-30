@@ -28,6 +28,11 @@ function getAppContext() {
 }
 exports.getAppContext;
 
+function getAppView() {
+    return Application.ios.rootController;
+}
+exports.getAppView;
+
 function getPlatformData() {
     return {
         type: 2

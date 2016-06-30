@@ -53,6 +53,9 @@ The module provides the following function that are short hands for the included
 | format | Formats a string. |
 | formatArray | Formats a string. |
 | getApplicationContext | Returns the current application context. |
+| getNativeView | Returns the native view of the app. |
+| getPlatform | Returns information of the current platform. |
+| invokeForPlatform | Invokes an action for a specific platform. |
 | isDebug | Checks if the device is in debug mode or not. |
 | isEnumerable | Checks if a value is a sequence. |
 | newBatch | Creates a new batch. |
