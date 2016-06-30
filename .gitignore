@@ -7,3 +7,4 @@
 /plugin/apiclient/*.map
 /plugin/batch/*.map
 /plugin/bitmap-factory/*.map
+/plugin/routed-values/*.map
