@@ -9,6 +9,7 @@ The module contains the following sub modules:
 
 | Name | Description |
 | ---- | --------- |
+| [nativescript-apiclient](https://github.com/mkloubert/nativescript-apiclient) | Simply call HTTP based APIs. |
 | [nativescript-enumerable](https://github.com/mkloubert/nativescript-enumerable) | Provides LINQ style extensions for handling arrays and lists. |
 | [nativescript-stringformat](https://github.com/mkloubert/nativescript-stringformat) | Helpers for handling strings. |
 
@@ -36,6 +37,12 @@ inside your app project to install the module.
 ## Usage
 
 ### Sub modules
+
+#### nativescript-apiclient
+
+```typescript
+import ApiClient = require('nativescript-toolbox/apiclient');
+```
 
 #### nativescript-enumerable
 

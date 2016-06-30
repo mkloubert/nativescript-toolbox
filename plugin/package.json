@@ -1,7 +1,7 @@
 {
 	"name": "nativescript-toolbox",
 	"description": "A NativeScript module that is a composition of useful tools and helpers.",
-	"version": "1.0.0",
+	"version": "1.2.0",
 	"nativescript": {
 		"platforms": {
 			"ios": "1.0.0",

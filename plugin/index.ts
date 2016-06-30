@@ -20,7 +20,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import ApiClient = require('./apiclient/index');
 import Enumerable = require('./enumerable/index');
+import StringFormat = require('./stringformat/index');
 
 /**
  * Returns a value as sequence.
@@ -37,6 +39,34 @@ export function asEnumerable(v: any, throwException: boolean = true): Enumerable
 }
 
 /**
+ * Formats a string.
+ * 
+ * @function format
+ * 
+ * @param {String} formatStr The format string.
+ * @param ...any args One or more argument for the format string.
+ * 
+ * @return {String} The formatted string.
+ */
+export function format(formatStr: string, ...args: any[]): string {
+    return StringFormat.formatArray(formatStr, args);
+}
+
+/**
+ * Formats a string.
+ * 
+ * @function formatArray
+ * 
+ * @param {String} formatStr The format string.
+ * @param {Array} args The list of arguments for the format string.
+ * 
+ * @return {String} The formatted string.
+ */
+export function formatArray(formatStr: string, args: any[]): string {
+    return StringFormat.formatArray(formatStr, args);
+}
+
+/**
  * Checks if a value is a sequence.
  * 
  * @param any v The value to check.
@@ -45,4 +75,15 @@ export function asEnumerable(v: any, throwException: boolean = true): Enumerable
  */
 export function isEnumerable(v: any): boolean {
     return Enumerable.isEnumerable(v);
+}
+
+/**
+ * Creates a new client.
+ * 
+ * @param any config The configuration data / base URL for the client.
+ * 
+ * @return {IApiClient} The new client.
+ */
+export function newClient(config : ApiClient.IApiClientConfig | string) : ApiClient.IApiClient {
+    return ApiClient.newClient(config);
 }

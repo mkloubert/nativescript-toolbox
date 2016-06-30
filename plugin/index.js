@@ -20,7 +20,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 "use strict";
+var ApiClient = require('./apiclient/index');
 var Enumerable = require('./enumerable/index');
+var StringFormat = require('./stringformat/index');
 /**
  * Returns a value as sequence.
  *
@@ -37,6 +39,38 @@ function asEnumerable(v, throwException) {
 }
 exports.asEnumerable = asEnumerable;
 /**
+ * Formats a string.
+ *
+ * @function format
+ *
+ * @param {String} formatStr The format string.
+ * @param ...any args One or more argument for the format string.
+ *
+ * @return {String} The formatted string.
+ */
+function format(formatStr) {
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
+    }
+    return StringFormat.formatArray(formatStr, args);
+}
+exports.format = format;
+/**
+ * Formats a string.
+ *
+ * @function formatArray
+ *
+ * @param {String} formatStr The format string.
+ * @param {Array} args The list of arguments for the format string.
+ *
+ * @return {String} The formatted string.
+ */
+function formatArray(formatStr, args) {
+    return StringFormat.formatArray(formatStr, args);
+}
+exports.formatArray = formatArray;
+/**
  * Checks if a value is a sequence.
  *
  * @param any v The value to check.
@@ -47,4 +81,15 @@ function isEnumerable(v) {
     return Enumerable.isEnumerable(v);
 }
 exports.isEnumerable = isEnumerable;
+/**
+ * Creates a new client.
+ *
+ * @param any config The configuration data / base URL for the client.
+ *
+ * @return {IApiClient} The new client.
+ */
+function newClient(config) {
+    return ApiClient.newClient(config);
+}
+exports.newClient = newClient;
 //# sourceMappingURL=index.js.map
