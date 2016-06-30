@@ -21,6 +21,7 @@
 // DEALINGS IN THE SOFTWARE.
 "use strict";
 var ApiClient = require('./apiclient/index');
+var Batch = require('./batch/index');
 var Enumerable = require('./enumerable/index');
 var StringFormat = require('./stringformat/index');
 /**
@@ -81,6 +82,15 @@ function isEnumerable(v) {
     return Enumerable.isEnumerable(v);
 }
 exports.isEnumerable = isEnumerable;
+/**
+ * Creates a new batch.
+ *
+ * @return {IBatchOperation} The first operation of the created batch.
+ */
+function newBatch(firstAction) {
+    return Batch.newBatch(firstAction);
+}
+exports.newBatch = newBatch;
 /**
  * Creates a new client.
  *
