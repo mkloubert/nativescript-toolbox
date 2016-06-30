@@ -25,8 +25,71 @@ import Batch = require('./batch/index');
 import BitmapFactory = require('./bitmap-factory/index');
 var Device = require('./Device');
 import Enumerable = require('./enumerable/index');
+import {ObservableArray} from 'data/observable-array';
 import StringFormat = require('./stringformat/index');
+var Sqlite = require('./sqlite/sqlite');
 import TypeUtils = require("utils/types");
+import {VirtualArray} from 'data/virtual-array';
+
+/**
+ * A cell.
+ */
+export interface ICell {
+    /**
+     * The zero based index.
+     */
+    index: number;
+
+    /**
+     * The underlying row.
+     */
+    row?: IRow;
+
+    /**
+     * The value.
+     */
+    value: any;
+}
+
+/**
+ * Config data for executing an SQL statement.
+ */
+export interface IExecuteSqlConfig {
+    /**
+     * The argument for the statement.
+     */
+    args: any[] | ObservableArray<any> | VirtualArray<any> | Enumerable.IEnumerable<any>;
+    
+    /**
+     * The optional callback.
+     */
+    callback?: (result: IExecuteSqlResult) => void;
+    
+    /**
+     * The statement to execute.
+     */
+    sql: string;
+}
+
+/**
+ * The result of a SQL execution.
+ */
+export interface IExecuteSqlResult {
+    /**
+     * The last inserted ID (if no error).
+     */
+    id?: any;
+
+    /**
+     * The error (if occured).
+     */
+    error?: any;
+
+    /**
+     * Contains the result set (if defined).
+     */
+    result?: Enumerable.IEnumerable<IRow>;
+}
 
 /**
  * Configuration for 'invokeForPlatform()' function.
@@ -41,6 +104,46 @@ export interface IInvokeForPlatformConfig {
      * Callback that is invoked on iOS.
      */
     ios?: (platform: IPlatformData) => any;
+}
+
+/**
+ * Config data for opening a database.
+ */
+export interface IOpenDatabaseConfig {
+    /**
+     * The callback for the result.
+     */
+    callback: (result: IOpenDatabaseResult) => void;
+
+    /**
+     * The name of the database to open.
+     */
+    name: string;
+
+    /**
+     * Open readonly or not. Default: (false)
+     */
+    readOnly?: boolean;
+}
+
+/**
+ * The result of opening a database.
+ */
+export interface IOpenDatabaseResult {
+    /**
+     * Gets the connection if succeeded.
+     */
+    db?: ISQLite;
+
+    /**
+     * Gets the error (if occurred.)
+     */
+    error?: any;
+
+    /**
+     * Gets the name of the data the tries to be open.
+     */
+    name: string;
 }
 
 /**
@@ -74,6 +177,51 @@ export interface IPlatformData {
 }
 
 /**
+ * A row.
+ */
+export interface IRow {
+    /**
+     * The cells of the row.
+     */
+    cells?: ICell[];
+
+    /**
+     * The zero based index.
+     */
+    index: number;
+}
+
+/**
+ * A SQLite connection.
+ */
+export interface ISQLite {
+    /**
+     * Gets the underlying SQLite object.
+     */
+    conn: any;
+
+    /**
+     * Executes an SQL statement.
+     */
+    execute(cfg: IExecuteSqlConfig);
+
+    /**
+     * Gets if the connection is open or not.
+     */
+    isOpen: boolean;
+
+    /**
+     * Gets the name of the opened database.
+     */
+    name: string;
+
+    /**
+     * Executes an SQL statement with a result.
+     */
+    selectAll(cfg: IExecuteSqlConfig);
+}
+
+/**
  * List of known platforms.
  */
 export enum Platform {
@@ -86,6 +234,158 @@ export enum Platform {
      * iOS
      */
     iOS = 2,
+}
+
+class SQLiteConnection implements ISQLite {
+    private _conn: any;
+    private _name: string;
+    
+    constructor(conn: any, name: string) {
+        this._conn = conn;
+        this._name = name;
+    }
+
+    private asArray(v: any): { length: () => number; getItem: (index: number) => any } {
+        if (TypeUtils.isNullOrUndefined(v)) {
+            return this.asArray([]);
+        }
+
+        if (isEnumerable(v)) {
+            return this.asArray(v.toArray());
+        }
+
+        if ((v instanceof ObservableArray) ||
+            (v instanceof VirtualArray)) {
+            
+            return {
+                getItem: (i) => v.getItem(i),
+                length: () => v.length,
+            };    
+        }
+
+        return {
+            getItem: (i) => v[i],
+            length: () => v.length,
+        };
+    }
+
+    public get conn(): any {
+        return this._conn;
+    }
+
+    private createCell(parent: IRow, cells: any[], i: number): ICell {
+        var newCell: any = {};
+
+        var val: any = cells[i];
+
+        Object.defineProperty(newCell, 'index', {
+            get: function() { return i; }
+        });
+
+        Object.defineProperty(newCell, 'row', {
+            get: function() { return parent; }
+        });
+
+        Object.defineProperty(newCell, 'value', {
+            get: function() { return val; }
+        });
+
+        return newCell;
+    }
+
+    private createRow(resultSet: any[], i: number): IRow {
+        var newRow: any = {};
+
+        var cellList: ICell[] = [];
+
+        var r: any[] = resultSet[i];
+        for (var i = 0; i < r.length; i++) {
+            var c = this.createCell(newRow, r, i);
+
+            cellList.push(c);
+        }
+
+        Object.defineProperty(newRow, 'cells', {
+            get: function() { return cellList; }
+        });
+
+        Object.defineProperty(newRow, 'index', {
+            get: function() { return i; }
+        });
+
+        return newRow;
+    }
+
+    public execute(cfg: IExecuteSqlConfig) {
+        this.conn
+            .execSQL(cfg.sql, this.asArray(cfg.args), function(err, insertId) {
+                if (TypeUtils.isNullOrUndefined(cfg.callback)) {
+                    return;
+                }
+
+                var resultCtx: any = {};
+
+                if (TypeUtils.isNullOrUndefined(err)) {
+                    // id
+                    Object.defineProperty(resultCtx, 'id', {
+                        get: function() { return insertId; }
+                    });
+                }
+                else {
+                    // error
+                    Object.defineProperty(resultCtx, 'error', {
+                        get: function() { return err; }
+                    });
+                }
+
+                cfg.callback(resultCtx);
+            });
+    }
+
+    public get isOpen(): boolean {
+        return this.conn.isOpen();
+    }
+
+    public get name(): string {
+        return this._name;
+    }
+
+    public selectAll(cfg: IExecuteSqlConfig) {
+        var me = this;
+
+        this.conn
+            .all(cfg.sql, this.asArray(cfg.args), function(err, resultSet) {
+                var resultCtx: any = {};
+
+                if (TypeUtils.isNullOrUndefined(err)) {
+                    var result: any = [];
+
+                    if (!TypeUtils.isNullOrUndefined(resultSet)) {
+                        for (var i = 0; i < resultSet.length; i++) {
+                            var newRow = me.createRow(resultSet, i);
+                            if (!TypeUtils.isNullOrUndefined(newRow)) {
+                                result.push(newRow);
+                            }
+                        }
+                    }
+
+                    result = asEnumerable(result);
+
+                    // result
+                    Object.defineProperty(resultCtx, 'result', {
+                        get: function() { return result; }
+                    });
+                }
+                else {
+                    // error
+                    Object.defineProperty(resultCtx, 'error', {
+                        get: function() { return err; }
+                    });
+                }
+
+                cfg.callback(resultCtx);
+            });
+    }
 }
 
 /**
@@ -272,6 +572,46 @@ export function newBatch(firstAction: (ctx : Batch.IBatchOperationContext) => vo
  */
 export function newClient(config : ApiClient.IApiClientConfig | string) : ApiClient.IApiClient {
     return ApiClient.newClient(config);
+}
+
+/**
+ * Opens a database connection.
+ * 
+ * @param {String} dbName The name of the database to open.
+ * @param {Function} callback The callback with the result data.
+ */
+export function openDatabase(cfg: IOpenDatabaseConfig) {
+    var openReadOnly = false;
+    if (!TypeUtils.isNullOrUndefined(cfg.readOnly)) {
+        openReadOnly = cfg.readOnly;
+    }
+
+    var r: any = {};
+
+    // name
+    Object.defineProperty(r, 'name', {
+        get: function() { return cfg.name; }
+    });
+
+    var p = new Sqlite(cfg.name, {
+        readOnly: openReadOnly
+    }).then((db) => {
+        var conn = new SQLiteConnection(db, cfg.name);
+
+        // db
+        Object.defineProperty(r, 'db', {
+            get: function() { return conn; }
+        });
+
+        cfg.callback(r);
+    }, (err) => {
+        // error
+        Object.defineProperty(r, 'error', {
+            get: function() { return err; }
+        });
+        
+        cfg.callback(r);
+    });
 }
 
 /**

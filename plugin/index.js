@@ -25,8 +25,11 @@ var Batch = require('./batch/index');
 var BitmapFactory = require('./bitmap-factory/index');
 var Device = require('./Device');
 var Enumerable = require('./enumerable/index');
+var observable_array_1 = require('data/observable-array');
 var StringFormat = require('./stringformat/index');
+var Sqlite = require('./sqlite/sqlite');
 var TypeUtils = require("utils/types");
+var virtual_array_1 = require('data/virtual-array');
 /**
  * List of known platforms.
  */
@@ -41,6 +44,135 @@ var TypeUtils = require("utils/types");
     Platform[Platform["iOS"] = 2] = "iOS";
 })(exports.Platform || (exports.Platform = {}));
 var Platform = exports.Platform;
+var SQLiteConnection = (function () {
+    function SQLiteConnection(conn, name) {
+        this._conn = conn;
+        this._name = name;
+    }
+    SQLiteConnection.prototype.asArray = function (v) {
+        if (TypeUtils.isNullOrUndefined(v)) {
+            return this.asArray([]);
+        }
+        if (isEnumerable(v)) {
+            return this.asArray(v.toArray());
+        }
+        if ((v instanceof observable_array_1.ObservableArray) ||
+            (v instanceof virtual_array_1.VirtualArray)) {
+            return {
+                getItem: function (i) { return v.getItem(i); },
+                length: function () { return v.length; },
+            };
+        }
+        return {
+            getItem: function (i) { return v[i]; },
+            length: function () { return v.length; },
+        };
+    };
+    Object.defineProperty(SQLiteConnection.prototype, "conn", {
+        get: function () {
+            return this._conn;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SQLiteConnection.prototype.createCell = function (parent, cells, i) {
+        var newCell = {};
+        var val = cells[i];
+        Object.defineProperty(newCell, 'index', {
+            get: function () { return i; }
+        });
+        Object.defineProperty(newCell, 'row', {
+            get: function () { return parent; }
+        });
+        Object.defineProperty(newCell, 'value', {
+            get: function () { return val; }
+        });
+        return newCell;
+    };
+    SQLiteConnection.prototype.createRow = function (resultSet, i) {
+        var newRow = {};
+        var cellList = [];
+        var r = resultSet[i];
+        for (var i = 0; i < r.length; i++) {
+            var c = this.createCell(newRow, r, i);
+            cellList.push(c);
+        }
+        Object.defineProperty(newRow, 'cells', {
+            get: function () { return cellList; }
+        });
+        Object.defineProperty(newRow, 'index', {
+            get: function () { return i; }
+        });
+        return newRow;
+    };
+    SQLiteConnection.prototype.execute = function (cfg) {
+        this.conn
+            .execSQL(cfg.sql, this.asArray(cfg.args), function (err, insertId) {
+            if (TypeUtils.isNullOrUndefined(cfg.callback)) {
+                return;
+            }
+            var resultCtx = {};
+            if (TypeUtils.isNullOrUndefined(err)) {
+                // id
+                Object.defineProperty(resultCtx, 'id', {
+                    get: function () { return insertId; }
+                });
+            }
+            else {
+                // error
+                Object.defineProperty(resultCtx, 'error', {
+                    get: function () { return err; }
+                });
+            }
+            cfg.callback(resultCtx);
+        });
+    };
+    Object.defineProperty(SQLiteConnection.prototype, "isOpen", {
+        get: function () {
+            return this.conn.isOpen();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SQLiteConnection.prototype, "name", {
+        get: function () {
+            return this._name;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SQLiteConnection.prototype.selectAll = function (cfg) {
+        var me = this;
+        this.conn
+            .all(cfg.sql, this.asArray(cfg.args), function (err, resultSet) {
+            var resultCtx = {};
+            if (TypeUtils.isNullOrUndefined(err)) {
+                var result = [];
+                if (!TypeUtils.isNullOrUndefined(resultSet)) {
+                    for (var i = 0; i < resultSet.length; i++) {
+                        var newRow = me.createRow(resultSet, i);
+                        if (!TypeUtils.isNullOrUndefined(newRow)) {
+                            result.push(newRow);
+                        }
+                    }
+                }
+                result = asEnumerable(result);
+                // result
+                Object.defineProperty(resultCtx, 'result', {
+                    get: function () { return result; }
+                });
+            }
+            else {
+                // error
+                Object.defineProperty(resultCtx, 'error', {
+                    get: function () { return err; }
+                });
+            }
+            cfg.callback(resultCtx);
+        });
+    };
+    return SQLiteConnection;
+}());
 /**
  * Returns a value as bitmap object.
  *
@@ -225,6 +357,40 @@ function newClient(config) {
     return ApiClient.newClient(config);
 }
 exports.newClient = newClient;
+/**
+ * Opens a database connection.
+ *
+ * @param {String} dbName The name of the database to open.
+ * @param {Function} callback The callback with the result data.
+ */
+function openDatabase(cfg) {
+    var openReadOnly = false;
+    if (!TypeUtils.isNullOrUndefined(cfg.readOnly)) {
+        openReadOnly = cfg.readOnly;
+    }
+    var r = {};
+    // name
+    Object.defineProperty(r, 'name', {
+        get: function () { return cfg.name; }
+    });
+    var p = new Sqlite(cfg.name, {
+        readOnly: openReadOnly
+    }).then(function (db) {
+        var conn = new SQLiteConnection(db, cfg.name);
+        // db
+        Object.defineProperty(r, 'db', {
+            get: function () { return conn; }
+        });
+        cfg.callback(r);
+    }, function (err) {
+        // error
+        Object.defineProperty(r, 'error', {
+            get: function () { return err; }
+        });
+        cfg.callback(r);
+    });
+}
+exports.openDatabase = openDatabase;
 /**
  * Opens a URL on the device.
  *

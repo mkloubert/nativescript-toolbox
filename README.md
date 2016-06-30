@@ -61,6 +61,7 @@ The module provides the following function that are short hands for the included
 | isEnumerable | Checks if a value is a sequence. |
 | newBatch | Creates a new batch. |
 | newClient | Creates a new API client. |
+| openDatabase | Opens a (SQLite) database (connection). |
 | openUrl | Open an URL on the device. |
 
 ### Sub modules
