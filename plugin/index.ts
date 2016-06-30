@@ -20,6 +20,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Application = require('application');
 import ApiClient = require('./apiclient');
 import Batch = require('./batch');
 import BitmapFactory = require('./bitmap-factory');
@@ -150,6 +151,11 @@ export interface IOpenDatabaseResult {
  * Stores platform data.
  */
 export interface IPlatformData {
+    /**
+     * Gets the underlying application object.
+     */
+    app: Application.AndroidApplication | Application.iOSApplication;
+
     /**
      * Gets if the app runs on Android or not.
      */

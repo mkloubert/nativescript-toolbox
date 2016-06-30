@@ -63,9 +63,19 @@ function getAppView() {
 exports.getAppView = getAppView;
 
 function getPlatformData() {
-    return {
-        type: 1
-    };
+    var pd = {};
+
+    // app
+    Object.defineProperty(pd, 'app', {
+        get: function() { return Application.ios; }
+    });
+
+    // type
+    Object.defineProperty(pd, 'type', {
+        get: function() { return 1; }
+    });
+
+    return pd;
 }
 exports.getPlatformData = getPlatformData;
 
