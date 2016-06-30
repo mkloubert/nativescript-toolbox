@@ -39,6 +39,23 @@ inside your app project to install the module.
 
 ## Usage
 
+```typescript
+import Toolbox = require('nativescript-toolbox');
+```
+
+The module provides the following function that are short hands for the included sub module:
+
+| Name | Description |
+| ---- | --------- |
+| asBitmap | Returns a value as bitmap object. |
+| asEnumerable | Returns a value as sequence. |
+| createBitmap | Creates a new bitmap. |
+| format | Formats a string. |
+| formatArray | Formats a string. |
+| isEnumerable |Checks if a value is a sequence. |
+| newBatch | Creates a new batch. |
+| newClient | Creates a new API client. |
+
 ### Sub modules
 
 #### nativescript-apiclient
