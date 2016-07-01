@@ -27,6 +27,7 @@ import TypeUtils = require("utils/types");
 class Batch implements IBatch {
     private _firstOperation: BatchOperation;
     private _invokeFinishedCheckForAll: boolean = false;
+    private _invokeStrategy: InvokeStrategy = InvokeStrategy.Automatic;
     private _items: ObservableArray<any>;
     private _name: string;
     private _object: Observable;
@@ -83,6 +84,13 @@ class Batch implements IBatch {
         return this;
     }
 
+    public get invokeStrategy(): InvokeStrategy {
+        return this._invokeStrategy;
+    }
+    public set invokeStrategy(newStradegy: InvokeStrategy) {
+        this._invokeStrategy = newStradegy;
+    }
+
     public loggers = [];
     
     public get items() : ObservableArray<any> {
@@ -97,6 +105,11 @@ class Batch implements IBatch {
 
     public get operations(): BatchOperation[] {
         return this._operations;
+    }
+
+    public setInvokeStrategy(newStradegy: InvokeStrategy) : Batch {
+        this._invokeStrategy = newStradegy;
+        return this;
     }
     
     public setObjectProperties(properties) : Batch {
@@ -133,6 +146,7 @@ class Batch implements IBatch {
         var me = this;
         var result = this._result;
         var previousValue;
+        var nextInvokeStradegy: InvokeStrategy;
         var skipWhile : (ctx : IBatchOperationContext) => boolean;
         var value : any = this._value;
         
@@ -159,19 +173,63 @@ class Batch implements IBatch {
                 }
             };
         };
+
+        var i = -1;
         
-        for (var i = 0; i < this.operations.length; i++) {
+        var invokeNextOperation;
+        invokeNextOperation = () => {
+            if (++i >= me.operations.length) {
+                return; // no more operations
+            }
+
             var ctx = new BatchOperationContext(previousValue,
-                                                this.operations, i);
+                                                me.operations, i);
             ctx.result = result;
             ctx.value = value;
+            ctx.nextInvokeStradegy = null;
+
+            // invoke stradegy
+            var operationInvokeStradegy = nextInvokeStradegy;
+            if (TypeUtils.isNullOrUndefined(operationInvokeStradegy)) {
+                // use operation's default
+                operationInvokeStradegy = ctx.operation.invokeStrategy;
+            }
+            if (TypeUtils.isNullOrUndefined(operationInvokeStradegy)) {
+                // use batch default
+                operationInvokeStradegy = me.invokeStrategy;
+            }
+            if (TypeUtils.isNullOrUndefined(operationInvokeStradegy)) {
+                // use default
+                operationInvokeStradegy = InvokeStrategy.Automatic;
+            }
+
+            var updateNextValues = () => {
+                previousValue = ctx.nextValue;
+                value = ctx.value;
+                result = ctx.result;
+                nextInvokeStradegy = ctx.nextInvokeStradegy;
+            
+                skipWhile = ctx.skipWhilePredicate;
+            };
+
+            var updateAndInvokeNextOperation = () => {
+                updateNextValues();
+                invokeNextOperation();
+            };
+
+            ctx.invokeNext = () => {
+                operationInvokeStradegy = InvokeStrategy.Manually;
+
+                updateAndInvokeNextOperation();
+            };
             
             ctx.checkIfFinishedAction = createCheckIfFinishedAction(i);
             
             if (!TypeUtils.isNullOrUndefined(skipWhile)) {
                 if (skipWhile(ctx)) {
                     ctx.checkIfFinishedAction();
-                    continue;
+                    invokeNextOperation();
+                    return;
                 }
             }
             
@@ -213,7 +271,7 @@ class Batch implements IBatch {
                     ctx.operation.beforeAction(ctx);
                     
                     if (checkIfCancelled()) {
-                        break;  // cancelled
+                        return;  // cancelled
                     }
                 }
                 
@@ -223,7 +281,7 @@ class Batch implements IBatch {
                     ctx.operation.action(ctx);
                     
                     if (checkIfCancelled()) {
-                        break;  // cancelled
+                        return;  // cancelled
                     }
                 }
 
@@ -233,7 +291,7 @@ class Batch implements IBatch {
                     ctx.operation.batch.afterAction(ctx);
                     
                     if (checkIfCancelled()) {
-                        break;  // cancelled
+                        return;  // cancelled
                     }
                 }
                 
@@ -245,12 +303,12 @@ class Batch implements IBatch {
                     ctx.operation.successAction(ctx);
                     
                     if (checkIfCancelled()) {
-                        break;  // cancelled
+                        return;  // cancelled
                     }
                 }
                 
                 if (!invokeCompletedAction()) {
-                    break;  // cancelled
+                    return;  // cancelled
                 }
             }
             catch (e) {
@@ -269,21 +327,22 @@ class Batch implements IBatch {
                 }
                 
                 if (checkIfCancelled()) {
-                    break;  // cancelled
+                    return;  // cancelled
                 }
                 
                 if (!invokeCompletedAction()) {
-                    break;  // cancelled
+                    return;  // cancelled
                 }
             }
 
-            previousValue = ctx.nextValue;
-            value = ctx.value;
-            result = ctx.result;
-            
-            skipWhile = ctx.skipWhilePredicate;
-        }
+            if (operationInvokeStradegy != InvokeStrategy.Automatic) {
+                return;
+            }
 
+            updateAndInvokeNextOperation();
+        };
+
+        invokeNextOperation();
         return result;
     }
     
@@ -338,6 +397,7 @@ class BatchLogContext implements IBatchLogContext {
 class BatchOperation implements IBatchOperation {
     private _batch: Batch;
     private _id: string;
+    private _invokeStrategy: InvokeStrategy;
     private _skipBefore: boolean = false;
 
     constructor(batch : Batch, action : (ctx : IBatchOperationContext) => void,
@@ -449,6 +509,13 @@ class BatchOperation implements IBatchOperation {
         
         return this;
     }
+
+    public get invokeStrategy(): InvokeStrategy {
+        return this._invokeStrategy;
+    }
+    public set invokeStrategy(newStradegy: InvokeStrategy) {
+        this._invokeStrategy = newStradegy;
+    }
     
     public get items() : ObservableArray<any> {
         return this._batch.items;
@@ -476,6 +543,11 @@ class BatchOperation implements IBatchOperation {
     
     public setId(value : string) : BatchOperation {
         this.id = value;
+        return this;
+    }
+
+    public setInvokeStrategy(newStradegy: InvokeStrategy) : BatchOperation {
+        this._invokeStrategy = newStradegy;
         return this;
     }
     
@@ -542,6 +614,7 @@ class BatchOperationContext implements IBatchOperationContext {
     private _operation : BatchOperation;
     private _prevValue;
     private _executionContext : BatchOperationExecutionContext;
+    private _nextInvokeStradegy: InvokeStrategy;
     
     constructor(previousValue : any,
                 operations? : BatchOperation[], index? : number) {
@@ -618,6 +691,8 @@ class BatchOperationContext implements IBatchOperationContext {
     public invokeComplete : boolean = true;
     
     public invokeError : boolean = true;
+
+    public invokeNext: () => void;
     
     public invokeSuccess : boolean = true;
     
@@ -667,6 +742,13 @@ class BatchOperationContext implements IBatchOperationContext {
         return this.operation.name;
     }
 
+    public get nextInvokeStradegy() : InvokeStrategy {
+        return this._nextInvokeStradegy;
+    }
+    public set nextInvokeStradegy(newValue: InvokeStrategy) {
+        this._nextInvokeStradegy = newValue;
+    }
+
     public nextValue : any;
 
     public get object(): Observable {
@@ -690,6 +772,11 @@ class BatchOperationContext implements IBatchOperationContext {
     
     public setError(error : any) : BatchOperationContext {
         this._error = error;
+        return this;
+    }
+
+    public setNextInvokeStradegy(newValue: InvokeStrategy) : BatchOperationContext {
+        this._nextInvokeStradegy = newValue;
         return this;
     }
     
@@ -834,6 +921,11 @@ export interface IBatch {
      * @param {Boolean} [flag] Automatically invoke "checkIfFinished" method or not. Default: (true) 
      */
     invokeFinishedCheckForAll(flag?: boolean) : IBatch;
+
+    /**
+     * Gets or sets the default invoke stradegy for an operation.
+     */
+    invokeStrategy: InvokeStrategy;
     
     /**
      * Gets the batch wide (observable) array of items.
@@ -855,6 +947,15 @@ export interface IBatch {
      * @property
      */
     name : string;
+
+    /**
+     * Sets the invoke stradegy for an operation.
+     * 
+     * @chainable
+     * 
+     * @param {InvokeStrategy} stradegy The (new) value.
+     */
+    setInvokeStrategy(stradegy: InvokeStrategy) : IBatch;
 
     /**
      * Sets properties for the object in 'object' property.
@@ -1064,6 +1165,11 @@ export interface IBatchOperation {
     ignoreErrors(flag? : boolean) : IBatchOperation;
 
     /**
+     * Gets or sets the invoke stradegy for that operation.
+     */
+    invokeStrategy: InvokeStrategy;
+
+    /**
      * Defines if "checkIfFinished" method should be autmatically invoked after
      * each operation.
      * 
@@ -1129,6 +1235,15 @@ export interface IBatchOperation {
      * @chainable
      */
     setId(id : string) : IBatchOperation;
+
+    /**
+     * Sets the invoke stradegy for that operation.
+     * 
+     * @chainable
+     * 
+     * @param {InvokeStrategy} stradegy The (new) value.
+     */
+    setInvokeStrategy(stradegy: InvokeStrategy) : IBatchOperation;
     
     /**
      * Sets the name of the operation.
@@ -1319,6 +1434,11 @@ export interface IBatchOperationContext extends IBatchLogger {
      * Defines if "error" action should be invoked or not.
      */
     invokeError : boolean;
+
+    /**
+     * Invokes the next operation.
+     */
+    invokeNext();
     
     /**
      * Defines if "success" action should be invoked or not.
@@ -1359,6 +1479,11 @@ export interface IBatchOperationContext extends IBatchLogger {
      * @property
      */
     name : string;
+
+    /**
+     * Gets or sets the invoke stradegy for the next operation.
+     */
+    nextInvokeStradegy : InvokeStrategy;
         
     /**
      * Gets or sets the value for the next operation.
@@ -1394,6 +1519,15 @@ export interface IBatchOperationContext extends IBatchLogger {
      * @property
      */
     result : any;
+
+    /**
+     * Sets the invoke stradegy for the next operation.
+     * 
+     * @chainable
+     * 
+     * @param {InvokeStrategy} stradegy The (new) value.
+     */
+    setNextInvokeStradegy(stradegy: InvokeStrategy) : IBatchOperationContext;
     
     /**
      * Sets the values for 'result' any 'value' properties.
@@ -1444,6 +1578,21 @@ export interface IBatchOperationContext extends IBatchLogger {
      * Gets or sets the value for that and all upcoming operations.
      */
     value : any;
+}
+
+/**
+ * List of invoke stradegies.
+ */
+export enum InvokeStrategy {
+    /**
+     * Automatic
+     */
+    Automatic,
+
+    /**
+     * From batch operation.
+     */
+    Manually,
 }
 
 /**
