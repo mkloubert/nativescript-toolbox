@@ -174,11 +174,10 @@ class Batch implements IBatch {
             };
         };
 
-        var i = -1;
-        
-        var invokeNextOperation;
-        invokeNextOperation = () => {
-            if (++i >= me.operations.length) {
+        var invokeNextOperation: (previousIndex: number) => void;
+        invokeNextOperation = (previousIndex: number) => {
+            var i = previousIndex + 1;
+            if (i >= me.operations.length) {
                 return; // no more operations
             }
 
@@ -214,7 +213,7 @@ class Batch implements IBatch {
 
             var updateAndInvokeNextOperation = () => {
                 updateNextValues();
-                invokeNextOperation();
+                invokeNextOperation(i);
             };
 
             ctx.invokeNext = () => {
@@ -228,7 +227,7 @@ class Batch implements IBatch {
             if (!TypeUtils.isNullOrUndefined(skipWhile)) {
                 if (skipWhile(ctx)) {
                     ctx.checkIfFinishedAction();
-                    invokeNextOperation();
+                    invokeNextOperation(i);
                     return;
                 }
             }
@@ -342,7 +341,7 @@ class Batch implements IBatch {
             updateAndInvokeNextOperation();
         };
 
-        invokeNextOperation();
+        invokeNextOperation(-1);
         return result;
     }
     
@@ -1165,11 +1164,6 @@ export interface IBatchOperation {
     ignoreErrors(flag? : boolean) : IBatchOperation;
 
     /**
-     * Gets or sets the invoke stradegy for that operation.
-     */
-    invokeStrategy: InvokeStrategy;
-
-    /**
      * Defines if "checkIfFinished" method should be autmatically invoked after
      * each operation.
      * 
@@ -1178,6 +1172,11 @@ export interface IBatchOperation {
      * @param {Boolean} [flag] Automatically invoke "checkIfFinished" method or not. Default: (true) 
      */
     invokeFinishedCheckForAll(flag?: boolean) : IBatchOperation;
+
+    /**
+     * Gets or sets the invoke stradegy for that operation.
+     */
+    invokeStrategy: InvokeStrategy;
 
     /**
      * Gets the batch wide (observable) array of items.

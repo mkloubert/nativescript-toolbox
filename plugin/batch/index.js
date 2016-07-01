@@ -152,10 +152,10 @@ var Batch = (function () {
                 }
             };
         };
-        var i = -1;
         var invokeNextOperation;
-        invokeNextOperation = function () {
-            if (++i >= me.operations.length) {
+        invokeNextOperation = function (previousIndex) {
+            var i = previousIndex + 1;
+            if (i >= me.operations.length) {
                 return; // no more operations
             }
             var ctx = new BatchOperationContext(previousValue, me.operations, i);
@@ -185,7 +185,7 @@ var Batch = (function () {
             };
             var updateAndInvokeNextOperation = function () {
                 updateNextValues();
-                invokeNextOperation();
+                invokeNextOperation(i);
             };
             ctx.invokeNext = function () {
                 operationInvokeStradegy = InvokeStrategy.Manually;
@@ -195,7 +195,7 @@ var Batch = (function () {
             if (!TypeUtils.isNullOrUndefined(skipWhile)) {
                 if (skipWhile(ctx)) {
                     ctx.checkIfFinishedAction();
-                    invokeNextOperation();
+                    invokeNextOperation(i);
                     return;
                 }
             }
@@ -284,7 +284,7 @@ var Batch = (function () {
             }
             updateAndInvokeNextOperation();
         };
-        invokeNextOperation();
+        invokeNextOperation(-1);
         return result;
     };
     Batch.prototype.whenAllFinished = function (action) {
