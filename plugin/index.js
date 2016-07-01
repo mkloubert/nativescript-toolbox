@@ -80,7 +80,7 @@ var SQLiteConnection = (function () {
         return arr;
     };
     SQLiteConnection.prototype.close = function (callback) {
-        this.conn.close(function (err) {
+        this._conn.close(function (err) {
             if (TypeUtils.isNullOrUndefined(callback)) {
                 return;
             }
@@ -132,7 +132,7 @@ var SQLiteConnection = (function () {
         return newRow;
     };
     SQLiteConnection.prototype.execute = function (cfg) {
-        this.conn
+        this._conn
             .execSQL(cfg.sql, this.asArray(cfg.args), function (err, insertId) {
             if (TypeUtils.isNullOrUndefined(cfg.callback)) {
                 return;
@@ -155,7 +155,7 @@ var SQLiteConnection = (function () {
     };
     Object.defineProperty(SQLiteConnection.prototype, "isOpen", {
         get: function () {
-            return this.conn.isOpen();
+            return this._conn.isOpen();
         },
         enumerable: true,
         configurable: true
@@ -169,7 +169,7 @@ var SQLiteConnection = (function () {
     });
     SQLiteConnection.prototype.selectAll = function (cfg) {
         var me = this;
-        this.conn
+        this._conn
             .all(cfg.sql, this.asArray(cfg.args), function (err, resultSet) {
             var resultCtx = {};
             if (TypeUtils.isNullOrUndefined(err)) {

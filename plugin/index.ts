@@ -307,7 +307,7 @@ class SQLiteConnection implements ISQLite {
     }
 
     public close(callback?: (result: ICloseDatabaseResult) => void) {
-        this.conn.close((err) => {
+        this._conn.close((err) => {
             if (TypeUtils.isNullOrUndefined(callback)) {
                 return;
             }
@@ -372,7 +372,7 @@ class SQLiteConnection implements ISQLite {
     }
 
     public execute(cfg: IExecuteSqlConfig) {
-        this.conn
+        this._conn
             .execSQL(cfg.sql, this.asArray(cfg.args), function(err, insertId) {
                 if (TypeUtils.isNullOrUndefined(cfg.callback)) {
                     return;
@@ -398,7 +398,7 @@ class SQLiteConnection implements ISQLite {
     }
 
     public get isOpen(): boolean {
-        return this.conn.isOpen();
+        return this._conn.isOpen();
     }
 
     public get name(): string {
@@ -408,7 +408,7 @@ class SQLiteConnection implements ISQLite {
     public selectAll(cfg: IExecuteSqlConfig) {
         var me = this;
 
-        this.conn
+        this._conn
             .all(cfg.sql, this.asArray(cfg.args), function(err, resultSet) {
                 var resultCtx: any = {};
 
