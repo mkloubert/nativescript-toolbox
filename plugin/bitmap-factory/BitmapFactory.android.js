@@ -315,8 +315,25 @@ function asBitmapObject(v) {
 
     if (typeof v === "string") {
         var decodedBytes = android.util.Base64.decode(v, 0);
+        try {
+            var options = new android.graphics.BitmapFactory.Options();
+            options.inMutable = true;
 
-        return new AndroidBitmap(android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length));
+            var bmp = android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length,
+                                                                     options);
+            try {
+                return new AndroidBitmap(bmp);
+            }
+            catch (e) {
+                bmp.recycle();
+                bmp = null;
+
+                throw e;
+            }
+        }
+        finally {
+            decodedBytes = null;
+        }
     }
 
     return false;
