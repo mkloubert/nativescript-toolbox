@@ -190,6 +190,7 @@ var Batch = (function () {
             ctx.invokeNext = function () {
                 operationInvokeStradegy = InvokeStrategy.Manually;
                 updateAndInvokeNextOperation();
+                return ctx;
             };
             ctx.checkIfFinishedAction = createCheckIfFinishedAction(i);
             if (!TypeUtils.isNullOrUndefined(skipWhile)) {

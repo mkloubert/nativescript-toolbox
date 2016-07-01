@@ -216,10 +216,11 @@ class Batch implements IBatch {
                 invokeNextOperation(i);
             };
 
-            ctx.invokeNext = () => {
+            ctx.invokeNext = (): BatchOperationContext => {
                 operationInvokeStradegy = InvokeStrategy.Manually;
 
                 updateAndInvokeNextOperation();
+                return ctx;
             };
             
             ctx.checkIfFinishedAction = createCheckIfFinishedAction(i);
@@ -691,7 +692,7 @@ class BatchOperationContext implements IBatchOperationContext {
     
     public invokeError : boolean = true;
 
-    public invokeNext: () => void;
+    public invokeNext: () => BatchOperationContext;
     
     public invokeSuccess : boolean = true;
     
@@ -1436,8 +1437,10 @@ export interface IBatchOperationContext extends IBatchLogger {
 
     /**
      * Invokes the next operation.
+     * 
+     * @chainable
      */
-    invokeNext();
+    invokeNext() : IBatchOperationContext;
     
     /**
      * Defines if "success" action should be invoked or not.
