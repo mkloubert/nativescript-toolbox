@@ -26,6 +26,7 @@ var BitmapFactory = require('./bitmap-factory');
 var Device = require('./Device');
 var Enumerable = require('./enumerable');
 var observable_array_1 = require('data/observable-array');
+var Moment = require('./moment');
 var StringFormat = require('./stringformat');
 var Sqlite = require('./sqlite');
 var TypeUtils = require("utils/types");
@@ -383,6 +384,15 @@ function newClient(config) {
     return ApiClient.newClient(config);
 }
 exports.newClient = newClient;
+/**
+ * Gets the current time.
+ *
+ * @return {Moment} The current time.
+ */
+function now() {
+    return Moment();
+}
+exports.now = now;
 /**
  * Opens a database connection.
  *

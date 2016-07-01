@@ -27,6 +27,7 @@ import BitmapFactory = require('./bitmap-factory');
 var Device = require('./Device');
 import Enumerable = require('./enumerable');
 import {ObservableArray} from 'data/observable-array';
+import Moment = require('./moment');
 import StringFormat = require('./stringformat');
 var Sqlite = require('./sqlite');
 import TypeUtils = require("utils/types");
@@ -627,6 +628,15 @@ export function newBatch(firstAction: (ctx : Batch.IBatchOperationContext) => vo
  */
 export function newClient(config : ApiClient.IApiClientConfig | string) : ApiClient.IApiClient {
     return ApiClient.newClient(config);
+}
+
+/**
+ * Gets the current time.
+ * 
+ * @return {Moment} The current time.
+ */
+export function now(): Moment.Moment {
+    return Moment();
 }
 
 /**

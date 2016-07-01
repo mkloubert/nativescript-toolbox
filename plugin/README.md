@@ -9,6 +9,7 @@ The module contains the following sub modules:
 
 | Name | Description |
 | ---- | --------- |
+| [Moment](https://github.com/moment/moment) | A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates. |
 | [nativescript-apiclient](https://github.com/mkloubert/nativescript-apiclient) | Simply call HTTP based APIs. |
 | [nativescript-batch](https://github.com/mkloubert/nativescript-batch) | Implement batch operations. |
 | [nativescript-bitmap-factory](https://github.com/mkloubert/nativescript-bitmap-factory) | Create and manipulate bitmap images. |
@@ -61,10 +62,17 @@ The module provides the following function that are short hands for the included
 | isEnumerable | Checks if a value is a sequence. |
 | newBatch | Creates a new batch. |
 | newClient | Creates a new API client. |
+| now | Gets the current time. |
 | openDatabase | Opens a (SQLite) database (connection). |
 | openUrl | Open an URL on the device. |
 
 ### Sub modules
+
+#### Moment
+
+```typescript
+import Moment = require('nativescript-toolbox/moment');
+```
 
 #### nativescript-apiclient
 
