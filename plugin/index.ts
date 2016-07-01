@@ -33,6 +33,16 @@ import TypeUtils = require("utils/types");
 import {VirtualArray} from 'data/virtual-array';
 
 /**
+ * The result of closing 
+ */
+export interface ICloseDatabaseResult {
+    /**
+     * The error (if occured).
+     */
+    error?: any;
+}
+
+/**
  * A cell.
  */
 export interface ICell {
@@ -202,6 +212,13 @@ export interface IRow {
  */
 export interface ISQLite {
     /**
+     * Closes the connection.
+     * 
+     * @param {Function} [callback] The optional callback.
+     */
+    close(callback?: (result: ICloseDatabaseResult) => void);
+
+    /**
      * Gets the underlying SQLite object.
      */
     conn: any;
@@ -287,6 +304,24 @@ class SQLiteConnection implements ISQLite {
         }
 
         return arr;
+    }
+
+    public close(callback?: (result: ICloseDatabaseResult) => void) {
+        this.conn.close((err) => {
+            if (TypeUtils.isNullOrUndefined(callback)) {
+                return;
+            }
+
+            var resultCtx: any = {};
+            if (!TypeUtils.isNullOrUndefined(err)) {
+                // error
+                Object.defineProperty(resultCtx, 'error', {
+                    get: function() { return err; }
+                });
+            }
+
+            callback(resultCtx);
+        });
     }
 
     public get conn(): any {

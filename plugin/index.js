@@ -79,6 +79,21 @@ var SQLiteConnection = (function () {
         }
         return arr;
     };
+    SQLiteConnection.prototype.close = function (callback) {
+        this.conn.close(function (err) {
+            if (TypeUtils.isNullOrUndefined(callback)) {
+                return;
+            }
+            var resultCtx = {};
+            if (!TypeUtils.isNullOrUndefined(err)) {
+                // error
+                Object.defineProperty(resultCtx, 'error', {
+                    get: function () { return err; }
+                });
+            }
+            callback(resultCtx);
+        });
+    };
     Object.defineProperty(SQLiteConnection.prototype, "conn", {
         get: function () {
             return this._conn;
