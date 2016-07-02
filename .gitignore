@@ -9,3 +9,4 @@
 /plugin/bitmap-factory/*.map
 /plugin/routed-values/*.map
 /demo/app/*.map
+/plugin/xmlobjects/*.map
