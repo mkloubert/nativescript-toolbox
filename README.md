@@ -17,6 +17,7 @@ The module contains the following sub modules:
 | [nativescript-routed-values](https://github.com/mkloubert/nativescript-routed-values) | Implement routed value graphs. |
 | [nativescript-sqlite (free)](https://github.com/nathanaela/nativescript-sqlite) | Provides sqlite actions. |
 | [nativescript-stringformat](https://github.com/mkloubert/nativescript-stringformat) | Helpers for handling strings. |
+| [nativescript-xmlobjects](https://github.com/mkloubert/nativescript-xmlobjects) | Handles XML data as objects similar to LINQ to XML. |
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X493PDBNGKAGG)
 
@@ -114,4 +115,10 @@ var SQLite = require('nativescript-toolbox/sqlite');
 
 ```typescript
 import StringFormat = require('nativescript-toolbox/stringformat');
+```
+
+#### nativescript-xmlobjects
+
+```typescript
+import XmlObjects = require('nativescript-toolbox/xmlobjects');
 ```
