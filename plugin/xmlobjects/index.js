@@ -525,7 +525,7 @@ var XDocument = (function (_super) {
         return str;
     };
     return XDocument;
-}(XContainerWithAttributes));
+}(XContainer));
 exports.XDocument = XDocument;
 function getOwnProperties(obj) {
     if (TypeUtils.isNullOrUndefined(obj)) {

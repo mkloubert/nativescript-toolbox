@@ -514,7 +514,7 @@ export class XElement extends XContainerWithAttributes {
 /**
  * A XML document.
  */
-export class XDocument extends XContainerWithAttributes {
+export class XDocument extends XContainer {
     private _root: XElement = null;
 
     /** @inheritdoc */
