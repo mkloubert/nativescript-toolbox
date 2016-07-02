@@ -21,6 +21,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 var Application = require("application");
+var ImageSource = require('image-source');
 var KnownColors = require("color/known-colors");
 var TypeUtils = require("utils/types");
 
@@ -329,6 +330,14 @@ function setupBitmapClass(bitmapClass) {
     bitmapClass.prototype.toDataUrl = function(format, quality) {
         var bd = this.toObject(format, quality);
         return 'data:' + bd.mime + ';base64,' + bd.base64;
+    };
+
+    // toImageSource()
+    bitmapClass.prototype.toImageSource = function() {
+        var imgSrc = new ImageSource.ImageSource();
+        imgSrc.setNativeSource(this.nativeObject);
+
+        return imgSrc;
     };
 
     // toObject()

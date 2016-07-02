@@ -22,6 +22,7 @@
 
 var BitmapFactory = require("./BitmapFactory");
 import TypeUtils = require("utils/types");
+import ImageSource = require('image-source');
 
 /**
  * Describes an object that stores ARGB color data.
@@ -370,6 +371,13 @@ export interface IBitmap {
      * @throws At least one input value is invalid.
      */
     toDataUrl(format?: OutputFormat, quality?: number): string;
+
+    /**
+     * Returns that image as ImageSource.
+     * 
+     * @return {ImageSource} The bitmap as ImageSource.
+     */
+    toImageSource(): ImageSource.ImageSource;
 
     /**
      * Converts that image to an object.
