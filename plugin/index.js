@@ -31,6 +31,7 @@ var StringFormat = require('./stringformat');
 var Sqlite = require('./sqlite');
 var TypeUtils = require("utils/types");
 var virtual_array_1 = require('data/virtual-array');
+var XmlObjects = require('./xmlobjects');
 /**
  * List of known platforms.
  */
@@ -444,6 +445,21 @@ function openUrl(url) {
     }
 }
 exports.openUrl = openUrl;
+/**
+ * Parses a XML string.
+ *
+ * @param {String} xml The string to parse.
+ * @param {Boolean} [processNamespaces] Process namespaces or not.
+ * @param {Boolean} [angularSyntax] Handle Angular syntax or not.
+ *
+ * @return {XDocument} The new document.
+ *
+ * @throws Parse error.
+ */
+function parseXml(xml, processNamespaces, angularSyntax) {
+    return XmlObjects.parse(xml, processNamespaces, angularSyntax);
+}
+exports.parseXml = parseXml;
 /**
  * Runs an action on the UI thread.
  *

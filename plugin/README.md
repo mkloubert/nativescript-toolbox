@@ -66,6 +66,7 @@ The module provides the following function that are short hands for the included
 | now | Gets the current time. |
 | openDatabase | Opens a (SQLite) database (connection). |
 | openUrl | Open an URL on the device. |
+| parseXml | Parses a XML string to an object. |
 
 ### Sub modules
 

@@ -32,6 +32,7 @@ import StringFormat = require('./stringformat');
 var Sqlite = require('./sqlite');
 import TypeUtils = require("utils/types");
 import {VirtualArray} from 'data/virtual-array';
+import XmlObjects = require('./xmlobjects');
 
 /**
  * The result of closing 
@@ -694,6 +695,24 @@ export function openUrl(url: string): boolean {
         console.log('[ERROR] (nativescript-toolbox).openUrl(): ' + e);
         return false;
     }
+}
+
+/**
+ * Parses a XML string.
+ * 
+ * @param {String} xml The string to parse.
+ * @param {Boolean} [processNamespaces] Process namespaces or not.
+ * @param {Boolean} [angularSyntax] Handle Angular syntax or not.
+ * 
+ * @return {XDocument} The new document.
+ * 
+ * @throws Parse error.
+ */
+export function parseXml(xml: string,
+                         processNamespaces?: boolean, angularSyntax?: boolean): XmlObjects.XDocument {
+
+    return XmlObjects.parse(xml,
+                            processNamespaces, angularSyntax);
 }
 
 /**
