@@ -39,6 +39,7 @@ var StringFormat = require('./stringformat');
 var TypeUtils = require("utils/types");
 var virtual_array_1 = require('data/virtual-array');
 var XmlObjects = require('./xmlobjects');
+var Yaml = require('./js-yaml');
 /**
  * List of known platforms.
  */
@@ -308,6 +309,20 @@ function formatArray(formatStr, args) {
     return StringFormat.formatArray(formatStr, args);
 }
 exports.formatArray = formatArray;
+/**
+ * Parses YAML data to an object.
+ *
+ * @param any y The YAML data.
+ * @param {IYamlDecodeOptions} [opts] The custom options to use.
+ *
+ * @return {T} The YAML data as object.
+ *
+ * @throws Parse error.
+ */
+function fromYaml(y, opts) {
+    return Yaml.safeLoad(y, opts);
+}
+exports.fromYaml = fromYaml;
 /**
  * Tries to return the application context of the current app.
  * For Android this is an 'android.content.Context' object.
@@ -589,4 +604,16 @@ function sha512(v) {
     return SHA512(v).toString();
 }
 exports.sha512 = sha512;
+/**
+ * Converts an object / a value to YAML.
+ *
+ * @param any v The value to convert.
+ * @param {IYamlEncodeOptions} [opts] The custom options to use.
+ *
+ * @return {String} The YAML data.
+ */
+function toYaml(v, opts) {
+    return Yaml.safeDump(v, opts);
+}
+exports.toYaml = toYaml;
 //# sourceMappingURL=index.js.map

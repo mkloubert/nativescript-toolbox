@@ -40,6 +40,7 @@ import StringFormat = require('./stringformat');
 import TypeUtils = require("utils/types");
 import {VirtualArray} from 'data/virtual-array';
 import XmlObjects = require('./xmlobjects');
+var Yaml = require('./js-yaml');
 
 /**
  * The result of closing 
@@ -251,6 +252,85 @@ export interface ISQLite {
      * Executes an SQL statement with a result.
      */
     selectAll(cfg: IExecuteSqlConfig);
+}
+
+/**
+ * YAML decode options.
+ */
+export interface IYamlDecodeOptions {
+    /**
+     * String to be used as a file path in error/warning messages.
+     */
+    filename?: string;
+
+    /**
+     * Compatibility with JSON.parse behaviour.
+     * If true, then duplicate keys in a mapping will override values rather than throwing an error.
+     */
+    json?: boolean;
+
+    /**
+     * Function to call on warning messages.
+     * Loader will throw on warnings if this function is not provided.
+     */
+    onWarning?: (error: any) => void;
+
+    /**
+     * Specifies a schema to use.
+     */
+    schema?: string;
+}
+
+/**
+ * YAML encode options.
+ */
+export interface IYamlEncodeOptions {
+    /**
+     * Specifies level of nesting, when to switch from block to flow style for collections.
+     * -1 means block style everwhere
+     */
+    flowLevel?: number;
+
+    /**
+     * Indentation width to use (in spaces).
+     */
+    indent?: number;
+
+    /**
+     * Set max line width.
+     */
+    lineWidth?: number;
+
+    /**
+     * If true don't try to be compatible with older yaml versions.
+     * Currently: don't quote "yes", "no" and so on, as required for YAML 1.1
+     */
+    noCompatMode?: boolean;
+
+    /**
+     * If true, don't convert duplicate objects into references.
+     */
+    noRefs?: boolean;
+
+    /**
+     * Specifies a schema to use.
+     */
+    schema?: string;
+    
+    /**
+     * Do not throw on invalid types (like function in the safe schema) and skip pairs and single values with such types.
+     */
+    skipInvalid?: boolean;
+
+    /**
+     * If true, sort keys when dumping YAML. If a function, use the function to sort the keys.
+     */
+    sortKeys?: boolean;
+
+    /**
+     * "tag" => "style" map. Each tag may have own set of styles.
+     */
+    styles?: any;
 }
 
 /**
@@ -545,6 +625,20 @@ export function format(formatStr: string, ...args: any[]): string {
  */
 export function formatArray(formatStr: string, args: any[]): string {
     return StringFormat.formatArray(formatStr, args);
+}
+
+/**
+ * Parses YAML data to an object.
+ * 
+ * @param any y The YAML data.
+ * @param {IYamlDecodeOptions} [opts] The custom options to use.
+ * 
+ * @return {T} The YAML data as object.
+ * 
+ * @throws Parse error.
+ */
+export function fromYaml<T>(y: any, opts?: IYamlDecodeOptions): T {
+    return Yaml.safeLoad(y, opts);
 }
 
 /**
@@ -845,4 +939,16 @@ export function sha384(v: any): string {
  */
 export function sha512(v: any): string {
     return SHA512(v).toString();
+}
+
+/**
+ * Converts an object / a value to YAML.
+ * 
+ * @param any v The value to convert.
+ * @param {IYamlEncodeOptions} [opts] The custom options to use.
+ * 
+ * @return {String} The YAML data.
+ */
+export function toYaml(v: any, opts?: IYamlEncodeOptions): string {
+    return Yaml.safeDump(v, opts);
 }

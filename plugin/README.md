@@ -59,6 +59,7 @@ The module provides the following function that are short hands for the included
 | encrypt | Encrypts a value / an object with AES. |
 | format | Formats a string. |
 | formatArray | Formats a string. |
+| fromYaml | Parses YAML data to an object. |
 | getApplicationContext | Returns the current application context. |
 | getNativeView | Returns the native view of the app. |
 | getPlatform | Returns information of the current platform. |
@@ -77,6 +78,7 @@ The module provides the following function that are short hands for the included
 | sha3 | Hashes a value with SHA-3. |
 | sha384 | Hashes a value with SHA-384. |
 | sha512 | Hashes a value with SHA-512. |
+| toYaml | Converts an object / a value to YAML. |
 
 ### Sub modules
 
