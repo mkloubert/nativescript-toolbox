@@ -24,12 +24,19 @@ import Application = require('application');
 import ApiClient = require('./apiclient');
 import Batch = require('./batch');
 import BitmapFactory = require('./bitmap-factory');
+var CryptoJS = require('./crypto-js');
 var Device = require('./Device');
 import Enumerable = require('./enumerable');
-import {ObservableArray} from 'data/observable-array';
+var MD5 = require('./crypto-js/md5');
 import Moment = require('./moment');
-import StringFormat = require('./stringformat');
+import {ObservableArray} from 'data/observable-array';
+var SHA1 = require('./crypto-js/sha1');
+var SHA256 = require('./crypto-js/sha256');
+var SHA3 = require('./crypto-js/sha3');
+var SHA384 = require('./crypto-js/sha384');
+var SHA512 = require('./crypto-js/sha512');
 var Sqlite = require('./sqlite');
+import StringFormat = require('./stringformat');
 import TypeUtils = require("utils/types");
 import {VirtualArray} from 'data/virtual-array';
 import XmlObjects = require('./xmlobjects');
@@ -486,6 +493,33 @@ export function createBitmap(width: number, height?: number): BitmapFactory.IBit
 }
 
 /**
+ * Decrypts a value / an object with AES.
+ * 
+ * @param {String} v The value to decrypt.
+ * 
+ * @return {T} The decrypted value.
+ */
+export function decrypt<T>(v: string, key: string): T {
+    var bytes = CryptoJS.AES.decrypt(v, key);
+    var json = bytes.toString(CryptoJS.enc.Utf8);
+
+    return JSON.parse(json);
+}
+
+/**
+ * Encrypts a value / an object with AES.
+ * 
+ * @param any v The value to encrypt.
+ * 
+ * @return {String} The encrypted value.
+ */
+export function encrypt(v: any, key: string): string {
+    return CryptoJS.AES
+                   .encrypt(JSON.stringify(v), key)
+                   .toString();
+}
+
+/**
  * Formats a string.
  * 
  * @function format
@@ -609,6 +643,17 @@ export function isDebug(): boolean {
  */
 export function isEnumerable(v: any): boolean {
     return Enumerable.isEnumerable(v);
+}
+
+/**
+ * Returns the MD5 hash of a value.
+ * 
+ * @param any v The value to hash.
+ * 
+ * @return {String} The hash.
+ */
+export function md5(v: any): string {
+    return MD5(v).toString();
 }
 
 /**
@@ -745,4 +790,59 @@ export function runOnUI<T>(action: (state: T) => void, state?: T,
         console.log('[ERROR] (nativescript-toolbox).runOnUI(0): ' + e);
         return false;
     }
+}
+
+/**
+ * Returns the SHA-1 hash of a value.
+ * 
+ * @param any v The value to hash.
+ * 
+ * @return {String} The hash.
+ */
+export function sha1(v: any): string {
+    return SHA1(v).toString();
+}
+
+/**
+ * Returns the SHA-256 hash of a value.
+ * 
+ * @param any v The value to hash.
+ * 
+ * @return {String} The hash.
+ */
+export function sha256(v: any): string {
+    return SHA256(v).toString();
+}
+
+/**
+ * Returns the SHA-3 hash of a value.
+ * 
+ * @param any v The value to hash.
+ * 
+ * @return {String} The hash.
+ */
+export function sha3(v: any): string {
+    return SHA3(v).toString();
+}
+
+/**
+ * Returns the SHA-384 hash of a value.
+ * 
+ * @param any v The value to hash.
+ * 
+ * @return {String} The hash.
+ */
+export function sha384(v: any): string {
+    return SHA384(v).toString();
+}
+
+/**
+ * Returns the SHA-512 hash of a value.
+ * 
+ * @param any v The value to hash.
+ * 
+ * @return {String} The hash.
+ */
+export function sha512(v: any): string {
+    return SHA512(v).toString();
 }

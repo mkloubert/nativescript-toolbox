@@ -23,12 +23,19 @@
 var ApiClient = require('./apiclient');
 var Batch = require('./batch');
 var BitmapFactory = require('./bitmap-factory');
+var CryptoJS = require('./crypto-js');
 var Device = require('./Device');
 var Enumerable = require('./enumerable');
-var observable_array_1 = require('data/observable-array');
+var MD5 = require('./crypto-js/md5');
 var Moment = require('./moment');
-var StringFormat = require('./stringformat');
+var observable_array_1 = require('data/observable-array');
+var SHA1 = require('./crypto-js/sha1');
+var SHA256 = require('./crypto-js/sha256');
+var SHA3 = require('./crypto-js/sha3');
+var SHA384 = require('./crypto-js/sha384');
+var SHA512 = require('./crypto-js/sha512');
 var Sqlite = require('./sqlite');
+var StringFormat = require('./stringformat');
 var TypeUtils = require("utils/types");
 var virtual_array_1 = require('data/virtual-array');
 var XmlObjects = require('./xmlobjects');
@@ -244,6 +251,32 @@ function createBitmap(width, height) {
 }
 exports.createBitmap = createBitmap;
 /**
+ * Decrypts a value / an object with AES.
+ *
+ * @param {String} v The value to decrypt.
+ *
+ * @return {T} The decrypted value.
+ */
+function decrypt(v, key) {
+    var bytes = CryptoJS.AES.decrypt(v, key);
+    var json = bytes.toString(CryptoJS.enc.Utf8);
+    return JSON.parse(json);
+}
+exports.decrypt = decrypt;
+/**
+ * Encrypts a value / an object with AES.
+ *
+ * @param any v The value to encrypt.
+ *
+ * @return {String} The encrypted value.
+ */
+function encrypt(v, key) {
+    return CryptoJS.AES
+        .encrypt(JSON.stringify(v), key)
+        .toString();
+}
+exports.encrypt = encrypt;
+/**
  * Formats a string.
  *
  * @function format
@@ -365,6 +398,17 @@ function isEnumerable(v) {
     return Enumerable.isEnumerable(v);
 }
 exports.isEnumerable = isEnumerable;
+/**
+ * Returns the MD5 hash of a value.
+ *
+ * @param any v The value to hash.
+ *
+ * @return {String} The hash.
+ */
+function md5(v) {
+    return MD5(v).toString();
+}
+exports.md5 = md5;
 /**
  * Creates a new batch.
  *
@@ -490,4 +534,59 @@ function runOnUI(action, state, onError) {
     }
 }
 exports.runOnUI = runOnUI;
+/**
+ * Returns the SHA-1 hash of a value.
+ *
+ * @param any v The value to hash.
+ *
+ * @return {String} The hash.
+ */
+function sha1(v) {
+    return SHA1(v).toString();
+}
+exports.sha1 = sha1;
+/**
+ * Returns the SHA-256 hash of a value.
+ *
+ * @param any v The value to hash.
+ *
+ * @return {String} The hash.
+ */
+function sha256(v) {
+    return SHA256(v).toString();
+}
+exports.sha256 = sha256;
+/**
+ * Returns the SHA-3 hash of a value.
+ *
+ * @param any v The value to hash.
+ *
+ * @return {String} The hash.
+ */
+function sha3(v) {
+    return SHA3(v).toString();
+}
+exports.sha3 = sha3;
+/**
+ * Returns the SHA-384 hash of a value.
+ *
+ * @param any v The value to hash.
+ *
+ * @return {String} The hash.
+ */
+function sha384(v) {
+    return SHA384(v).toString();
+}
+exports.sha384 = sha384;
+/**
+ * Returns the SHA-512 hash of a value.
+ *
+ * @param any v The value to hash.
+ *
+ * @return {String} The hash.
+ */
+function sha512(v) {
+    return SHA512(v).toString();
+}
+exports.sha512 = sha512;
 //# sourceMappingURL=index.js.map
