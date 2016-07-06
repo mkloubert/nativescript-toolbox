@@ -9,6 +9,8 @@ The module contains the following sub modules:
 
 | Name | Description |
 | ---- | --------- |
+| [crypto-js](https://github.com/brix/crypto-js) | Library of crypto standards. |
+| [JS-YAML](https://github.com/nodeca/js-yaml) | YAML 1.2 parser / writer. |
 | [Moment](https://github.com/moment/moment) | A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates. |
 | [nativescript-apiclient](https://github.com/mkloubert/nativescript-apiclient) | Simply call HTTP based APIs. |
 | [nativescript-batch](https://github.com/mkloubert/nativescript-batch) | Implement batch operations. |
@@ -69,6 +71,33 @@ The module provides the following function that are short hands for the included
 | parseXml | Parses a XML string to an object. |
 
 ### Sub modules
+
+#### crypto-js
+
+Here are some examples of common algorithms:
+
+##### Encrypters
+
+```typescript
+import AES = require("nativescript-toolbox/crypto-js/aes");
+```
+
+##### Hashes
+
+```typescript
+import MD5 = require('nativescript-toolbox/crypto-js/md5');
+import SHA1 = require('nativescript-toolbox/crypto-js/sha1');
+import SHA256 = require('nativescript-toolbox/crypto-js/sha256');
+import SHA384 = require('nativescript-toolbox/crypto-js/sha384');
+import SHA512 = require('nativescript-toolbox/crypto-js/sha512');
+import SHA3 = require('nativescript-toolbox/crypto-js/sha3');
+```
+
+#### JS-YAML
+
+```typescript
+import YAML = require('nativescript-toolbox/js-yaml');
+```
 
 #### Moment
 
