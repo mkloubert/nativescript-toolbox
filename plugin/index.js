@@ -310,17 +310,10 @@ function formatArray(formatStr, args) {
 }
 exports.formatArray = formatArray;
 /**
- * Parses YAML data to an object.
- *
- * @param any y The YAML data.
- * @param {IYamlDecodeOptions} [opts] The custom options to use.
- *
- * @return {T} The YAML data as object.
- *
- * @throws Parse error.
+ * Alias for 'parseYaml()'
  */
 function fromYaml(y, opts) {
-    return Yaml.safeLoad(y, opts);
+    return parseYaml(y, opts);
 }
 exports.fromYaml = fromYaml;
 /**
@@ -519,6 +512,20 @@ function parseXml(xml, processNamespaces, angularSyntax) {
     return XmlObjects.parse(xml, processNamespaces, angularSyntax);
 }
 exports.parseXml = parseXml;
+/**
+ * Parses YAML data to an object.
+ *
+ * @param any y The YAML data.
+ * @param {IYamlDecodeOptions} [opts] The custom options to use.
+ *
+ * @return {T} The YAML data as object.
+ *
+ * @throws Parse error.
+ */
+function parseYaml(y, opts) {
+    return Yaml.safeLoad(y, opts);
+}
+exports.parseYaml = parseYaml;
 /**
  * Runs an action on the UI thread.
  *

@@ -59,12 +59,12 @@ The module provides the following function that are short hands for the included
 | encrypt | Encrypts a value / an object with AES. |
 | format | Formats a string. |
 | formatArray | Formats a string. |
-| fromYaml | Parses YAML data to an object. |
+| fromYaml | Alias for 'parseYaml'. |
 | getApplicationContext | Returns the current application context. |
 | getNativeView | Returns the native view of the app. |
 | getPlatform | Returns information of the current platform. |
 | invokeForPlatform | Invokes an action for a specific platform. |
-| isDebug | Checks if the device is in debug mode or not. |
+| isDebug | Checks if the app is in debug mode or not. |
 | isEnumerable | Checks if a value is a sequence. |
 | md5 | Hashes a value with MD5. |
 | newBatch | Creates a new batch. |
@@ -73,6 +73,7 @@ The module provides the following function that are short hands for the included
 | openDatabase | Opens a (SQLite) database (connection). |
 | openUrl | Open an URL on the device. |
 | parseXml | Parses a XML string to an object. |
+| parseYaml | Parses YAML data to an object. |
 | sha1 | Hashes a value with SHA-1. |
 | sha256 | Hashes a value with SHA-256. |
 | sha3 | Hashes a value with SHA-3. |
@@ -89,24 +90,24 @@ Here are some examples of common algorithms:
 ##### Encrypters
 
 ```typescript
-import AES = require("nativescript-toolbox/crypto-js/aes");
+var AES = require("nativescript-toolbox/crypto-js/aes");
 ```
 
 ##### Hashes
 
 ```typescript
-import MD5 = require('nativescript-toolbox/crypto-js/md5');
-import SHA1 = require('nativescript-toolbox/crypto-js/sha1');
-import SHA256 = require('nativescript-toolbox/crypto-js/sha256');
-import SHA3 = require('nativescript-toolbox/crypto-js/sha3');
-import SHA384 = require('nativescript-toolbox/crypto-js/sha384');
-import SHA512 = require('nativescript-toolbox/crypto-js/sha512');
+var MD5 = require('nativescript-toolbox/crypto-js/md5');
+var SHA1 = require('nativescript-toolbox/crypto-js/sha1');
+var SHA256 = require('nativescript-toolbox/crypto-js/sha256');
+var SHA3 = require('nativescript-toolbox/crypto-js/sha3');
+var SHA384 = require('nativescript-toolbox/crypto-js/sha384');
+var SHA512 = require('nativescript-toolbox/crypto-js/sha512');
 ```
 
 #### JS-YAML
 
 ```typescript
-import YAML = require('nativescript-toolbox/js-yaml');
+var YAML = require('nativescript-toolbox/js-yaml');
 ```
 
 #### Moment
