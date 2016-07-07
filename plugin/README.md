@@ -59,6 +59,7 @@ The module provides the following function that are short hands for the included
 | encrypt | Encrypts a value / an object with AES. |
 | format | Formats a string. |
 | formatArray | Formats a string. |
+| fromXml | Alias for 'parseXml'. |
 | fromYaml | Alias for 'parseYaml'. |
 | getApplicationContext | Returns the current application context. |
 | getNativeView | Returns the native view of the app. |

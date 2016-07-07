@@ -628,6 +628,15 @@ export function formatArray(formatStr: string, args: any[]): string {
 }
 
 /**
+ * Alias for 'parseXml()'
+ */
+export function fromXml(xml: string,
+                        processNamespaces?: boolean, angularSyntax?: boolean): XmlObjects.XDocument {
+    return parseXml(xml,
+                    processNamespaces, angularSyntax);
+}
+
+/**
  * Alias for 'parseYaml()'
  */
 export function fromYaml<T>(y: any, opts?: IYamlDecodeOptions): T {

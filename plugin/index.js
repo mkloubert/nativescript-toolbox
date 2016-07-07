@@ -310,6 +310,13 @@ function formatArray(formatStr, args) {
 }
 exports.formatArray = formatArray;
 /**
+ * Alias for 'parseXml()'
+ */
+function fromXml(xml, processNamespaces, angularSyntax) {
+    return parseXml(xml, processNamespaces, angularSyntax);
+}
+exports.fromXml = fromXml;
+/**
  * Alias for 'parseYaml()'
  */
 function fromYaml(y, opts) {
