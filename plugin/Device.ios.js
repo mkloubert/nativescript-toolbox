@@ -38,7 +38,7 @@ function getPlatformData() {
 
     // app
     Object.defineProperty(pd, 'app', {
-        get: function() { return Application.android; }
+        get: function() { return Application.ios; }
     });
 
     // type
