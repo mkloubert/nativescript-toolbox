@@ -598,6 +598,7 @@ class ApiClient extends LoggerBase implements IApiClient {
             }
         }
 
+        var authorizer = me.authorizer;
         var content;
         var encoding = "utf-8";
         var tag;
@@ -661,11 +662,12 @@ class ApiClient extends LoggerBase implements IApiClient {
                 }
             }
             
-            // authorization
-            var authorizer = opts.authorizer || me.authorizer;
-            if (!TypeUtils.isNullOrUndefined(authorizer)) {
-                authorizer.prepare(httpRequestOpts);
-            }
+            authorizer = opts.authorizer || authorizer;
+        }
+
+        // authorization
+        if (!TypeUtils.isNullOrUndefined(authorizer)) {
+            authorizer.prepare(httpRequestOpts);
         }
         
         if (TypeUtils.isNullOrUndefined(content)) {

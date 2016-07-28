@@ -448,6 +448,7 @@ var ApiClient = (function (_super) {
                 httpRequestOpts.timeout = opts.timeout;
             }
         }
+        var authorizer = me.authorizer;
         var content;
         var encoding = "utf-8";
         var tag;
@@ -499,11 +500,11 @@ var ApiClient = (function (_super) {
                         break;
                 }
             }
-            // authorization
-            var authorizer = opts.authorizer || me.authorizer;
-            if (!TypeUtils.isNullOrUndefined(authorizer)) {
-                authorizer.prepare(httpRequestOpts);
-            }
+            authorizer = opts.authorizer || authorizer;
+        }
+        // authorization
+        if (!TypeUtils.isNullOrUndefined(authorizer)) {
+            authorizer.prepare(httpRequestOpts);
         }
         if (TypeUtils.isNullOrUndefined(content)) {
             content = null;
