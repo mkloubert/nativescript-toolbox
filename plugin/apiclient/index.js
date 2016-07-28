@@ -418,7 +418,7 @@ var ApiClient = (function (_super) {
                 allUrlParams.push(getOwnProperties(opts.params));
             }
             var urlParamCount = 0;
-            var urlParamSuffix = "";
+            var urlParamSuffix = "?";
             for (var i = 0; i < allUrlParams.length; i++) {
                 var urlParams = allUrlParams[i];
                 if (TypeUtils.isNullOrUndefined(urlParams)) {

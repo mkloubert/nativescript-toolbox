@@ -561,7 +561,7 @@ class ApiClient extends LoggerBase implements IApiClient {
             }
 
             var urlParamCount = 0;
-            var urlParamSuffix = "";
+            var urlParamSuffix = "?";
             for (var i = 0; i < allUrlParams.length; i++) {
                 var urlParams = allUrlParams[i];
                 if (TypeUtils.isNullOrUndefined(urlParams)) {
