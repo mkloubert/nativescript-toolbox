@@ -491,7 +491,7 @@ var XElement = (function (_super) {
             for (var i = 0; i < childNodes.length; i++) {
                 var node = childNodes[i];
                 var valueToAdd;
-                if (hasProperty(node, 'value')) {
+                if (!TypeUtils.isNullOrUndefined(node.value)) {
                     valueToAdd = node.value;
                 }
                 else {
@@ -568,18 +568,6 @@ function getOwnProperties(obj) {
         }
     }
     return properties;
-}
-function hasProperty(obj, propertyName) {
-    if (TypeUtils.isNullOrUndefined(obj)) {
-        return obj;
-    }
-    obj.hasProperty();
-    for (var p in obj) {
-        if (propertyName === p) {
-            return true;
-        }
-    }
-    return false;
 }
 /**
  * Parses an XML string.

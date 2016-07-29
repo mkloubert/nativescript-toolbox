@@ -527,7 +527,7 @@ export class XElement extends XContainerWithAttributes {
             var node: any = childNodes[i];
 
             var valueToAdd;
-            if (hasProperty(node, 'value')) {
+            if (!TypeUtils.isNullOrUndefined(node.value)) {
                 valueToAdd = node.value;
             }
             else {
@@ -604,22 +604,6 @@ function getOwnProperties(obj) {
     }
     
     return properties;
-}
-
-function hasProperty(obj: any, propertyName: string): boolean {
-    if (TypeUtils.isNullOrUndefined(obj)) {
-        return obj;
-    }
-
-    obj.hasProperty();
-
-    for (var p in obj) {
-        if (propertyName === p) {
-            return true;
-        }
-    }
-    
-    return false;
 }
 
 /**
