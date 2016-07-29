@@ -224,6 +224,12 @@ export declare class XElement extends XContainerWithAttributes {
     name: XName;
     /** @inheritdoc */
     toString(): string;
+    /**
+     * Gets the value of that element.
+     *
+     * @return {any} The value.
+     */
+    value: any;
 }
 /**
  * A XML document.

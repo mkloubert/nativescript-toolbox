@@ -509,6 +509,38 @@ export class XElement extends XContainerWithAttributes {
 
         return str;
     }
+
+    /**
+     * Gets the value of that element.
+     * 
+     * @return {any} The value.
+     */
+    public get value(): any {
+        var childNodes = this.nodes();
+        if (childNodes.length < 1) {
+            return null;
+        }
+
+        var elementValue = '';
+
+        for (var i = 0; i < childNodes.length; i++) {
+            var node: any = childNodes[i];
+
+            var valueToAdd;
+            if (hasProperty(node, 'value')) {
+                valueToAdd = node.value;
+            }
+            else {
+                valueToAdd = node.toString();
+            }
+
+            if (!TypeUtils.isNullOrUndefined(valueToAdd)) {
+                elementValue += valueToAdd;
+            }
+        }
+
+        return elementValue;
+    }
 }
 
 /**
@@ -572,6 +604,22 @@ function getOwnProperties(obj) {
     }
     
     return properties;
+}
+
+function hasProperty(obj: any, propertyName: string): boolean {
+    if (TypeUtils.isNullOrUndefined(obj)) {
+        return obj;
+    }
+
+    obj.hasProperty();
+
+    for (var p in obj) {
+        if (propertyName === p) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 /**

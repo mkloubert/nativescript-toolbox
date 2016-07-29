@@ -476,6 +476,36 @@ var XElement = (function (_super) {
         }
         return str;
     };
+    Object.defineProperty(XElement.prototype, "value", {
+        /**
+         * Gets the value of that element.
+         *
+         * @return {any} The value.
+         */
+        get: function () {
+            var childNodes = this.nodes();
+            if (childNodes.length < 1) {
+                return null;
+            }
+            var elementValue = '';
+            for (var i = 0; i < childNodes.length; i++) {
+                var node = childNodes[i];
+                var valueToAdd;
+                if (hasProperty(node, 'value')) {
+                    valueToAdd = node.value;
+                }
+                else {
+                    valueToAdd = node.toString();
+                }
+                if (!TypeUtils.isNullOrUndefined(valueToAdd)) {
+                    elementValue += valueToAdd;
+                }
+            }
+            return elementValue;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return XElement;
 }(XContainerWithAttributes));
 exports.XElement = XElement;
@@ -538,6 +568,18 @@ function getOwnProperties(obj) {
         }
     }
     return properties;
+}
+function hasProperty(obj, propertyName) {
+    if (TypeUtils.isNullOrUndefined(obj)) {
+        return obj;
+    }
+    obj.hasProperty();
+    for (var p in obj) {
+        if (propertyName === p) {
+            return true;
+        }
+    }
+    return false;
 }
 /**
  * Parses an XML string.
