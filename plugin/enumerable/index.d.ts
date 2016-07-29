@@ -394,6 +394,12 @@ export interface IEnumerable<T> {
      */
     skip(cnt: number): IEnumerable<T>;
     /**
+     * Takes all elements but the last one.
+     *
+     * @return {IEnumerable} The new sequence.
+     */
+    skipLast(): IEnumerable<T>;
+    /**
      * Skips elements of that sequence while a condition matches.
      *
      * @method skipWhile
@@ -692,6 +698,8 @@ export declare abstract class Sequence<T> implements IEnumerable<T> {
     singleOrDefault(predicateOrDefaultValue?: any, defaultValue?: any): any;
     /** @inheritdoc */
     skip(cnt: number): IEnumerable<T>;
+    /** @inheritdoc */
+    skipLast(): IEnumerable<T>;
     /** @inheritdoc */
     skipWhile(predicate: any): IEnumerable<T>;
     /** @inheritdoc */

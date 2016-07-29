@@ -658,6 +658,27 @@ var Sequence = (function () {
         });
     };
     /** @inheritdoc */
+    Sequence.prototype.skipLast = function () {
+        var hasRemainingItems;
+        var isFirst = true;
+        var item;
+        var newItemList = [];
+        do {
+            hasRemainingItems = this.moveNext();
+            if (!hasRemainingItems) {
+                continue;
+            }
+            if (!isFirst) {
+                newItemList.push(item);
+            }
+            else {
+                isFirst = false;
+            }
+            item = this.current;
+        } while (hasRemainingItems);
+        return fromArray(newItemList);
+    };
+    /** @inheritdoc */
     Sequence.prototype.skipWhile = function (predicate) {
         predicate = asFunc(predicate);
         var newItems = [];

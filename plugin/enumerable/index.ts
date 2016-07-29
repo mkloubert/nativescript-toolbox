@@ -467,6 +467,13 @@ export interface IEnumerable<T> {
     skip(cnt: number): IEnumerable<T>;
 
     /**
+     * Takes all elements but the last one.
+     * 
+     * @return {IEnumerable} The new sequence.
+     */
+    skipLast(): IEnumerable<T>;
+
+    /**
      * Skips elements of that sequence while a condition matches.
      *
      * @method skipWhile
@@ -1512,6 +1519,35 @@ export abstract class Sequence<T> implements IEnumerable<T> {
             
             return false;
         });
+    }
+
+    /** @inheritdoc */
+    public skipLast(): IEnumerable<T> {
+        var hasRemainingItems;
+        var isFirst = true;
+        var item;
+
+        var newItemList: T[] = [];
+
+        do
+        {
+            hasRemainingItems = this.moveNext();
+            if (!hasRemainingItems) {
+                continue;
+            }
+
+            if (!isFirst) {
+                newItemList.push(item);
+            }
+            else {
+                isFirst = false;
+            }
+
+            item = this.current;
+        }
+        while (hasRemainingItems);
+
+        return fromArray(newItemList);
     }
 
     /** @inheritdoc */
