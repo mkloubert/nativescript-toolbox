@@ -8,6 +8,19 @@ import { ObservableArray } from 'data/observable-array';
 import { VirtualArray } from 'data/virtual-array';
 import XmlObjects = require('./xmlobjects');
 /**
+ * List of device orientations.
+ */
+export declare enum DeviceOrientation {
+    /**
+     * Landscape
+     */
+    Landscape = 2,
+    /**
+     * Portrait
+     */
+    Portrait = 1,
+}
+/**
  * The result of closing
  */
 export interface ICloseDatabaseResult {
@@ -68,17 +81,42 @@ export interface IExecuteSqlResult {
     result?: Enumerable.IEnumerable<IRow>;
 }
 /**
+ * Configuration for 'invokeForOrientation()' function.
+ */
+export interface IInvokeForOrientationConfig<T> {
+    /**
+     * The callback that is invoked if device is in landscape mode.
+     */
+    landscape?: (orientation: DeviceOrientation, tag?: T) => any;
+    /**
+     * The callback that is invoked if device is in portrait mode.
+     */
+    portrait?: (orientation: DeviceOrientation, tag?: T) => any;
+    /**
+     * The custom objects for the callbacks.
+     */
+    tag?: T;
+    /**
+     * The callback that is invoked if device is in unknown mode.
+     */
+    unknown?: (orientation: DeviceOrientation, tag?: T) => any;
+}
+/**
  * Configuration for 'invokeForPlatform()' function.
  */
-export interface IInvokeForPlatformConfig {
+export interface IInvokeForPlatformConfig<T> {
     /**
      * Callback that is invoked on Android.
      */
-    android?: (platform: IPlatformData) => any;
+    android?: (platform: IPlatformData, tag?: T) => any;
     /**
      * Callback that is invoked on iOS.
      */
-    ios?: (platform: IPlatformData) => any;
+    ios?: (platform: IPlatformData, tag?: T) => any;
+    /**
+     * The custom objects for the callbacks.
+     */
+    tag?: T;
 }
 /**
  * Config data for opening a database.
@@ -381,6 +419,12 @@ export declare function getApplicationContext(): any;
  */
 export declare function getNativeView(): any;
 /**
+ * Gets the current orientation of the device.
+ *
+ * @return {UIEnums.DeviceOrientation} The orientation (if defined).
+ */
+export declare function getOrientation(): DeviceOrientation;
+/**
  * Returns information of the current platform.
  *
  * @return {IPlatformData} The platform information.
@@ -391,13 +435,30 @@ export declare function getPlatform(): IPlatformData;
  */
 export declare function guid(separator?: string): string;
 /**
+ * Generic hash function.
+ *
+ * @param {any} v The value to hash.
+ * @param {string} [algo] The name of the algorithm to use (default: 'sha256').
+ *
+ * @return {string} The hash.
+ */
+export declare function hash(v: any, algo?: string): string;
+/**
+ * Invokes a callback for specific orientation mode.
+ *
+ * @param {IInvokeForOrientationConfig} cfg The configuration.
+ *
+ * @return {any} The result of a callback.
+ */
+export declare function invokeForOrientation<T>(cfg: IInvokeForOrientationConfig<T>): any;
+/**
  * Invokes an action for a specific platform.
  *
  * @param {IInvokeForPlatformContext} cfg The config data.
  *
  * @return any The result of the invoked callback.
  */
-export declare function invokeForPlatform(cfg: IInvokeForPlatformConfig): any;
+export declare function invokeForPlatform<T>(cfg: IInvokeForPlatformConfig<T>): any;
 /**
  * Checks if the device is in debug mode or not.
  *

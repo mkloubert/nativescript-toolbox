@@ -43,6 +43,21 @@ import XmlObjects = require('./xmlobjects');
 var Yaml = require('./js-yaml');
 
 /**
+ * List of device orientations.
+ */
+export enum DeviceOrientation {
+    /**
+     * Landscape
+     */
+    Landscape = 2,
+
+    /**
+     * Portrait
+     */
+    Portrait = 1,
+}
+
+/**
  * The result of closing 
  */
 export interface ICloseDatabaseResult {
@@ -113,18 +128,48 @@ export interface IExecuteSqlResult {
 }
 
 /**
+ * Configuration for 'invokeForOrientation()' function.
+ */
+export interface IInvokeForOrientationConfig<T> {
+    /**
+     * The callback that is invoked if device is in landscape mode.
+     */
+    landscape?: (orientation: DeviceOrientation, tag?: T) => any;
+
+    /**
+     * The callback that is invoked if device is in portrait mode.
+     */
+    portrait?: (orientation: DeviceOrientation, tag?: T) => any;
+
+    /**
+     * The custom objects for the callbacks.
+     */
+    tag?: T;
+
+    /**
+     * The callback that is invoked if device is in unknown mode.
+     */
+    unknown?: (orientation: DeviceOrientation, tag?: T) => any;
+}
+
+/**
  * Configuration for 'invokeForPlatform()' function.
  */
-export interface IInvokeForPlatformConfig {
+export interface IInvokeForPlatformConfig<T> {
     /**
      * Callback that is invoked on Android.
      */
-    android?: (platform: IPlatformData) => any;
+    android?: (platform: IPlatformData, tag?: T) => any;
 
     /**
      * Callback that is invoked on iOS.
      */
-    ios?: (platform: IPlatformData) => any;
+    ios?: (platform: IPlatformData, tag?: T) => any;
+
+    /**
+     * The custom objects for the callbacks.
+     */
+    tag?: T;
 }
 
 /**
@@ -696,6 +741,15 @@ export function getNativeView(): any {
 }
 
 /**
+ * Gets the current orientation of the device.
+ * 
+ * @return {UIEnums.DeviceOrientation} The orientation (if defined).
+ */
+export function getOrientation(): DeviceOrientation {
+    return Device.getDeviceOrientation();
+}
+
+/**
  * Returns information of the current platform.
  * 
  * @return {IPlatformData} The platform information.
@@ -731,16 +785,99 @@ export function guid(separator: string = '-'): string {
 }
 
 /**
+ * Generic hash function.
+ * 
+ * @param {any} v The value to hash.
+ * @param {string} [algo] The name of the algorithm to use (default: 'sha256').
+ * 
+ * @return {string} The hash.
+ */
+export function hash(v: any, algo?: string): string {
+    if (StringFormat.isEmptyOrWhitespace(algo)) {
+        algo = 'sha256';
+    }
+
+    var hasher;
+    switch (algo.toLowerCase().trim()) {
+        case 'sha256':
+        case 'sha-256':
+            hasher = sha256;
+            break;
+
+        case 'sha1':
+        case 'sha-1':
+            hasher = sha1;
+            break;
+
+        case 'md5':
+        case 'md-5':
+            hasher = md5;
+            break;
+
+        case 'sha384':
+        case 'sha-384':
+            hasher = sha384;
+            break;
+
+        case 'sha512':
+        case 'sha-512':
+            hasher = sha512;
+            break;
+
+        case 'sha3':
+        case 'sha-3':
+            hasher = sha3;
+            break;
+    }
+
+    if (TypeUtils.isNullOrUndefined(hasher)) {
+        throw "Algorithm '" + algo + "' is NOT supported!";
+    }
+    
+    return hasher(v);
+}
+
+/**
+ * Invokes a callback for specific orientation mode.
+ * 
+ * @param {IInvokeForOrientationConfig} cfg The configuration.
+ * 
+ * @return {any} The result of a callback.
+ */
+export function invokeForOrientation<T>(cfg: IInvokeForOrientationConfig<T>): any {
+    var orientation = getOrientation();
+
+    var callback: (orientation: DeviceOrientation, tag?: T) => any;
+    switch (orientation) {
+        case DeviceOrientation.Portrait:
+            callback = cfg.portrait;
+            break;
+
+        case DeviceOrientation.Landscape:
+            callback = cfg.landscape;
+            break;
+
+        default:
+            callback = cfg.unknown;
+            break;
+    }
+
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        return callback(orientation, cfg.tag);
+    }
+}
+
+/**
  * Invokes an action for a specific platform.
  * 
  * @param {IInvokeForPlatformContext} cfg The config data.
  * 
  * @return any The result of the invoked callback.
  */
-export function invokeForPlatform(cfg: IInvokeForPlatformConfig): any {
+export function invokeForPlatform<T>(cfg: IInvokeForPlatformConfig<T>): any {
     var platform = getPlatform();
 
-    var callback: (platform: IPlatformData) => any;
+    var callback: (platform: IPlatformData, tag?: T) => any;
     if (platform.android) {
         callback = cfg.android;
     }
@@ -749,7 +886,7 @@ export function invokeForPlatform(cfg: IInvokeForPlatformConfig): any {
     }
 
     if (!TypeUtils.isNullOrUndefined(callback)) {
-        return callback(platform);
+        return callback(platform, cfg.tag);
     }
 }
 

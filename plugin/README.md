@@ -62,9 +62,12 @@ The module provides the following function that are short hands for the included
 | fromXml | Alias for 'parseXml'. |
 | fromYaml | Alias for 'parseYaml'. |
 | getApplicationContext | Returns the current application context. |
+| getOrientation | Gets the current orientation of the device (based on [nativescript-orientation](https://github.com/nathanaela/nativescript-orientation)). |
 | getNativeView | Returns the native view of the app. |
 | getPlatform | Returns information of the current platform. |
 | guid | Alias for 'uuid'. |
+| hash | Generic hash function. |
+| invokeForOrientation | Invokes a callback for specific orientation mode. |
 | invokeForPlatform | Invokes an action for a specific platform. |
 | isDebug | Checks if the app is in debug mode or not. |
 | isEnumerable | Checks if a value is a sequence. |

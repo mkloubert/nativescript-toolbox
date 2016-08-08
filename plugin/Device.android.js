@@ -108,6 +108,26 @@ function getAppView() {
 }
 exports.getAppView = getAppView;
 
+// based on code by Nathanael Anderson
+// 
+// https://github.com/NathanaelA/nativescript-orientation
+function getDeviceOrientation() {
+    var activity = getAppView();
+    if (!TypeUtils.isNullOrUndefined(activity)) {
+        var ctx = activity.getApplicationContext();
+        if (!TypeUtils.isNullOrUndefined(ctx)) {
+            switch (ctx.getResources().getConfiguration().orientation) {
+                case android.content.res.Configuration.ORIENTATION_LANDSCAPE:
+                    return 2;
+
+                case android.content.res.Configuration.ORIENTATION_PORTRAIT:
+                    return 1;
+            }
+        }
+    }
+}
+exports.getDeviceOrientation = getDeviceOrientation;
+
 function getPlatformData() {
     var pd = {};
 

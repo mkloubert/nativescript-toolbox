@@ -41,6 +41,20 @@ var virtual_array_1 = require('data/virtual-array');
 var XmlObjects = require('./xmlobjects');
 var Yaml = require('./js-yaml');
 /**
+ * List of device orientations.
+ */
+(function (DeviceOrientation) {
+    /**
+     * Landscape
+     */
+    DeviceOrientation[DeviceOrientation["Landscape"] = 2] = "Landscape";
+    /**
+     * Portrait
+     */
+    DeviceOrientation[DeviceOrientation["Portrait"] = 1] = "Portrait";
+})(exports.DeviceOrientation || (exports.DeviceOrientation = {}));
+var DeviceOrientation = exports.DeviceOrientation;
+/**
  * List of known platforms.
  */
 (function (Platform) {
@@ -350,6 +364,15 @@ function getNativeView() {
 }
 exports.getNativeView = getNativeView;
 /**
+ * Gets the current orientation of the device.
+ *
+ * @return {UIEnums.DeviceOrientation} The orientation (if defined).
+ */
+function getOrientation() {
+    return Device.getDeviceOrientation();
+}
+exports.getOrientation = getOrientation;
+/**
  * Returns information of the current platform.
  *
  * @return {IPlatformData} The platform information.
@@ -381,6 +404,77 @@ function guid(separator) {
 }
 exports.guid = guid;
 /**
+ * Generic hash function.
+ *
+ * @param {any} v The value to hash.
+ * @param {string} [algo] The name of the algorithm to use (default: 'sha256').
+ *
+ * @return {string} The hash.
+ */
+function hash(v, algo) {
+    if (StringFormat.isEmptyOrWhitespace(algo)) {
+        algo = 'sha256';
+    }
+    var hasher;
+    switch (algo.toLowerCase().trim()) {
+        case 'sha256':
+        case 'sha-256':
+            hasher = sha256;
+            break;
+        case 'sha1':
+        case 'sha-1':
+            hasher = sha1;
+            break;
+        case 'md5':
+        case 'md-5':
+            hasher = md5;
+            break;
+        case 'sha384':
+        case 'sha-384':
+            hasher = sha384;
+            break;
+        case 'sha512':
+        case 'sha-512':
+            hasher = sha512;
+            break;
+        case 'sha3':
+        case 'sha-3':
+            hasher = sha3;
+            break;
+    }
+    if (TypeUtils.isNullOrUndefined(hasher)) {
+        throw "Algorithm '" + algo + "' is NOT supported!";
+    }
+    return hasher(v);
+}
+exports.hash = hash;
+/**
+ * Invokes a callback for specific orientation mode.
+ *
+ * @param {IInvokeForOrientationConfig} cfg The configuration.
+ *
+ * @return {any} The result of a callback.
+ */
+function invokeForOrientation(cfg) {
+    var orientation = getOrientation();
+    var callback;
+    switch (orientation) {
+        case DeviceOrientation.Portrait:
+            callback = cfg.portrait;
+            break;
+        case DeviceOrientation.Landscape:
+            callback = cfg.landscape;
+            break;
+        default:
+            callback = cfg.unknown;
+            break;
+    }
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        return callback(orientation, cfg.tag);
+    }
+}
+exports.invokeForOrientation = invokeForOrientation;
+/**
  * Invokes an action for a specific platform.
  *
  * @param {IInvokeForPlatformContext} cfg The config data.
@@ -397,7 +491,7 @@ function invokeForPlatform(cfg) {
         callback = cfg.ios;
     }
     if (!TypeUtils.isNullOrUndefined(callback)) {
-        return callback(platform);
+        return callback(platform, cfg.tag);
     }
 }
 exports.invokeForPlatform = invokeForPlatform;

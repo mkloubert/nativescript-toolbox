@@ -65,6 +65,22 @@ function getAppView() {
 }
 exports.getAppView = getAppView;
 
+// based on code by Nathanael Anderson
+// 
+// https://github.com/NathanaelA/nativescript-orientation
+function getDeviceOrientation() {
+    switch (UIDevice.currentDevice().orientation) {
+        case UIDeviceOrientation.UIDeviceOrientationLandscapeRight:
+        case UIDeviceOrientation.UIDeviceOrientationLandscapeLeft:
+            return 2;
+
+        case UIDeviceOrientation.UIDeviceOrientationPortraitUpsideDown:
+        case UIDeviceOrientation.UIDeviceOrientationPortrait:
+            return 1;
+    }
+}
+exports.getDeviceOrientation = getDeviceOrientation;
+
 function getPlatformData() {
     var pd = {};
 
