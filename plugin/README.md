@@ -71,6 +71,7 @@ The module provides the following function that are short hands for the included
 | guid | Alias for 'uuid'. |
 | hash | Generic hash function. |
 | hasValue | Checks if a value / object is stored in the application settings. |
+| hideStatusBar | Short hand function for 'setStatusBarVisibility' for hiding the status bar. |
 | invokeForOrientation | Invokes a callback for specific orientation mode. |
 | invokeForPlatform | Invokes an action for a specific platform. |
 | isDebug | Checks if the app is in debug mode or not. |
@@ -92,6 +93,7 @@ The module provides the following function that are short hands for the included
 | sha3 | Hashes a value with SHA-3. |
 | sha384 | Hashes a value with SHA-384. |
 | sha512 | Hashes a value with SHA-512. |
+| showStatusBar | Short hand function for 'setStatusBarVisibility' for showing the status bar. |
 | toYaml | Converts an object / a value to YAML. |
 | uuid | Creates a new unique ID / GUID (s. [Create GUID / UUID in JavaScript?](http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript)). |
 

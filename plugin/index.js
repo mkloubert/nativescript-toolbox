@@ -550,6 +550,16 @@ function hasValue(key) {
 }
 exports.hasValue = hasValue;
 /**
+ * Short hand function for 'setStatusBarVisibility()'.
+ *
+ * @param {Function} [callback] The custom result callback to invoke.
+ * @param {T} [tag] The custom value for the result callback.
+ */
+function hideStatusBar(callback, tag) {
+    setStatusBarVisibility(false, callback, tag);
+}
+exports.hideStatusBar = hideStatusBar;
+/**
  * Invokes a callback for specific orientation mode.
  *
  * @param {IInvokeForOrientationConfig} cfg The configuration.
@@ -898,6 +908,16 @@ function sha512(v) {
     return SHA512(v).toString();
 }
 exports.sha512 = sha512;
+/**
+ * Short hand function for 'setStatusBarVisibility()'.
+ *
+ * @param {Function} [callback] The custom result callback to invoke.
+ * @param {T} [tag] The custom value for the result callback.
+ */
+function showStatusBar(callback, tag) {
+    setStatusBarVisibility(true, callback, tag);
+}
+exports.showStatusBar = showStatusBar;
 function toValueKey(key) {
     var prefix = exports.ValueKeyPrefix;
     if (TypeUtils.isNullOrUndefined(prefix)) {

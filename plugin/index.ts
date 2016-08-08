@@ -1025,6 +1025,18 @@ export function hasValue(key: string): boolean {
 }
 
 /**
+ * Short hand function for 'setStatusBarVisibility()'.
+ * 
+ * @param {Function} [callback] The custom result callback to invoke.
+ * @param {T} [tag] The custom value for the result callback.
+ */
+export function hideStatusBar<T>(callback?: (result: ISetStatusBarVisibilityResult<T>, tag?: T) => void,
+                                 tag?: T) {
+    setStatusBarVisibility(false,
+                           callback, tag);
+}
+
+/**
  * Invokes a callback for specific orientation mode.
  * 
  * @param {IInvokeForOrientationConfig} cfg The configuration.
@@ -1305,7 +1317,8 @@ export function runOnUI<T>(action: (state: T) => void, state?: T,
  * @param {Function} [callback] The optional callback to call.
  * @param {T} [tag] The custom object for the callback.
  */
-export function setStatusBarVisibility<T>(isVisible, callback?: (result: ISetStatusBarVisibilityResult<T>) => void, tag?: T) {
+export function setStatusBarVisibility<T>(isVisible: boolean,
+                                          callback?: (result: ISetStatusBarVisibilityResult<T>) => void, tag?: T) {
     try {
         Device.changeStatusBarVisibility(isVisible ? true : false,
                                          callback, tag);
@@ -1394,6 +1407,18 @@ export function sha384(v: any): string {
  */
 export function sha512(v: any): string {
     return SHA512(v).toString();
+}
+
+/**
+ * Short hand function for 'setStatusBarVisibility()'.
+ * 
+ * @param {Function} [callback] The custom result callback to invoke.
+ * @param {T} [tag] The custom value for the result callback.
+ */
+export function showStatusBar<T>(callback?: (result: ISetStatusBarVisibilityResult<T>, tag?: T) => void,
+                                 tag?: T) {
+    setStatusBarVisibility(true,
+                           callback, tag);
 }
 
 function toValueKey(key: string) {

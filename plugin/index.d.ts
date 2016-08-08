@@ -536,6 +536,13 @@ export declare function hash(v: any, algo?: string): string;
  */
 export declare function hasValue(key: string): boolean;
 /**
+ * Short hand function for 'setStatusBarVisibility()'.
+ *
+ * @param {Function} [callback] The custom result callback to invoke.
+ * @param {T} [tag] The custom value for the result callback.
+ */
+export declare function hideStatusBar<T>(callback?: (result: ISetStatusBarVisibilityResult<T>, tag?: T) => void, tag?: T): void;
+/**
  * Invokes a callback for specific orientation mode.
  *
  * @param {IInvokeForOrientationConfig} cfg The configuration.
@@ -663,7 +670,7 @@ export declare function runOnUI<T>(action: (state: T) => void, state?: T, onErro
  * @param {Function} [callback] The optional callback to call.
  * @param {T} [tag] The custom object for the callback.
  */
-export declare function setStatusBarVisibility<T>(isVisible: any, callback?: (result: ISetStatusBarVisibilityResult<T>) => void, tag?: T): void;
+export declare function setStatusBarVisibility<T>(isVisible: boolean, callback?: (result: ISetStatusBarVisibilityResult<T>) => void, tag?: T): void;
 /**
  * Stores a value / object in the application settings.
  *
@@ -713,6 +720,13 @@ export declare function sha384(v: any): string;
  * @return {String} The hash.
  */
 export declare function sha512(v: any): string;
+/**
+ * Short hand function for 'setStatusBarVisibility()'.
+ *
+ * @param {Function} [callback] The custom result callback to invoke.
+ * @param {T} [tag] The custom value for the result callback.
+ */
+export declare function showStatusBar<T>(callback?: (result: ISetStatusBarVisibilityResult<T>, tag?: T) => void, tag?: T): void;
 /**
  * Converts an object / a value to YAML.
  *
