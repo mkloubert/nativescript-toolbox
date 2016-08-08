@@ -1,7 +1,7 @@
 {
 	"name": "nativescript-toolbox",
 	"description": "A NativeScript module that is a composition of useful classes, tools and helpers.",
-	"version": "1.28.0",
+	"version": "1.29.0",
 	"nativescript": {
 		"platforms": {
 			"ios": "1.0.0",
@@ -44,7 +44,9 @@
         "JSON",
         "XML",
         "Objects",
-		"StatusBar"
+		"StatusBar",
+		"GUID",
+		"UUID"
 	],
 	"author": {
 		"name": "Marcel Joachim Kloubert",

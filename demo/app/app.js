@@ -14,5 +14,7 @@ Timer.setTimeout(function () {
         }, 5000);
     }, 'TM');
 }, 5000);
+console.log('UUID 1: ' + Toolbox.uuid());
+console.log('UUID 2: ' + Toolbox.uuid('_'));
 Application.start({ moduleName: "main-page" });
 //# sourceMappingURL=app.js.map

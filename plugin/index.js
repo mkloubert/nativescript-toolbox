@@ -373,6 +373,14 @@ function getPlatform() {
 }
 exports.getPlatform = getPlatform;
 /**
+ * Alias for 'uuid()' function.
+ */
+function guid(separator) {
+    if (separator === void 0) { separator = '-'; }
+    return uuid(separator);
+}
+exports.guid = guid;
+/**
  * Invokes an action for a specific platform.
  *
  * @param {IInvokeForPlatformContext} cfg The config data.
@@ -653,4 +661,25 @@ function toYaml(v, opts) {
     return Yaml.safeDump(v, opts);
 }
 exports.toYaml = toYaml;
+/**
+ * Creates a new unique ID / GUID.
+ *
+ * @param {string} [separator] The custom separator to use.
+ *
+ * s. http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+ */
+function uuid(separator) {
+    if (separator === void 0) { separator = '-'; }
+    var s4 = function () {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    };
+    if (TypeUtils.isNullOrUndefined(separator)) {
+        separator = '';
+    }
+    return s4() + s4() + separator + s4() + separator + s4() + separator +
+        s4() + separator + s4() + s4() + s4();
+}
+exports.uuid = uuid;
 //# sourceMappingURL=index.js.map

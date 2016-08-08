@@ -387,6 +387,10 @@ export declare function getNativeView(): any;
  */
 export declare function getPlatform(): IPlatformData;
 /**
+ * Alias for 'uuid()' function.
+ */
+export declare function guid(separator?: string): string;
+/**
  * Invokes an action for a specific platform.
  *
  * @param {IInvokeForPlatformContext} cfg The config data.
@@ -541,3 +545,11 @@ export declare function sha512(v: any): string;
  * @return {String} The YAML data.
  */
 export declare function toYaml(v: any, opts?: IYamlEncodeOptions): string;
+/**
+ * Creates a new unique ID / GUID.
+ *
+ * @param {string} [separator] The custom separator to use.
+ *
+ * s. http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+ */
+export declare function uuid(separator?: string): string;

@@ -64,6 +64,7 @@ The module provides the following function that are short hands for the included
 | getApplicationContext | Returns the current application context. |
 | getNativeView | Returns the native view of the app. |
 | getPlatform | Returns information of the current platform. |
+| guid | Alias for 'uuid'. |
 | invokeForPlatform | Invokes an action for a specific platform. |
 | isDebug | Checks if the app is in debug mode or not. |
 | isEnumerable | Checks if a value is a sequence. |
@@ -82,6 +83,7 @@ The module provides the following function that are short hands for the included
 | sha384 | Hashes a value with SHA-384. |
 | sha512 | Hashes a value with SHA-512. |
 | toYaml | Converts an object / a value to YAML. |
+| uuid | Creates a new unique ID / GUID (s. [Create GUID / UUID in JavaScript?](http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript)). |
 
 ### Sub modules
 

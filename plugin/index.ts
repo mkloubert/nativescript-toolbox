@@ -724,6 +724,13 @@ export function getPlatform(): IPlatformData {
 }
 
 /**
+ * Alias for 'uuid()' function.
+ */
+export function guid(separator: string = '-'): string {
+    return uuid(separator);
+}
+
+/**
  * Invokes an action for a specific platform.
  * 
  * @param {IInvokeForPlatformContext} cfg The config data.
@@ -1017,4 +1024,26 @@ export function sha512(v: any): string {
  */
 export function toYaml(v: any, opts?: IYamlEncodeOptions): string {
     return Yaml.safeDump(v, opts);
+}
+
+/**
+ * Creates a new unique ID / GUID.
+ * 
+ * @param {string} [separator] The custom separator to use.
+ * 
+ * s. http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+ */
+export function uuid(separator: string = '-'): string {
+    var s4 = () => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+                   .toString(16)
+                   .substring(1);
+    };
+
+    if (TypeUtils.isNullOrUndefined(separator)) {
+        separator = '';
+    }
+
+    return s4() + s4() + separator + s4() + separator + s4() + separator +
+           s4() + separator + s4() + s4() + s4();
 }
