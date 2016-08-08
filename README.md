@@ -15,6 +15,7 @@ The module contains the following sub modules:
 | [nativescript-apiclient](https://github.com/mkloubert/nativescript-apiclient) | Simply call HTTP based APIs. |
 | [nativescript-batch](https://github.com/mkloubert/nativescript-batch) | Implement batch operations. |
 | [nativescript-bitmap-factory](https://github.com/mkloubert/nativescript-bitmap-factory) | Create and manipulate bitmap images. |
+| [nativescript-email](https://github.com/EddyVerbruggen/nativescript-email) | An Email plugin for use in your NativeScript app. You can use it to compose emails, edit the draft manually, and send it. |
 | [nativescript-enumerable](https://github.com/mkloubert/nativescript-enumerable) | Provides LINQ style extensions for handling arrays and lists. |
 | [nativescript-routed-values](https://github.com/mkloubert/nativescript-routed-values) | Implement routed value graphs. |
 | [nativescript-sqlite (free)](https://github.com/nathanaela/nativescript-sqlite) | Provides sqlite actions. |
@@ -148,6 +149,12 @@ import Batch = require('nativescript-toolbox/batch');
 
 ```typescript
 import BitmapFactory = require('nativescript-toolbox/bitmap-factory');
+```
+
+#### nativescript-email
+
+```typescript
+import Email = require('nativescript-toolbox/email');
 ```
 
 #### nativescript-enumerable
