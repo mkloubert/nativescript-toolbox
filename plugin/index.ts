@@ -20,8 +20,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-import Application = require('application');
 import ApiClient = require('./apiclient');
+import Application = require('application');
+import AppSettings = require("application-settings");
 import Batch = require('./batch');
 import BitmapFactory = require('./bitmap-factory');
 var CryptoJS = require('./crypto-js');
@@ -778,6 +779,31 @@ export function getPlatform(): IPlatformData {
 }
 
 /**
+ * Tries to return a value / object that is stored in the application settings.
+ * 
+ * @param {string} key The name of the key (case insensitive).
+ * @param {T} defValue The default value.
+ * 
+ * @return {T} The value or the default value if not found.
+ */
+export function getValue<T>(key: string, defValue?: T): T {
+    if (!hasValue(key)) {
+        return defValue;
+    }
+
+    var json = AppSettings.getString(toValueKey(key));
+    if (StringFormat.isEmptyOrWhitespace(json)) {
+        json = undefined;   
+    }
+    
+    if (!TypeUtils.isNullOrUndefined(json)) {
+        return JSON.parse(json);
+    }
+
+    return <any>json;
+}
+
+/**
  * Alias for 'uuid()' function.
  */
 export function guid(separator: string = '-'): string {
@@ -835,6 +861,17 @@ export function hash(v: any, algo?: string): string {
     }
     
     return hasher(v);
+}
+
+/**
+ * Checks if a value / object is stored in the application settings.
+ * 
+ * @param {string} key The name of the key (case insensitive).
+ * 
+ * @return {Boolean} Is stored or not.
+ */
+export function hasValue(key: string): boolean {
+    return AppSettings.hasKey(toValueKey(key));
 }
 
 /**
@@ -1097,6 +1134,24 @@ export function setStatusBarVisibility<T>(isVisible, callback?: (result: ISetSta
 }
 
 /**
+ * Stores a value / object in the application settings.
+ * 
+ * @param {T} v The value / object to store.
+ * @param {string} key The name of the key (case insensitive).
+ * 
+ * @return {Boolean} Operation was successfull or not.
+ */
+export function setValue<T>(v: T, key: string): boolean {
+    var json: any = v;
+    if (!TypeUtils.isNullOrUndefined(json)) {
+        json = JSON.stringify(json);
+    }
+
+    AppSettings.setString(toValueKey(key), json);
+    return true;
+}
+
+/**
  * Returns the SHA-1 hash of a value.
  * 
  * @param any v The value to hash.
@@ -1151,6 +1206,19 @@ export function sha512(v: any): string {
     return SHA512(v).toString();
 }
 
+function toValueKey(key: string) {
+    var prefix = ValueKeyPrefix;
+    if (TypeUtils.isNullOrUndefined(prefix)) {
+        prefix = '';
+    }
+
+    if (TypeUtils.isNullOrUndefined(key)) {
+        key = '';
+    }
+
+    return ('' + prefix) + ('' + key).toLowerCase().trim();
+}
+
 /**
  * Converts an object / a value to YAML.
  * 
@@ -1184,3 +1252,8 @@ export function uuid(separator: string = '-'): string {
     return s4() + s4() + separator + s4() + separator + s4() + separator +
            s4() + separator + s4() + s4() + s4();
 }
+
+/**
+ * Prefix for value keys.
+ */
+export var ValueKeyPrefix = '';

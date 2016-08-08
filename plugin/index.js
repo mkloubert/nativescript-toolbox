@@ -21,6 +21,7 @@
 // DEALINGS IN THE SOFTWARE.
 "use strict";
 var ApiClient = require('./apiclient');
+var AppSettings = require("application-settings");
 var Batch = require('./batch');
 var BitmapFactory = require('./bitmap-factory');
 var CryptoJS = require('./crypto-js');
@@ -396,6 +397,28 @@ function getPlatform() {
 }
 exports.getPlatform = getPlatform;
 /**
+ * Tries to return a value / object that is stored in the application settings.
+ *
+ * @param {string} key The name of the key (case insensitive).
+ * @param {T} defValue The default value.
+ *
+ * @return {T} The value or the default value if not found.
+ */
+function getValue(key, defValue) {
+    if (!hasValue(key)) {
+        return defValue;
+    }
+    var json = AppSettings.getString(toValueKey(key));
+    if (StringFormat.isEmptyOrWhitespace(json)) {
+        json = undefined;
+    }
+    if (!TypeUtils.isNullOrUndefined(json)) {
+        return JSON.parse(json);
+    }
+    return json;
+}
+exports.getValue = getValue;
+/**
  * Alias for 'uuid()' function.
  */
 function guid(separator) {
@@ -448,6 +471,17 @@ function hash(v, algo) {
     return hasher(v);
 }
 exports.hash = hash;
+/**
+ * Checks if a value / object is stored in the application settings.
+ *
+ * @param {string} key The name of the key (case insensitive).
+ *
+ * @return {Boolean} Is stored or not.
+ */
+function hasValue(key) {
+    return AppSettings.hasKey(toValueKey(key));
+}
+exports.hasValue = hasValue;
 /**
  * Invokes a callback for specific orientation mode.
  *
@@ -689,6 +723,23 @@ function setStatusBarVisibility(isVisible, callback, tag) {
 }
 exports.setStatusBarVisibility = setStatusBarVisibility;
 /**
+ * Stores a value / object in the application settings.
+ *
+ * @param {T} v The value / object to store.
+ * @param {string} key The name of the key (case insensitive).
+ *
+ * @return {Boolean} Operation was successfull or not.
+ */
+function setValue(v, key) {
+    var json = v;
+    if (!TypeUtils.isNullOrUndefined(json)) {
+        json = JSON.stringify(json);
+    }
+    AppSettings.setString(toValueKey(key), json);
+    return true;
+}
+exports.setValue = setValue;
+/**
  * Returns the SHA-1 hash of a value.
  *
  * @param any v The value to hash.
@@ -743,6 +794,16 @@ function sha512(v) {
     return SHA512(v).toString();
 }
 exports.sha512 = sha512;
+function toValueKey(key) {
+    var prefix = exports.ValueKeyPrefix;
+    if (TypeUtils.isNullOrUndefined(prefix)) {
+        prefix = '';
+    }
+    if (TypeUtils.isNullOrUndefined(key)) {
+        key = '';
+    }
+    return ('' + prefix) + ('' + key).toLowerCase().trim();
+}
 /**
  * Converts an object / a value to YAML.
  *
@@ -776,4 +837,8 @@ function uuid(separator) {
         s4() + separator + s4() + s4() + s4();
 }
 exports.uuid = uuid;
+/**
+ * Prefix for value keys.
+ */
+exports.ValueKeyPrefix = '';
 //# sourceMappingURL=index.js.map

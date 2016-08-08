@@ -65,8 +65,10 @@ The module provides the following function that are short hands for the included
 | getOrientation | Gets the current orientation of the device (based on [nativescript-orientation](https://github.com/nathanaela/nativescript-orientation)). |
 | getNativeView | Returns the native view of the app. |
 | getPlatform | Returns information of the current platform. |
+| getValue | Tries to return a value / object that is stored in the application settings. |
 | guid | Alias for 'uuid'. |
 | hash | Generic hash function. |
+| hasValue | Checks if a value / object is stored in the application settings. |
 | invokeForOrientation | Invokes a callback for specific orientation mode. |
 | invokeForPlatform | Invokes an action for a specific platform. |
 | isDebug | Checks if the app is in debug mode or not. |
@@ -80,6 +82,7 @@ The module provides the following function that are short hands for the included
 | parseXml | Parses a XML string to an object. |
 | parseYaml | Parses YAML data to an object. |
 | setStatusBarVisibility | Changes the visibility of the device's status bar (based on [nativescript-status-bar](https://github.com/PeterStaev/NativeScript-Status-Bar)).
+| setValue | Stores a value / object in the application settings. |
 | sha1 | Hashes a value with SHA-1. |
 | sha256 | Hashes a value with SHA-256. |
 | sha3 | Hashes a value with SHA-3. |

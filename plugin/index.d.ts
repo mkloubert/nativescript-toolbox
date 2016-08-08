@@ -1,5 +1,5 @@
-import Application = require('application');
 import ApiClient = require('./apiclient');
+import Application = require('application');
 import Batch = require('./batch');
 import BitmapFactory = require('./bitmap-factory');
 import Enumerable = require('./enumerable');
@@ -431,6 +431,15 @@ export declare function getOrientation(): DeviceOrientation;
  */
 export declare function getPlatform(): IPlatformData;
 /**
+ * Tries to return a value / object that is stored in the application settings.
+ *
+ * @param {string} key The name of the key (case insensitive).
+ * @param {T} defValue The default value.
+ *
+ * @return {T} The value or the default value if not found.
+ */
+export declare function getValue<T>(key: string, defValue?: T): T;
+/**
  * Alias for 'uuid()' function.
  */
 export declare function guid(separator?: string): string;
@@ -443,6 +452,14 @@ export declare function guid(separator?: string): string;
  * @return {string} The hash.
  */
 export declare function hash(v: any, algo?: string): string;
+/**
+ * Checks if a value / object is stored in the application settings.
+ *
+ * @param {string} key The name of the key (case insensitive).
+ *
+ * @return {Boolean} Is stored or not.
+ */
+export declare function hasValue(key: string): boolean;
 /**
  * Invokes a callback for specific orientation mode.
  *
@@ -558,6 +575,15 @@ export declare function runOnUI<T>(action: (state: T) => void, state?: T, onErro
  */
 export declare function setStatusBarVisibility<T>(isVisible: any, callback?: (result: ISetStatusBarVisibilityResult<T>) => void, tag?: T): void;
 /**
+ * Stores a value / object in the application settings.
+ *
+ * @param {T} v The value / object to store.
+ * @param {string} key The name of the key (case insensitive).
+ *
+ * @return {Boolean} Operation was successfull or not.
+ */
+export declare function setValue<T>(v: T, key: string): boolean;
+/**
  * Returns the SHA-1 hash of a value.
  *
  * @param any v The value to hash.
@@ -614,3 +640,7 @@ export declare function toYaml(v: any, opts?: IYamlEncodeOptions): string;
  * s. http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
  */
 export declare function uuid(separator?: string): string;
+/**
+ * Prefix for value keys.
+ */
+export declare var ValueKeyPrefix: string;
