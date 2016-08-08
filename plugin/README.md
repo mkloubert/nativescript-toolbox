@@ -62,8 +62,9 @@ The module provides the following function that are short hands for the included
 | fromXml | Alias for 'parseXml'. |
 | fromYaml | Alias for 'parseYaml'. |
 | getApplicationContext | Returns the current application context. |
-| getOrientation | Gets the current orientation of the device (based on [nativescript-orientation](https://github.com/nathanaela/nativescript-orientation)). |
+| getClipboard | Returns an object that handles the clipboard of the device. |
 | getNativeView | Returns the native view of the app. |
+| getOrientation | Gets the current orientation of the device (based on [nativescript-orientation](https://github.com/nathanaela/nativescript-orientation)). |
 | getPlatform | Returns information of the current platform. |
 | getValue | Tries to return a value / object that is stored in the application settings. |
 | guid | Alias for 'uuid'. |

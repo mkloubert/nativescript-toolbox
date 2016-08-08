@@ -16,6 +16,27 @@ Application.android.onActivityCreated = function () {
             console.log('Device is in UNKNOWN mode.');
         },
     });
+    var clipboard = Toolbox.getClipboard();
+    clipboard.setText('https://github.com/mkloubert/nativescript-toolbox', function (result, tag) {
+        switch (result.code) {
+            case 0:
+                clipboard.getText(function (result2, tag2) {
+                    switch (result2.code) {
+                        case 0:
+                            console.log('Text from clipboard: ' + result2.value);
+                            console.log('Clipboard tag: ' + tag2);
+                            break;
+                        default:
+                            console.log('Could not GET text (' + result2.code + '): ' + result2.error);
+                            break;
+                    }
+                }, tag.toLowerCase().trim());
+                break;
+            default:
+                console.log('Could not SET text (' + result.code + '): ' + result.error);
+                break;
+        }
+    }, 'MK');
 };
 console.log('a: ' + typeof a);
 console.log('b: ' + typeof b);

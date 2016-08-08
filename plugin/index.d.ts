@@ -8,6 +8,10 @@ import { ObservableArray } from 'data/observable-array';
 import { VirtualArray } from 'data/virtual-array';
 import XmlObjects = require('./xmlobjects');
 /**
+ * Stores the application name.
+ */
+export declare var AppName: string;
+/**
  * List of device orientations.
  */
 export declare enum DeviceOrientation {
@@ -19,6 +23,41 @@ export declare enum DeviceOrientation {
      * Portrait
      */
     Portrait = 1,
+}
+/**
+ * A clipboard instance.
+ */
+export interface IClipboard {
+    /**
+     * Returns an object / value that is stored as JSON string in the clipboard.
+     *
+     * @param {Function} callback The callback with the result.
+     * @param {T} [tag] The custom object / value for the callback.
+     */
+    getObject<O>(callback: (result: IGetClipboardResult<O>, tag?: any) => void, tag?: any): any;
+    /**
+     * Returns a text.
+     *
+     * @param {Function} callback The callback with the result.
+     * @param {T} [tag] The custom object / value for the callback.
+     */
+    getText<T>(callback: (result: IGetClipboardResult<string>, tag?: T) => void, tag?: T): any;
+    /**
+     * Sets a value / object as JSON serialized string.
+     *
+     * @param {O} obj The object to set.
+     * @param {Function} [callback] The optional callback with the result.
+     * @param {T} [tag] The custom object / value for the callback.
+     */
+    setObject<O, T>(obj: O, callback?: (result: ISetClipboardResult<O>, tag?: T) => void, tag?: T): any;
+    /**
+     * Sets a text.
+     *
+     * @param {String} txt The text to set.
+     * @param {Function} [callback] The optional callback with the result.
+     * @param {T} [tag] The custom object / value for the callback.
+     */
+    setText<T>(txt: string, callback?: (result: ISetClipboardResult<string>, tag?: T) => void, tag?: T): any;
 }
 /**
  * The result of closing
@@ -79,6 +118,23 @@ export interface IExecuteSqlResult {
      * Contains the result set (if defined).
      */
     result?: Enumerable.IEnumerable<IRow>;
+}
+/**
+ * The result of getting a value from the clipboard.
+ */
+export interface IGetClipboardResult<T> {
+    /**
+     * The result code.
+     */
+    code: number;
+    /**
+     * The error information (if occurred).
+     */
+    error?: any;
+    /**
+     * The value (if no error)
+     */
+    value?: T;
 }
 /**
  * Configuration for 'invokeForOrientation()' function.
@@ -193,6 +249,23 @@ export interface IRow {
      * The zero based index.
      */
     index: number;
+}
+/**
+ * The result of setting a value in the clipboard.
+ */
+export interface ISetClipboardResult<T> {
+    /**
+     * The result code.
+     */
+    code: number;
+    /**
+     * The error information (if occurred).
+     */
+    error?: any;
+    /**
+     * The value that has been tried to be stored.
+     */
+    value: T;
 }
 /**
  * Result object for the callback of 'setStatusBarVisibility()' function.
@@ -410,6 +483,12 @@ export declare function fromYaml<T>(y: any, opts?: IYamlDecodeOptions): T;
  * @return any The application context (if available.)
  */
 export declare function getApplicationContext(): any;
+/**
+ * Returns an object that handles the clipboard of the device.
+ *
+ * @return {IClipboard} The clipboard.
+ */
+export declare function getClipboard(): IClipboard;
 /**
  * Returns the native view of the app.
  * For Android this is an activity.

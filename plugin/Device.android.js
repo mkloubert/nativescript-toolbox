@@ -108,6 +108,99 @@ function getAppView() {
 }
 exports.getAppView = getAppView;
 
+// Based on the code by Eddy Verbruggen
+// 
+// https://github.com/EddyVerbruggen/nativescript-clipboard
+function getDeviceClipboard(appName) {
+    var clipboard = {};
+
+    clipboard.getText = function(callback, tag) {
+        var cbResult = {
+            code: 1
+        };
+
+        try {
+            var ctx = getAppContext();
+            if (!TypeUtils.isNullOrUndefined(ctx)) {
+                var service = ctx.getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+                if (!TypeUtils.isNullOrUndefined(service)) {
+                    if (service.getPrimaryClipDescription().hasMimeType(android.content.ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                        var item = service.getPrimaryClip().getItemAt(0);
+                        
+                        var content = item.getText().toString();
+                        if (TypeUtils.isNullOrUndefined(content)) {
+                            content = '';
+                        }
+
+                        cbResult.value = content;
+                        cbResult.code = 0;
+                    }
+                    else {
+                        cbResult.code = 4;
+                    }
+                }
+                else {
+                    cbResult.code = 3;
+                }
+            }
+            else {
+                cbResult.code = 2;
+            }
+        }
+        catch (e) {
+            console.log('[ERROR] (nativescript-toolbox).android.getDeviceClipboard().getText(): ' + e);
+
+            cbResult.code = -1;
+            cbResult.error = e;
+        }
+        
+        if (!TypeUtils.isNullOrUndefined(callback)) {
+            callback(cbResult, tag);
+        }
+    };
+
+    clipboard.setText = function(txt,
+                                 callback, tag) {
+
+        var cbResult = {
+            code: 1,
+            value: txt
+        };
+
+        try {
+            var ctx = getAppContext();
+            if (!TypeUtils.isNullOrUndefined(ctx)) {
+                var service = ctx.getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+                if (!TypeUtils.isNullOrUndefined(service)) {
+                    var clip = android.content.ClipData.newPlainText(appName, txt);
+                    service.setPrimaryClip(clip);
+
+                    cbResult.code = 0;
+                }
+                else {
+                    cbResult.code = 3;
+                }
+            }
+            else {
+                cbResult.code = 2;
+            }
+        }
+        catch (e) {
+            console.log('[ERROR] (nativescript-toolbox).android.getDeviceClipboard().setText(): ' + e);
+
+            cbResult.code = -1;
+            cbResult.error = e;
+        }
+
+        if (!TypeUtils.isNullOrUndefined(callback)) {
+            callback(cbResult, tag);
+        }
+    };
+
+    return clipboard;
+}
+exports.getDeviceClipboard = getDeviceClipboard;
+
 // based on code by Nathanael Anderson
 // 
 // https://github.com/NathanaelA/nativescript-orientation

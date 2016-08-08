@@ -42,6 +42,10 @@ var virtual_array_1 = require('data/virtual-array');
 var XmlObjects = require('./xmlobjects');
 var Yaml = require('./js-yaml');
 /**
+ * Stores the application name.
+ */
+exports.AppName = 'NativeScript Toolbox';
+/**
  * List of device orientations.
  */
 (function (DeviceOrientation) {
@@ -349,6 +353,47 @@ function getApplicationContext() {
     return Device.getAppContext();
 }
 exports.getApplicationContext = getApplicationContext;
+/**
+ * Returns an object that handles the clipboard of the device.
+ *
+ * @return {IClipboard} The clipboard.
+ */
+function getClipboard() {
+    var appName = exports.AppName;
+    if (TypeUtils.isNullOrUndefined(appName)) {
+        appName = '';
+    }
+    var cb = Device.getDeviceClipboard(appName);
+    // getObject()
+    cb.getObject = function (callback, tag) {
+        this.getText(function (result, tag) {
+            if (StringFormat.isEmptyOrWhitespace(result.value)) {
+                result.value = undefined;
+            }
+            if (!TypeUtils.isNullOrUndefined(result.value)) {
+                result.value = JSON.parse(result.value);
+            }
+            if (!TypeUtils.isNullOrUndefined(callback)) {
+                callback(result, tag);
+            }
+        }, tag);
+    };
+    // setObject()
+    cb.setObject = function (obj, callback, tag) {
+        var json = obj;
+        if (!TypeUtils.isNullOrUndefined(json)) {
+            json = JSON.stringify(json);
+        }
+        this.setText(function (result, tag) {
+            result.value = obj;
+            if (!TypeUtils.isNullOrUndefined(callback)) {
+                callback(result, tag);
+            }
+        }, tag);
+    };
+    return cb;
+}
+exports.getClipboard = getClipboard;
 /**
  * Returns the native view of the app.
  * For Android this is an activity.

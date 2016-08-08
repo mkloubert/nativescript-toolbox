@@ -65,6 +65,74 @@ function getAppView() {
 }
 exports.getAppView = getAppView;
 
+// Based on the code by Eddy Verbruggen
+// 
+// https://github.com/EddyVerbruggen/nativescript-clipboard
+function getDeviceClipboard(appName) {
+    var clipboard = {};
+
+    clipboard.getText = function(callback, tag) {
+        var cbResult = {
+            code: 1
+        };
+
+        try {
+            var pasteBoard = UIPasteboard.generalPasteboard();
+            if (!TypeUtils.isNullOrUndefined(pasteBoard)) {
+                cbResult.value = pasteBoard.valueForPasteboardType(kUTTypePlainText);
+                cbResult.code = 0;
+            }
+            else {
+                cbResult.code = 2;
+            }
+        }
+        catch (e) {
+            console.log('[ERROR] (nativescript-toolbox).ios.getDeviceClipboard().getText(): ' + e);
+
+            cbResult.code = -1;
+            cbResult.error = e;
+        }
+        
+        if (!TypeUtils.isNullOrUndefined(callback)) {
+            callback(cbResult, tag);
+        }
+    };
+
+    clipboard.setText = function(txt,
+                                 callback, tag) {
+
+        var cbResult = {
+            code: 1,
+            value: txt
+        };
+
+        try {
+            var pasteBoard = UIPasteboard.generalPasteboard();
+            if (!TypeUtils.isNullOrUndefined(pasteBoard)) {
+                pasteBoard.setValueForPasteboardType(txt, kUTTypePlainText);
+
+                cbResult.code = 0;
+            }
+            else {
+                cbResult.code = 2;
+            }
+        }
+        catch (e) {
+            console.log('[ERROR] (nativescript-toolbox).ios.getDeviceClipboard().setText(): ' + e);
+
+            cbResult.code = -1;
+            cbResult.error = e;
+        }
+
+        if (!TypeUtils.isNullOrUndefined(callback)) {
+            callback(cbResult, tag);
+        }
+    };
+
+    return clipboard;
+}
+exports.getDeviceClipboard = getDeviceClipboard;
+
 // based on code by Nathanael Anderson
 // 
 // https://github.com/NathanaelA/nativescript-orientation
