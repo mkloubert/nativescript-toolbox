@@ -23,6 +23,30 @@
 var Application = require("application");
 var TypeUtils = require("utils/types");
 
+// Based on code by Eddy Verbruggen
+// 
+// s. https://github.com/EddyVerbruggen/nativescript-insomnia
+function allowDeviceToSleep() {
+    var cbResult = {
+        code: 1
+    };
+
+    var app = UIApplication.sharedApplication();
+    if (!TypeUtils.isNullOrUndefined(app)) {
+        if (app.idleTimerDisabled) {
+            app.idleTimerDisabled = false;
+        }
+
+        cbResult.code = 0;
+    }
+    else {
+        cbResult.code = 2;
+    }
+
+    return cbResult;
+}
+exports.allowDeviceToSleep = allowDeviceToSleep;
+
 // Based on the code by Peter Staev
 // 
 // https://github.com/PeterStaev/NativeScript-Status-Bar
@@ -174,6 +198,30 @@ function isInDebugMode() {
     return false;
 }
 exports.isInDebugMode = isInDebugMode;
+
+// Based on code by Eddy Verbruggen
+// 
+// s. https://github.com/EddyVerbruggen/nativescript-insomnia
+function keepDeviceAwake() {
+    var cbResult = {
+        code: 1
+    };
+
+    var app = UIApplication.sharedApplication();
+    if (!TypeUtils.isNullOrUndefined(app)) {
+        if (!app.idleTimerDisabled) {
+            app.idleTimerDisabled = true;
+        }
+
+        cbResult.code = 0;
+    }
+    else {
+        cbResult.code = 2;
+    }
+
+    return cbResult;
+}
+exports.keepDeviceAwake = keepDeviceAwake;
 
 // Thanks to Nathanael Anderson!
 // 

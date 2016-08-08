@@ -1,7 +1,7 @@
 {
 	"name": "nativescript-toolbox",
 	"description": "A NativeScript module that is a composition of useful classes, tools and helpers.",
-	"version": "1.33.0",
+	"version": "1.34.0",
 	"nativescript": {
 		"platforms": {
 			"ios": "1.0.0",
@@ -50,7 +50,10 @@
 		"Orientation",
 		"Device",
 		"Settings",
-		"Clipboard"
+		"Clipboard",
+		"Sleep",
+		"Awake",
+		"Modes"
 	],
 	"author": {
 		"name": "Marcel Joachim Kloubert",

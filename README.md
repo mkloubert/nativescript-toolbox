@@ -52,6 +52,7 @@ The module provides the following function that are short hands for the included
 
 | Name | Description |
 | ---- | --------- |
+| allowToSleep | Allows the device to go to sleep mode. |
 | asBitmap | Returns a value as bitmap object. |
 | asEnumerable | Returns a value as sequence. |
 | createBitmap | Creates a new bitmap. |
@@ -74,6 +75,7 @@ The module provides the following function that are short hands for the included
 | invokeForPlatform | Invokes an action for a specific platform. |
 | isDebug | Checks if the app is in debug mode or not. |
 | isEnumerable | Checks if a value is a sequence. |
+| keepAwake | Keeps the device awake. |
 | md5 | Hashes a value with MD5. |
 | newBatch | Creates a new batch. |
 | newClient | Creates a new API client. |

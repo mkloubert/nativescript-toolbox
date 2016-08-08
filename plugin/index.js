@@ -229,6 +229,28 @@ var SQLiteConnection = (function () {
     return SQLiteConnection;
 }());
 /**
+ * Allows the device to go to sleep mode.
+ *
+ * @param {Function} [callback] The custom result callback.
+ * @param {T} [tag] The custom object for the callback to use.
+ */
+function allowToSleep(callback, tag) {
+    var cbResult;
+    try {
+        cbResult = Device.allowDeviceToSleep();
+    }
+    catch (e) {
+        cbResult = {
+            code: -1,
+            error: e,
+        };
+    }
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        callback(cbResult, tag);
+    }
+}
+exports.allowToSleep = allowToSleep;
+/**
  * Returns a value as bitmap object.
  *
  * @param any v The input value.
@@ -594,6 +616,28 @@ function isEnumerable(v) {
     return Enumerable.isEnumerable(v);
 }
 exports.isEnumerable = isEnumerable;
+/**
+ * Keeps the device awake.
+ *
+ * @param {Function} [callback] The custom result callback.
+ * @param {T} [tag] The custom object for the callback.
+ */
+function keepAwake(callback, tag) {
+    var cbResult;
+    try {
+        cbResult = Device.keepDeviceAwake();
+    }
+    catch (e) {
+        cbResult = {
+            code: -1,
+            error: e,
+        };
+    }
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        callback(cbResult, tag);
+    }
+}
+exports.keepAwake = keepAwake;
 /**
  * Returns the MD5 hash of a value.
  *

@@ -178,17 +178,7 @@ export interface IExecuteSqlResult {
 /**
  * The result of getting a value from the clipboard.
  */
-export interface IGetClipboardResult<T> {
-    /**
-     * The result code.
-     */
-    code: number;
-
-    /**
-     * The error information (if occurred).
-     */
-    error?: any;
-
+export interface IGetClipboardResult<T> extends IResult {
     /**
      * The value (if no error)
      */
@@ -316,6 +306,21 @@ export interface IPlatformData {
 }
 
 /**
+ * A general callback result.
+ */
+export interface IResult {
+    /**
+     * The result code.
+     */
+    code: number;
+
+    /**
+     * The error information (if occurred).
+     */
+    error?: any;
+}
+
+/**
  * A row.
  */
 export interface IRow {
@@ -333,17 +338,7 @@ export interface IRow {
 /**
  * The result of setting a value in the clipboard.
  */
-export interface ISetClipboardResult<T> {
-    /**
-     * The result code.
-     */
-    code: number;
-
-    /**
-     * The error information (if occurred).
-     */
-    error?: any;
-
+export interface ISetClipboardResult<T> extends IResult {
     /**
      * The value that has been tried to be stored.
      */
@@ -353,21 +348,11 @@ export interface ISetClipboardResult<T> {
 /**
  * Result object for the callback of 'setStatusBarVisibility()' function.
  */
-export interface ISetStatusBarVisibilityResult<T> {
-    /**
-     * The result code.
-     */
-    code: number;
-
+export interface ISetStatusBarVisibilityResult<T> extends IResult {
     /**
      * The actual visibility (if defined)
      */
     isVisible?: boolean;
-
-    /**
-     * The error information (if one occured)
-     */
-    error?: any;
 
     /**
      * The custom submitted object.
@@ -687,6 +672,30 @@ class SQLiteConnection implements ISQLite {
 
                 cfg.callback(resultCtx);
             });
+    }
+}
+
+/**
+ * Allows the device to go to sleep mode.
+ * 
+ * @param {Function} [callback] The custom result callback.
+ * @param {T} [tag] The custom object for the callback to use.
+ */
+export function allowToSleep<T>(callback?: (result: IResult, tag?: T) => void, tag?: T) {
+    var cbResult: IResult;
+
+    try {
+        cbResult = Device.allowDeviceToSleep();
+    }
+    catch (e) {
+        cbResult = {
+            code: -1,
+            error: e,
+        };
+    }
+
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        callback(cbResult, tag);
     }
 }
 
@@ -1086,6 +1095,30 @@ export function isDebug(): boolean {
  */
 export function isEnumerable(v: any): boolean {
     return Enumerable.isEnumerable(v);
+}
+
+/**
+ * Keeps the device awake.
+ * 
+ * @param {Function} [callback] The custom result callback.
+ * @param {T} [tag] The custom object for the callback.
+ */
+export function keepAwake<T>(callback?: (result: IResult, tag?: T) => void, tag?: T) {
+    var cbResult: IResult;
+    
+    try {
+        cbResult = Device.keepDeviceAwake();
+    }
+    catch (e) {
+        cbResult = {
+            code: -1,
+            error: e,
+        };
+    }
+
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        callback(cbResult, tag);
+    }
 }
 
 /**

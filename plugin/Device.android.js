@@ -31,6 +31,34 @@ var actionRunnable = java.lang.Runnable.extend({
     }
 });
 
+// Based on code by Eddy Verbruggen
+// 
+// s. https://github.com/EddyVerbruggen/nativescript-insomnia
+function allowDeviceToSleep() {
+    var cbResult = {
+        code: 1
+    };
+
+    var ctx = getAppContext();
+    if (!TypeUtils.isNullOrUndefined(ctx)) {
+        var window = ctx.getWindow();
+        if (!TypeUtils.isNullOrUndefined(window)) {
+            window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+            cbResult.code = 0;
+        }
+        else {
+            cbResult.code = 3;
+        }
+    }
+    else {
+        cbResult.code = 2;
+    }
+
+    return cbResult;
+}
+exports.allowDeviceToSleep = allowDeviceToSleep;
+
 // Based on the code by Peter Staev
 // 
 // https://github.com/PeterStaev/NativeScript-Status-Bar
@@ -247,6 +275,34 @@ function isInDebugMode() {
     return (0 != (ctx.getApplicationInfo().flags &= android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE));
 }
 exports.isInDebugMode = isInDebugMode;
+
+// Based on code by Eddy Verbruggen
+// 
+// s. https://github.com/EddyVerbruggen/nativescript-insomnia
+function keepDeviceAwake() {
+    var cbResult = {
+        code: 1
+    };
+
+    var ctx = getAppContext();
+    if (!TypeUtils.isNullOrUndefined(ctx)) {
+        var window = ctx.getWindow();
+        if (!TypeUtils.isNullOrUndefined(window)) {
+            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+            cbResult.code = 0;
+        }
+        else {
+            cbResult.code = 3;
+        }
+    }
+    else {
+        cbResult.code = 2;
+    }
+
+    return cbResult;
+}
+exports.keepDeviceAwake = keepDeviceAwake;
 
 // Thanks to Nathanael Anderson!
 // 
