@@ -670,6 +670,21 @@ function parseYaml(y, opts) {
 }
 exports.parseYaml = parseYaml;
 /**
+ * Removes a value.
+ *
+ * @param {string} key The name of the key (case insensitive).
+ *
+ * @return {Boolean} Value was removed or not.
+ */
+function removeValue(key) {
+    if (hasValue(key)) {
+        AppSettings.remove(toValueKey(key));
+        return true;
+    }
+    return false;
+}
+exports.removeValue = removeValue;
+/**
  * Runs an action on the UI thread.
  *
  * @param {Function} action The action to invoke.

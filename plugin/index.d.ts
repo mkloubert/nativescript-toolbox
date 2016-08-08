@@ -557,6 +557,14 @@ export declare function parseXml(xml: string, processNamespaces?: boolean, angul
  */
 export declare function parseYaml<T>(y: any, opts?: IYamlDecodeOptions): T;
 /**
+ * Removes a value.
+ *
+ * @param {string} key The name of the key (case insensitive).
+ *
+ * @return {Boolean} Value was removed or not.
+ */
+export declare function removeValue(key: string): boolean;
+/**
  * Runs an action on the UI thread.
  *
  * @param {Function} action The action to invoke.

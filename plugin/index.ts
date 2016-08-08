@@ -1077,6 +1077,22 @@ export function parseYaml<T>(y: any, opts?: IYamlDecodeOptions): T {
 }
 
 /**
+ * Removes a value.
+ * 
+ * @param {string} key The name of the key (case insensitive).
+ * 
+ * @return {Boolean} Value was removed or not.
+ */
+export function removeValue(key: string): boolean {
+    if (hasValue(key)) {
+        AppSettings.remove(toValueKey(key));
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * Runs an action on the UI thread.
  * 
  * @param {Function} action The action to invoke.
