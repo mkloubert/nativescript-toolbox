@@ -75,6 +75,7 @@ The module provides the following function that are short hands for the included
 | openUrl | Open an URL on the device. |
 | parseXml | Parses a XML string to an object. |
 | parseYaml | Parses YAML data to an object. |
+| setStatusBarVisibility | Changes the visibility of the device's status bar (based on [nativescript-status-bar](https://github.com/PeterStaev/NativeScript-Status-Bar)).
 | sha1 | Hashes a value with SHA-1. |
 | sha256 | Hashes a value with SHA-256. |
 | sha3 | Hashes a value with SHA-3. |

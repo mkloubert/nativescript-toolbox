@@ -1,5 +1,6 @@
 import Application = require("application");
 import Toolbox = require('nativescript-toolbox');
+import Timer = require('timer');
 
 interface IObject {
     a: any;
@@ -11,5 +12,16 @@ var b = Toolbox.fromYaml<IObject>(a, 'b');
 
 console.log('a: ' + typeof a);
 console.log('b: ' + typeof b);
+
+Timer.setTimeout(() => {
+    Toolbox.setStatusBarVisibility(false,
+        (result) => {
+            Timer.setTimeout(() => {
+                console.log('setStatusBarVisibility.tag: ' + result.tag);
+
+                Toolbox.setStatusBarVisibility(true);
+            }, 5000);
+        }, 'TM');
+}, 5000);
 
 Application.start({ moduleName: "main-page" });

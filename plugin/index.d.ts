@@ -157,6 +157,27 @@ export interface IRow {
     index: number;
 }
 /**
+ * Result object for the callback of 'setStatusBarVisibility()' function.
+ */
+export interface ISetStatusBarVisibilityResult<T> {
+    /**
+     * The result code.
+     */
+    code: number;
+    /**
+     * The actual visibility (if defined)
+     */
+    isVisible?: boolean;
+    /**
+     * The error information (if one occured)
+     */
+    error?: any;
+    /**
+     * The custom submitted object.
+     */
+    tag?: T;
+}
+/**
  * A SQLite connection.
  */
 export interface ISQLite {
@@ -463,6 +484,14 @@ export declare function parseYaml<T>(y: any, opts?: IYamlDecodeOptions): T;
  * @return {Boolean} Operation was successful or not.
  */
 export declare function runOnUI<T>(action: (state: T) => void, state?: T, onError?: (err: any, state: T) => void): boolean;
+/**
+ * Changes the visibility of the device's status bar.
+ *
+ * @param {Boolean} isVisible Status bar should be visible (true) or not (false)
+ * @param {Function} [callback] The optional callback to call.
+ * @param {T} [tag] The custom object for the callback.
+ */
+export declare function setStatusBarVisibility<T>(isVisible: any, callback?: (result: ISetStatusBarVisibilityResult<T>) => void, tag?: T): void;
 /**
  * Returns the SHA-1 hash of a value.
  *

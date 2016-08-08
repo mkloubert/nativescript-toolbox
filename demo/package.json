@@ -12,7 +12,7 @@
   "dependencies": {
     "nativescript-dev-typescript": "^0.3.2",
     "nativescript-toolbox": "file:..\\plugin",
-    "tns-core-modules": "2.1.0"
+    "tns-core-modules": "^2.1.0"
   },
   "devDependencies": {
     "babel-traverse": "6.10.4",

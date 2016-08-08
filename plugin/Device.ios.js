@@ -23,6 +23,38 @@
 var Application = require("application");
 var TypeUtils = require("utils/types");
 
+// Based on the code by Peter Staev
+// 
+// https://github.com/PeterStaev/NativeScript-Status-Bar
+function changeStatusBarVisibility(showBar, callback, tag) {
+    var activity = getAppView();
+
+    var isVisible;
+    var error;
+    var code = 1;
+
+    var app = UIApplication.sharedApplication();
+    if (!TypeUtils.isNullOrUndefined(app)) {
+        app.setStatusBarHiddenWithAnimation(!showBar, UIStatusBarAnimation.UIStatusBarAnimationSlide);
+
+        isVisible = showBar;
+        code = 0;
+    }
+    else {
+        code = 2;
+    }
+
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        callback({
+            code: code,
+            error: error,
+            isVisible: isVisible,
+            tag: tag
+        });
+    }
+}
+exports.changeStatusBarVisibility = changeStatusBarVisibility;
+
 function getAppContext() {
     return Application.ios.delegate;
 }

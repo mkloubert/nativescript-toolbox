@@ -564,6 +564,29 @@ function runOnUI(action, state, onError) {
 }
 exports.runOnUI = runOnUI;
 /**
+ * Changes the visibility of the device's status bar.
+ *
+ * @param {Boolean} isVisible Status bar should be visible (true) or not (false)
+ * @param {Function} [callback] The optional callback to call.
+ * @param {T} [tag] The custom object for the callback.
+ */
+function setStatusBarVisibility(isVisible, callback, tag) {
+    try {
+        Device.changeStatusBarVisibility(isVisible ? true : false, callback, tag);
+    }
+    catch (e) {
+        console.log('[ERROR] (nativescript-toolbox).setStatusBarVisibility(): ' + e);
+        if (!TypeUtils.isNullOrUndefined(callback)) {
+            callback({
+                code: -1,
+                error: e,
+                tag: tag,
+            });
+        }
+    }
+}
+exports.setStatusBarVisibility = setStatusBarVisibility;
+/**
  * Returns the SHA-1 hash of a value.
  *
  * @param any v The value to hash.

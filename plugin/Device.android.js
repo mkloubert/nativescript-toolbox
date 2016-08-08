@@ -31,6 +31,52 @@ var actionRunnable = java.lang.Runnable.extend({
     }
 });
 
+// Based on the code by Peter Staev
+// 
+// https://github.com/PeterStaev/NativeScript-Status-Bar
+function changeStatusBarVisibility(showBar, callback, tag) {
+    var activity = getAppView();
+
+    var isVisible;
+    var error;
+    var code = 1;
+
+    if (!TypeUtils.isNullOrUndefined(activity)) {
+        var window = activity.getWindow();
+        if (!TypeUtils.isNullOrUndefined(window)) {
+            var view = window.getDecorView();
+            if (!TypeUtils.isNullOrUndefined(view)) {
+                var flag = showBar ? android.view.View.SYSTEM_UI_FLAG_VISIBLE
+                                   : android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
+
+                view.setSystemUiVisibility(flag);
+
+                isVisible = showBar;
+                code = 0;
+            }
+            else {
+                code = 4;
+            }
+        }
+        else {
+            code = 3;
+        }
+    }
+    else {
+        code = 2;
+    }
+
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        callback({
+            code: code,
+            error: error,
+            isVisible: isVisible,
+            tag: tag
+        });
+    }
+}
+exports.changeStatusBarVisibility = changeStatusBarVisibility;
+
 function getAppContext() {
     var ctx = Application.android.context;
 

@@ -218,6 +218,31 @@ export interface IRow {
 }
 
 /**
+ * Result object for the callback of 'setStatusBarVisibility()' function.
+ */
+export interface ISetStatusBarVisibilityResult<T> {
+    /**
+     * The result code.
+     */
+    code: number;
+
+    /**
+     * The actual visibility (if defined)
+     */
+    isVisible?: boolean;
+
+    /**
+     * The error information (if one occured)
+     */
+    error?: any;
+
+    /**
+     * The custom submitted object.
+     */
+    tag?: T;
+}
+
+/**
  * A SQLite connection.
  */
 export interface ISQLite {
@@ -899,6 +924,31 @@ export function runOnUI<T>(action: (state: T) => void, state?: T,
     catch (e) {
         console.log('[ERROR] (nativescript-toolbox).runOnUI(0): ' + e);
         return false;
+    }
+}
+
+/**
+ * Changes the visibility of the device's status bar.
+ * 
+ * @param {Boolean} isVisible Status bar should be visible (true) or not (false)
+ * @param {Function} [callback] The optional callback to call.
+ * @param {T} [tag] The custom object for the callback.
+ */
+export function setStatusBarVisibility<T>(isVisible, callback?: (result: ISetStatusBarVisibilityResult<T>) => void, tag?: T) {
+    try {
+        Device.changeStatusBarVisibility(isVisible ? true : false,
+                                         callback, tag);
+    }
+    catch (e) {
+        console.log('[ERROR] (nativescript-toolbox).setStatusBarVisibility(): ' + e);
+        
+        if (!TypeUtils.isNullOrUndefined(callback)) {
+            callback({
+                code: -1,
+                error: e,
+                tag: tag,
+            });
+        }
     }
 }
 

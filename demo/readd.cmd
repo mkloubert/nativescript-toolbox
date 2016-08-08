@@ -7,7 +7,7 @@ CALL tns plugin remove nativescript-toolbox
 CD ..
 CD plugin
 ECHO Rebuild plugin...
-CALL tsc
+CALL tsc --declaration
 ECHO Done
 
 CD ..
