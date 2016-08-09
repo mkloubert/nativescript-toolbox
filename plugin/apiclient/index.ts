@@ -308,6 +308,10 @@ class ApiClient extends LoggerBase implements IApiClient {
     }
     
     public completeAction : (ctx : IApiClientCompleteContext) => void;
+
+    public conflict(conflictAction : (result : IApiClientResult) => void) : ApiClient {
+        return this.status(409, conflictAction);
+    }
     
     protected createLogMessage(msg: any, tag: string,
                                category : LogCategory, priority : LogPriority) : ILogMessage {
@@ -1429,6 +1433,16 @@ export interface IApiClient {
      * @param {Function} completeAction The action to invoke.
      */
     complete(completeAction : (ctx : IApiClientCompleteContext) => void) : IApiClient;
+
+    /**
+     * Short hand method to define an action that is invoked
+     * for a status code 409 (conflict).
+     * 
+     * @chainable
+     * 
+     * @param {Function} conflictAction The action to invoke.
+     */
+    conflict(conflictAction : (result : IApiClientResult) => void) : IApiClient;
     
     /**
      * Starts a DELETE request.

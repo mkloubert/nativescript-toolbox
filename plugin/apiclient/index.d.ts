@@ -312,6 +312,15 @@ export interface IApiClient {
      */
     complete(completeAction: (ctx: IApiClientCompleteContext) => void): IApiClient;
     /**
+     * Short hand method to define an action that is invoked
+     * for a status code 409 (conflict).
+     *
+     * @chainable
+     *
+     * @param {Function} conflictAction The action to invoke.
+     */
+    conflict(conflictAction: (result: IApiClientResult) => void): IApiClient;
+    /**
      * Starts a DELETE request.
      *
      * @param {IRequestOptions} [opts] The (additional) options.

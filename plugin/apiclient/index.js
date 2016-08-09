@@ -239,6 +239,9 @@ var ApiClient = (function (_super) {
         this.completeAction = completeAction;
         return this;
     };
+    ApiClient.prototype.conflict = function (conflictAction) {
+        return this.status(409, conflictAction);
+    };
     ApiClient.prototype.createLogMessage = function (msg, tag, category, priority) {
         return new LogMessage(LogSource.Client, new Date(), msg, tag, category, priority);
     };

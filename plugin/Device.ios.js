@@ -54,7 +54,6 @@ function changeStatusBarVisibility(showBar, callback, tag) {
     var activity = getAppView();
 
     var isVisible;
-    var error;
     var code = 1;
 
     var app = UIApplication.sharedApplication();
@@ -71,7 +70,6 @@ function changeStatusBarVisibility(showBar, callback, tag) {
     if (!TypeUtils.isNullOrUndefined(callback)) {
         callback({
             code: code,
-            error: error,
             isVisible: isVisible,
             tag: tag
         });
