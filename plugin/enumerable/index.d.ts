@@ -319,6 +319,14 @@ export interface IEnumerable<T> {
      */
     orderDescending(comparer?: any): IOrderedEnumerable<T>;
     /**
+     * Pushes the items of that sequence to an array.
+     *
+     * @param {any} arr The target array.
+     *
+     * @chainable
+     */
+    pushToArray(arr: any[] | ObservableArray<T>): IEnumerable<T>;
+    /**
      * Resets the sequence.
      *
      * @throws Reset is not possible.
@@ -674,6 +682,8 @@ export declare abstract class Sequence<T> implements IEnumerable<T> {
     orderByDescending(selector: any, comparer?: any): IOrderedEnumerable<T>;
     /** @inheritdoc */
     orderDescending(comparer?: any): IOrderedEnumerable<T>;
+    /** @inheritdoc */
+    pushToArray(arr: any[] | ObservableArray<T>): Sequence<T>;
     /** @inheritdoc */
     abstract reset(): any;
     /** @inheritdoc */

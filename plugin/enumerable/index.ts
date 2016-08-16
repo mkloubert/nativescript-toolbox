@@ -384,6 +384,15 @@ export interface IEnumerable<T> {
     orderDescending(comparer?: any): IOrderedEnumerable<T>;
 
     /**
+     * Pushes the items of that sequence to an array.
+     * 
+     * @param {any} arr The target array.
+     * 
+     * @chainable
+     */
+    pushToArray(arr: any[] | ObservableArray<T>): IEnumerable<T>;
+
+    /**
      * Resets the sequence.
      * 
      * @throws Reset is not possible.
@@ -1364,6 +1373,15 @@ export abstract class Sequence<T> implements IEnumerable<T> {
     /** @inheritdoc */
     public orderDescending(comparer?: any): IOrderedEnumerable<T> {
         return this.orderByDescending('x => x', comparer);
+    }
+
+    /** @inheritdoc */
+    public pushToArray(arr: any[] | ObservableArray<T>): Sequence<T> {
+        while (this.moveNext()) {
+            arr.push(this.current);
+        }
+
+        return this;
     }
 
     /** @inheritdoc */

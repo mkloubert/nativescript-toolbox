@@ -540,6 +540,13 @@ var Sequence = (function () {
         return this.orderByDescending('x => x', comparer);
     };
     /** @inheritdoc */
+    Sequence.prototype.pushToArray = function (arr) {
+        while (this.moveNext()) {
+            arr.push(this.current);
+        }
+        return this;
+    };
+    /** @inheritdoc */
     Sequence.prototype.reverse = function () {
         var reverseItems = [];
         while (this.moveNext()) {
