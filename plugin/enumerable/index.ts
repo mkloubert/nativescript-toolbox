@@ -390,7 +390,7 @@ export interface IEnumerable<T> {
      * 
      * @chainable
      */
-    pushToArray(arr: any[] | ObservableArray<T>): IEnumerable<T>;
+    pushToArray(arr: T[] | ObservableArray<T>): IEnumerable<T>;
 
     /**
      * Resets the sequence.
@@ -1376,7 +1376,7 @@ export abstract class Sequence<T> implements IEnumerable<T> {
     }
 
     /** @inheritdoc */
-    public pushToArray(arr: any[] | ObservableArray<T>): Sequence<T> {
+    public pushToArray(arr: T[] | ObservableArray<T>): Sequence<T> {
         while (this.moveNext()) {
             arr.push(this.current);
         }

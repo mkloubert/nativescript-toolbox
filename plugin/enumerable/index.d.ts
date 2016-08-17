@@ -325,7 +325,7 @@ export interface IEnumerable<T> {
      *
      * @chainable
      */
-    pushToArray(arr: any[] | ObservableArray<T>): IEnumerable<T>;
+    pushToArray(arr: T[] | ObservableArray<T>): IEnumerable<T>;
     /**
      * Resets the sequence.
      *
@@ -683,7 +683,7 @@ export declare abstract class Sequence<T> implements IEnumerable<T> {
     /** @inheritdoc */
     orderDescending(comparer?: any): IOrderedEnumerable<T>;
     /** @inheritdoc */
-    pushToArray(arr: any[] | ObservableArray<T>): Sequence<T>;
+    pushToArray(arr: T[] | ObservableArray<T>): Sequence<T>;
     /** @inheritdoc */
     abstract reset(): any;
     /** @inheritdoc */
