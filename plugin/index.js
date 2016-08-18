@@ -24,6 +24,7 @@ var ApiClient = require('./apiclient');
 var AppSettings = require("application-settings");
 var Batch = require('./batch');
 var BitmapFactory = require('./bitmap-factory');
+var Connectivity = require('connectivity');
 var CryptoJS = require('./crypto-js');
 var Device = require('./Device');
 var Enumerable = require('./enumerable');
@@ -560,6 +561,49 @@ function hideStatusBar(callback, tag) {
 }
 exports.hideStatusBar = hideStatusBar;
 /**
+ * Invokes logic for a specific connectivity type.
+ *
+ * @param {IInvokeForConnectivityConfig} cfg The configuration.
+ * @param {T} [tag] The custom value for callback to invoke.
+ *
+ * @return {any} The result of the invoked callback.
+ */
+function invokeForConnectivity(cfg, tag) {
+    var code = 0;
+    var callback = cfg.unknown;
+    var error;
+    var type;
+    try {
+        type = Connectivity.getConnectionType();
+        switch (type) {
+            case Connectivity.connectionType.mobile:
+                callback = cfg.mobile;
+                break;
+            case Connectivity.connectionType.wifi:
+                callback = cfg.wifi;
+                break;
+            case Connectivity.connectionType.none:
+                callback = cfg.none;
+                break;
+            default:
+                code = 1;
+                break;
+        }
+    }
+    catch (e) {
+        code = -1;
+        error = e;
+    }
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        return callback({
+            code: code,
+            error: error,
+            type: type,
+        });
+    }
+}
+exports.invokeForConnectivity = invokeForConnectivity;
+/**
  * Invokes a callback for specific orientation mode.
  *
  * @param {IInvokeForOrientationConfig} cfg The configuration.
@@ -740,6 +784,21 @@ function openUrl(url) {
 }
 exports.openUrl = openUrl;
 /**
+ * Opens the WiFi settings on the device.
+ *
+ * @return {Boolean} Operation was successful or not.
+ */
+function openWifiSettings() {
+    try {
+        return Device.openWifiSettingsOnDevice();
+    }
+    catch (e) {
+        console.log('[ERROR] (nativescript-toolbox).openWifiSettings(): ' + e);
+        return false;
+    }
+}
+exports.openWifiSettings = openWifiSettings;
+/**
  * Parses a XML string.
  *
  * @param {String} xml The string to parse.
@@ -918,6 +977,25 @@ function showStatusBar(callback, tag) {
     setStatusBarVisibility(true, callback, tag);
 }
 exports.showStatusBar = showStatusBar;
+/**
+ * Starts monitoring for connectivity (changes).
+ *
+ * @param {IInvokeForConnectivityConfig} cfg The configuration.
+ * @param {T} [tag] The custom value for callback to invoke.
+ */
+function startMonitoringForConnectivity(cfg, tag) {
+    Connectivity.startMonitoring(function () {
+        invokeForConnectivity(cfg);
+    });
+}
+exports.startMonitoringForConnectivity = startMonitoringForConnectivity;
+/**
+ * Stops monitoring for connectivity.
+ */
+function stopMonitoringForConnectivity() {
+    Connectivity.stopMonitoring();
+}
+exports.stopMonitoringForConnectivity = stopMonitoringForConnectivity;
 function toValueKey(key) {
     var prefix = exports.ValueKeyPrefix;
     if (TypeUtils.isNullOrUndefined(prefix)) {

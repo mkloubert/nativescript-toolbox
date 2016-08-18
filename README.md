@@ -84,6 +84,7 @@ The module provides the following function that are short hands for the included
 | now | Gets the current time. |
 | openDatabase | Opens a (SQLite) database (connection). |
 | openUrl | Open an URL on the device. |
+| openWifiSettings | Opens the WiFi settings on the device. |
 | parseXml | Parses a XML string to an object. |
 | parseYaml | Parses YAML data to an object. |
 | removeValue | Removes a value / object that is stored in the application settings. |
@@ -95,6 +96,8 @@ The module provides the following function that are short hands for the included
 | sha384 | Hashes a value with SHA-384. |
 | sha512 | Hashes a value with SHA-512. |
 | showStatusBar | Short hand function for 'setStatusBarVisibility' for showing the status bar. |
+| startMonitoringForConnectivity | Starts monitoring for connectivity (changes). |
+| stopMonitoringForConnectivity | Stops monitoring for connectivity. |
 | toYaml | Converts an object / a value to YAML. |
 | uuid | Creates a new unique ID / GUID (s. [Create GUID / UUID in JavaScript?](http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript)). |
 

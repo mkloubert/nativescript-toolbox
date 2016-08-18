@@ -302,6 +302,21 @@ function keepDeviceAwake() {
 }
 exports.keepDeviceAwake = keepDeviceAwake;
 
+function openWifiSettingsOnDevice() {
+    var ctx = getAppContext();
+
+    if (TypeUtils.isNullOrUndefined(ctx)) {
+        return false;
+    }
+
+    var intent = new android.content.Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
+    intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+
+    ctx.startActivity(intent);
+    return true;
+}
+exports.openWifiSettingsOnDevice = openWifiSettingsOnDevice;
+
 // Thanks to Nathanael Anderson!
 // 
 // s. https://github.com/NathanaelA/nativescript-openurl

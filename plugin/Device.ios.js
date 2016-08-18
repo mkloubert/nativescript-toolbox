@@ -233,6 +233,11 @@ function openUri(uri) {
 }
 exports.openUri = openUri;
 
+function openWifiSettingsOnDevice() {
+    return openUri('prefs:root=WIFI');
+}
+exports.openWifiSettingsOnDevice = openWifiSettingsOnDevice;
+
 function runOnUIThread(uiAction, state, onError) {
     dispatch_async(dispatch_get_main_queue(), function() {
         try {

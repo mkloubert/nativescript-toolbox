@@ -129,6 +129,36 @@ export interface IGetClipboardResult<T> extends IResult {
     value?: T;
 }
 /**
+ * Configuration for 'invokeForConnectivity()' function.
+ */
+export interface IInvokeForConnectivityConfig<T> {
+    /**
+     * Is invoked on 'mobile' state.
+     */
+    mobile?: (result: IInvokeForConnectivityResult<T>, tag?: T) => void;
+    /**
+     * Is invoked on 'mobile' state.
+     */
+    none?: (result: IInvokeForConnectivityResult<T>, tag?: T) => void;
+    /**
+     * Is invoked on 'mobile' state.
+     */
+    wifi?: (result: IInvokeForConnectivityResult<T>, tag?: T) => void;
+    /**
+     * Is invoked on 'mobile' state.
+     */
+    unknown?: (result: IInvokeForConnectivityResult<T>, tag?: T) => void;
+}
+/**
+ * Result for a callback of 'invokeForConnectivity()' function call.
+ */
+export interface IInvokeForConnectivityResult<T> extends IResult {
+    /**
+     * The type
+     */
+    type?: number;
+}
+/**
  * Configuration for 'invokeForOrientation()' function.
  */
 export interface IInvokeForOrientationConfig<T> {
@@ -543,6 +573,15 @@ export declare function hasValue(key: string): boolean;
  */
 export declare function hideStatusBar<T>(callback?: (result: ISetStatusBarVisibilityResult<T>, tag?: T) => void, tag?: T): void;
 /**
+ * Invokes logic for a specific connectivity type.
+ *
+ * @param {IInvokeForConnectivityConfig} cfg The configuration.
+ * @param {T} [tag] The custom value for callback to invoke.
+ *
+ * @return {any} The result of the invoked callback.
+ */
+export declare function invokeForConnectivity<T>(cfg: IInvokeForConnectivityConfig<T>, tag?: T): void;
+/**
  * Invokes a callback for specific orientation mode.
  *
  * @param {IInvokeForOrientationConfig} cfg The configuration.
@@ -622,6 +661,12 @@ export declare function openDatabase(cfg: IOpenDatabaseConfig): void;
  * @return {Boolean} Operation was successful or not.
  */
 export declare function openUrl(url: string): boolean;
+/**
+ * Opens the WiFi settings on the device.
+ *
+ * @return {Boolean} Operation was successful or not.
+ */
+export declare function openWifiSettings(): boolean;
 /**
  * Parses a XML string.
  *
@@ -727,6 +772,17 @@ export declare function sha512(v: any): string;
  * @param {T} [tag] The custom value for the result callback.
  */
 export declare function showStatusBar<T>(callback?: (result: ISetStatusBarVisibilityResult<T>, tag?: T) => void, tag?: T): void;
+/**
+ * Starts monitoring for connectivity (changes).
+ *
+ * @param {IInvokeForConnectivityConfig} cfg The configuration.
+ * @param {T} [tag] The custom value for callback to invoke.
+ */
+export declare function startMonitoringForConnectivity<T>(cfg: IInvokeForConnectivityConfig<T>, tag?: T): void;
+/**
+ * Stops monitoring for connectivity.
+ */
+export declare function stopMonitoringForConnectivity(): void;
 /**
  * Converts an object / a value to YAML.
  *

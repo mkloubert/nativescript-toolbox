@@ -25,6 +25,7 @@ import Application = require('application');
 import AppSettings = require("application-settings");
 import Batch = require('./batch');
 import BitmapFactory = require('./bitmap-factory');
+import Connectivity = require('connectivity');
 var CryptoJS = require('./crypto-js');
 var Device = require('./Device');
 import Enumerable = require('./enumerable');
@@ -183,6 +184,41 @@ export interface IGetClipboardResult<T> extends IResult {
      * The value (if no error)
      */
     value?: T;
+}
+
+/**
+ * Configuration for 'invokeForConnectivity()' function.
+ */
+export interface IInvokeForConnectivityConfig<T> {
+    /**
+     * Is invoked on 'mobile' state.
+     */
+    mobile?: (result: IInvokeForConnectivityResult<T>, tag?: T) => void;
+    
+    /**
+     * Is invoked on 'mobile' state.
+     */
+    none?: (result: IInvokeForConnectivityResult<T>, tag?: T) => void;
+   
+   /**
+    * Is invoked on 'mobile' state.
+    */
+    wifi?: (result: IInvokeForConnectivityResult<T>, tag?: T) => void;
+    
+   /**
+    * Is invoked on 'mobile' state.
+    */
+    unknown?: (result: IInvokeForConnectivityResult<T>, tag?: T) => void;
+}
+
+/**
+ * Result for a callback of 'invokeForConnectivity()' function call.
+ */
+export interface IInvokeForConnectivityResult<T> extends IResult {
+    /**
+     * The type
+     */
+    type?: number;
 }
 
 /**
@@ -1037,6 +1073,56 @@ export function hideStatusBar<T>(callback?: (result: ISetStatusBarVisibilityResu
 }
 
 /**
+ * Invokes logic for a specific connectivity type.
+ * 
+ * @param {IInvokeForConnectivityConfig} cfg The configuration.
+ * @param {T} [tag] The custom value for callback to invoke.
+ * 
+ * @return {any} The result of the invoked callback.
+ */
+export function invokeForConnectivity<T>(cfg: IInvokeForConnectivityConfig<T>,
+                                         tag?: T) {
+    
+    var code = 0;
+    var callback = cfg.unknown;
+    var error;
+    var type: number;
+
+    try {
+        type = Connectivity.getConnectionType();
+        switch (type) {
+            case Connectivity.connectionType.mobile:
+                callback = cfg.mobile;
+                break;
+
+            case Connectivity.connectionType.wifi:
+                callback = cfg.wifi;
+                break;
+
+            case Connectivity.connectionType.none:
+                callback = cfg.none;
+                break;
+
+            default:
+                code = 1;
+                break;
+        }
+    }
+    catch (e) {
+        code = -1;
+        error = e;
+    }
+
+    if (!TypeUtils.isNullOrUndefined(callback)) {
+        return callback({
+            code: code,
+            error: error,
+            type: type,
+        });
+    }
+}
+
+/**
  * Invokes a callback for specific orientation mode.
  * 
  * @param {IInvokeForOrientationConfig} cfg The configuration.
@@ -1231,6 +1317,21 @@ export function openUrl(url: string): boolean {
 }
 
 /**
+ * Opens the WiFi settings on the device.
+ * 
+ * @return {Boolean} Operation was successful or not.
+ */
+export function openWifiSettings(): boolean {
+    try {
+        return Device.openWifiSettingsOnDevice();
+    }
+    catch (e) {
+        console.log('[ERROR] (nativescript-toolbox).openWifiSettings(): ' + e);
+        return false;
+    }
+}
+
+/**
  * Parses a XML string.
  * 
  * @param {String} xml The string to parse.
@@ -1419,6 +1520,27 @@ export function showStatusBar<T>(callback?: (result: ISetStatusBarVisibilityResu
                                  tag?: T) {
     setStatusBarVisibility(true,
                            callback, tag);
+}
+
+/**
+ * Starts monitoring for connectivity (changes).
+ * 
+ * @param {IInvokeForConnectivityConfig} cfg The configuration.
+ * @param {T} [tag] The custom value for callback to invoke.
+ */
+export function startMonitoringForConnectivity<T>(cfg: IInvokeForConnectivityConfig<T>,
+                                                  tag?: T) {
+
+    Connectivity.startMonitoring(() => {
+        invokeForConnectivity(cfg);
+    });
+}
+
+/**
+ * Stops monitoring for connectivity.
+ */
+export function stopMonitoringForConnectivity() {
+    Connectivity.stopMonitoring();
 }
 
 function toValueKey(key: string) {
