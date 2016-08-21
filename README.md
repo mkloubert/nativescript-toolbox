@@ -75,6 +75,7 @@ The module provides the following function that are short hands for the included
 | hash | Generic hash function. |
 | hasValue | Checks if a value / object is stored in the application settings. |
 | hideStatusBar | Short hand function for 'setStatusBarVisibility' for hiding the status bar. |
+| invokeForConnectivity | Invokes logic for a specific connectivity type. Requires permissions on Android ([android.permission.ACCESS_NETWORK_STATE](https://developer.android.com/reference/android/Manifest.permission.html#ACCESS_NETWORK_STATE)), e.g. |
 | invokeForOrientation | Invokes a callback for specific orientation mode. |
 | invokeForPlatform | Invokes an action for a specific platform. |
 | isDebug | Checks if the app is in debug mode or not. |
@@ -100,8 +101,8 @@ The module provides the following function that are short hands for the included
 | sha384 | Hashes a value with SHA-384. |
 | sha512 | Hashes a value with SHA-512. |
 | showStatusBar | Short hand function for 'setStatusBarVisibility' for showing the status bar. |
-| startMonitoringForConnectivity | Starts monitoring for connectivity (changes). |
-| stopMonitoringForConnectivity | Stops monitoring for connectivity. |
+| startMonitoringForConnectivity | Starts monitoring for connectivity (changes). Requires permissions on Android ([android.permission.ACCESS_NETWORK_STATE](https://developer.android.com/reference/android/Manifest.permission.html#ACCESS_NETWORK_STATE)), e.g. |
+| stopMonitoringForConnectivity | Stops monitoring for connectivity. Requires permissions on Android ([android.permission.ACCESS_NETWORK_STATE](https://developer.android.com/reference/android/Manifest.permission.html#ACCESS_NETWORK_STATE)), e.g. |
 | toYaml | Converts an object / a value to YAML. |
 | uuid | Creates a new unique ID / GUID (s. [Create GUID / UUID in JavaScript?](http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript)). |
 | vibrate | Vibrates the device. Requires permissions on Android ([android.permission.VIBRATE](https://developer.android.com/reference/android/Manifest.permission.html#VIBRATE)), e.g. (based on [nativescript-vibrate](https://github.com/anarchicknight/nativescript-vibrate)) |
