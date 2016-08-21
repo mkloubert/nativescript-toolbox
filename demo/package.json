@@ -6,13 +6,13 @@
   "nativescript": {
     "id": "org.nativescript.NativeScriptToolboxDemo",
     "tns-android": {
-      "version": "2.1.1"
+      "version": "2.2.0"
     }
   },
   "dependencies": {
     "nativescript-dev-typescript": "^0.3.2",
     "nativescript-toolbox": "file:..\\plugin",
-    "tns-core-modules": "^2.1.0"
+    "tns-core-modules": "^2.2.1"
   },
   "devDependencies": {
     "babel-traverse": "6.10.4",

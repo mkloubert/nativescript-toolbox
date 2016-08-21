@@ -256,3 +256,11 @@ function runOnUIThread(uiAction, state, onError) {
     return true;
 }
 exports.runOnUIThread = runOnUIThread;
+
+// Based on code by anarchicknight
+// 
+// s. https://github.com/anarchicknight/nativescript-vibrate
+function vibrateDevice(msec) {
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+}
+exports.vibrateDevice = vibrateDevice;

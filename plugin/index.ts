@@ -29,6 +29,7 @@ import Connectivity = require('connectivity');
 var CryptoJS = require('./crypto-js');
 var Device = require('./Device');
 import Enumerable = require('./enumerable');
+var Markdown = require('nativescript-toolbox/markdown').markdown;
 var MD5 = require('./crypto-js/md5');
 import Moment = require('./moment');
 import {ObservableArray} from 'data/observable-array';
@@ -513,6 +514,21 @@ export interface IYamlEncodeOptions {
 }
 
 /**
+ * List of known Markdown dialects
+ */
+export enum MarkdownDialect {
+    /**
+     * s. http://daringfireball.net/projects/markdown/syntax
+     */
+    Gruber = 1,
+
+    /**
+     * s. http://maruku.rubyforge.org/maruku.html
+     */
+    Maruku = 2,
+}
+
+/**
  * List of known platforms.
  */
 export enum Platform {
@@ -712,6 +728,21 @@ class SQLiteConnection implements ISQLite {
 }
 
 /**
+ * List of known target formats.
+ */
+export enum TargetFormat {
+    /**
+     * HTML
+     */
+    Html = 1,
+
+    /**
+     * JSON
+     */
+    Json = 2,
+}
+
+/**
  * Allows the device to go to sleep mode.
  * 
  * @param {Function} [callback] The custom result callback.
@@ -828,6 +859,48 @@ export function format(formatStr: string, ...args: any[]): string {
  */
 export function formatArray(formatStr: string, args: any[]): string {
     return StringFormat.formatArray(formatStr, args);
+}
+
+/**
+ * Converts Markdown code.
+ * 
+ * @param {String} md The Markdown.
+ * @param {TargetFormat} [format] The custom output format.
+ * @param {MarkdownDialect} [dialect] The dialect to use.
+ * 
+ * @return {any} The converted data.
+ */
+export function fromMarkdown(md: string,
+                             format: string | TargetFormat = TargetFormat.Json,
+                             dialect: string | MarkdownDialect = MarkdownDialect.Gruber): any {
+
+    if (TypeUtils.isNullOrUndefined(format)) {
+        format = TargetFormat.Json;
+    }
+
+    dialect = toMarkdownDialectString(dialect);
+
+    var parser: () => any;
+
+    switch (toTargetFormatString(format)) {
+        case 'json':
+            parser = () => Markdown.parse(md, dialect);
+            break;
+            
+        case 'html':
+            parser = () => Markdown.toHTML(md, dialect);
+            break;
+    }
+
+    if (TypeUtils.isNullOrUndefined(parser)) {
+        throw "Format '" + format + "' is NOT supported!";
+    }
+
+    if (TypeUtils.isNullOrUndefined(md)) {
+        return md;
+    }
+
+    return parser();
 }
 
 /**
@@ -1220,6 +1293,30 @@ export function keepAwake<T>(callback?: (result: IResult, tag?: T) => void, tag?
 }
 
 /**
+ * Converts Markdown code to parsable JSON object.
+ * 
+ * @oaram {String} md The Markdown code.
+ * @param {MarkdownDialect} [dialect] The custom dialect to use.
+ * 
+ * @return {Object} The Markdown as object.
+ */
+export function markdownToJson(md: string, dialect: string | MarkdownDialect = MarkdownDialect.Gruber): any {
+    return fromMarkdown(md, TargetFormat.Json, dialect);
+}
+
+/**
+ * Converts Markdown code to simple HTML.
+ * 
+ * @oaram {String} md The Markdown code.
+ * @param {MarkdownDialect} [dialect] The custom dialect to use.
+ * 
+ * @return {String} The Markdown as HTML code.
+ */
+export function markdownToHtml(md: string, dialect: string | MarkdownDialect = MarkdownDialect.Gruber): string {
+    return fromMarkdown(md, TargetFormat.Html, dialect);
+}
+
+/**
  * Returns the MD5 hash of a value.
  * 
  * @param any v The value to hash.
@@ -1543,6 +1640,30 @@ export function stopMonitoringForConnectivity() {
     Connectivity.stopMonitoring();
 }
 
+function toMarkdownDialectString(v: any) {
+    if (TypeUtils.isNullOrUndefined(v)) {
+        v = MarkdownDialect.Gruber;
+    }
+
+    if (!TypeUtils.isString(v)) {
+        v = MarkdownDialect[v];
+    }
+
+    return v;
+}
+
+function toTargetFormatString(v: any) {
+    if (TypeUtils.isNullOrUndefined(v)) {
+        return v;
+    }
+
+    if (!TypeUtils.isString(v)) {
+        v = TargetFormat[v];
+    }
+
+    return ('' + v).toLowerCase().trim();
+}
+
 function toValueKey(key: string) {
     var prefix = ValueKeyPrefix;
     if (TypeUtils.isNullOrUndefined(prefix)) {
@@ -1594,3 +1715,27 @@ export function uuid(separator: string = '-'): string {
  * Prefix for value keys.
  */
 export var ValueKeyPrefix = '';
+
+/**
+ * Vibrates the device.
+ * 
+ * @param {number} [msec] The custom number of milliseconds. Default: 500
+ */
+export function vibrate(msec?: number) {
+    if (TypeUtils.isNullOrUndefined(msec)) {
+        msec = 500;
+    }
+
+    if (msec < 0) {
+        msec = 0;
+    }
+
+    try {
+        return Device.vibrateDevice(msec);
+    }
+    catch (e) {
+        console.log('[ERROR] (nativescript-toolbox).vibrate(): ' + e);
+
+        return false;
+    }
+}

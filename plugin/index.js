@@ -28,6 +28,7 @@ var Connectivity = require('connectivity');
 var CryptoJS = require('./crypto-js');
 var Device = require('./Device');
 var Enumerable = require('./enumerable');
+var Markdown = require('nativescript-toolbox/markdown').markdown;
 var MD5 = require('./crypto-js/md5');
 var Moment = require('./moment');
 var observable_array_1 = require('data/observable-array');
@@ -60,6 +61,20 @@ exports.AppName = 'NativeScript Toolbox';
     DeviceOrientation[DeviceOrientation["Portrait"] = 1] = "Portrait";
 })(exports.DeviceOrientation || (exports.DeviceOrientation = {}));
 var DeviceOrientation = exports.DeviceOrientation;
+/**
+ * List of known Markdown dialects
+ */
+(function (MarkdownDialect) {
+    /**
+     * s. http://daringfireball.net/projects/markdown/syntax
+     */
+    MarkdownDialect[MarkdownDialect["Gruber"] = 1] = "Gruber";
+    /**
+     * s. http://maruku.rubyforge.org/maruku.html
+     */
+    MarkdownDialect[MarkdownDialect["Maruku"] = 2] = "Maruku";
+})(exports.MarkdownDialect || (exports.MarkdownDialect = {}));
+var MarkdownDialect = exports.MarkdownDialect;
 /**
  * List of known platforms.
  */
@@ -230,6 +245,20 @@ var SQLiteConnection = (function () {
     return SQLiteConnection;
 }());
 /**
+ * List of known target formats.
+ */
+(function (TargetFormat) {
+    /**
+     * HTML
+     */
+    TargetFormat[TargetFormat["Html"] = 1] = "Html";
+    /**
+     * JSON
+     */
+    TargetFormat[TargetFormat["Json"] = 2] = "Json";
+})(exports.TargetFormat || (exports.TargetFormat = {}));
+var TargetFormat = exports.TargetFormat;
+/**
  * Allows the device to go to sleep mode.
  *
  * @param {Function} [callback] The custom result callback.
@@ -351,6 +380,40 @@ function formatArray(formatStr, args) {
     return StringFormat.formatArray(formatStr, args);
 }
 exports.formatArray = formatArray;
+/**
+ * Converts Markdown code.
+ *
+ * @param {String} md The Markdown.
+ * @param {TargetFormat} [format] The custom output format.
+ * @param {MarkdownDialect} [dialect] The dialect to use.
+ *
+ * @return {any} The converted data.
+ */
+function fromMarkdown(md, format, dialect) {
+    if (format === void 0) { format = TargetFormat.Json; }
+    if (dialect === void 0) { dialect = MarkdownDialect.Gruber; }
+    if (TypeUtils.isNullOrUndefined(format)) {
+        format = TargetFormat.Json;
+    }
+    dialect = toMarkdownDialectString(dialect);
+    var parser;
+    switch (toTargetFormatString(format)) {
+        case 'json':
+            parser = function () { return Markdown.parse(md, dialect); };
+            break;
+        case 'html':
+            parser = function () { return Markdown.toHTML(md, dialect); };
+            break;
+    }
+    if (TypeUtils.isNullOrUndefined(parser)) {
+        throw "Format '" + format + "' is NOT supported!";
+    }
+    if (TypeUtils.isNullOrUndefined(md)) {
+        return md;
+    }
+    return parser();
+}
+exports.fromMarkdown = fromMarkdown;
 /**
  * Alias for 'parseXml()'
  */
@@ -693,6 +756,32 @@ function keepAwake(callback, tag) {
 }
 exports.keepAwake = keepAwake;
 /**
+ * Converts Markdown code to parsable JSON object.
+ *
+ * @oaram {String} md The Markdown code.
+ * @param {MarkdownDialect} [dialect] The custom dialect to use.
+ *
+ * @return {Object} The Markdown as object.
+ */
+function markdownToJson(md, dialect) {
+    if (dialect === void 0) { dialect = MarkdownDialect.Gruber; }
+    return fromMarkdown(md, TargetFormat.Json, dialect);
+}
+exports.markdownToJson = markdownToJson;
+/**
+ * Converts Markdown code to simple HTML.
+ *
+ * @oaram {String} md The Markdown code.
+ * @param {MarkdownDialect} [dialect] The custom dialect to use.
+ *
+ * @return {String} The Markdown as HTML code.
+ */
+function markdownToHtml(md, dialect) {
+    if (dialect === void 0) { dialect = MarkdownDialect.Gruber; }
+    return fromMarkdown(md, TargetFormat.Html, dialect);
+}
+exports.markdownToHtml = markdownToHtml;
+/**
  * Returns the MD5 hash of a value.
  *
  * @param any v The value to hash.
@@ -996,6 +1085,24 @@ function stopMonitoringForConnectivity() {
     Connectivity.stopMonitoring();
 }
 exports.stopMonitoringForConnectivity = stopMonitoringForConnectivity;
+function toMarkdownDialectString(v) {
+    if (TypeUtils.isNullOrUndefined(v)) {
+        v = MarkdownDialect.Gruber;
+    }
+    if (!TypeUtils.isString(v)) {
+        v = MarkdownDialect[v];
+    }
+    return v;
+}
+function toTargetFormatString(v) {
+    if (TypeUtils.isNullOrUndefined(v)) {
+        return v;
+    }
+    if (!TypeUtils.isString(v)) {
+        v = TargetFormat[v];
+    }
+    return ('' + v).toLowerCase().trim();
+}
 function toValueKey(key) {
     var prefix = exports.ValueKeyPrefix;
     if (TypeUtils.isNullOrUndefined(prefix)) {
@@ -1043,4 +1150,25 @@ exports.uuid = uuid;
  * Prefix for value keys.
  */
 exports.ValueKeyPrefix = '';
+/**
+ * Vibrates the device.
+ *
+ * @param {number} [msec] The custom number of milliseconds. Default: 500
+ */
+function vibrate(msec) {
+    if (TypeUtils.isNullOrUndefined(msec)) {
+        msec = 500;
+    }
+    if (msec < 0) {
+        msec = 0;
+    }
+    try {
+        return Device.vibrateDevice(msec);
+    }
+    catch (e) {
+        console.log('[ERROR] (nativescript-toolbox).vibrate(): ' + e);
+        return false;
+    }
+}
+exports.vibrate = vibrate;
 //# sourceMappingURL=index.js.map

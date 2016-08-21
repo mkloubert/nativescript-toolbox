@@ -11,6 +11,7 @@ The module contains the following sub modules:
 | ---- | --------- |
 | [crypto-js](https://github.com/brix/crypto-js) | Library of crypto standards. |
 | [JS-YAML](https://github.com/nodeca/js-yaml) | YAML 1.2 parser / writer. |
+| [markdown](https://github.com/evilstreak/markdown-js) | Markdown parser. |
 | [Moment](https://github.com/moment/moment) | A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates. |
 | [nativescript-apiclient](https://github.com/mkloubert/nativescript-apiclient) | Simply call HTTP based APIs. |
 | [nativescript-batch](https://github.com/mkloubert/nativescript-batch) | Implement batch operations. |
@@ -61,6 +62,7 @@ The module provides the following function that are short hands for the included
 | encrypt | Encrypts a value / an object with AES. |
 | format | Formats a string. |
 | formatArray | Formats a string. |
+| fromMarkdown | Converts Markdown code. |
 | fromXml | Alias for 'parseXml'. |
 | fromYaml | Alias for 'parseYaml'. |
 | getApplicationContext | Returns the current application context. |
@@ -78,6 +80,8 @@ The module provides the following function that are short hands for the included
 | isDebug | Checks if the app is in debug mode or not. |
 | isEnumerable | Checks if a value is a sequence. |
 | keepAwake | Keeps the device awake (based on [nativescript-insomnia](https://github.com/EddyVerbruggen/nativescript-insomnia)). |
+| markdownToHtml | Short hand for 'fromMarkdown()' with HTML as target format. |
+| markdownToJson | Short hand for 'fromMarkdown()' with JSON as target format. |
 | md5 | Hashes a value with MD5. |
 | newBatch | Creates a new batch. |
 | newClient | Creates a new API client. |
@@ -100,6 +104,7 @@ The module provides the following function that are short hands for the included
 | stopMonitoringForConnectivity | Stops monitoring for connectivity. |
 | toYaml | Converts an object / a value to YAML. |
 | uuid | Creates a new unique ID / GUID (s. [Create GUID / UUID in JavaScript?](http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript)). |
+| vibrate | Vibrates the device. Requires permissions on Android ([android.permission.VIBRATE](https://developer.android.com/reference/android/Manifest.permission.html#VIBRATE)), e.g. (based on [nativescript-vibrate](https://github.com/anarchicknight/nativescript-vibrate)) |
 
 ### Sub modules
 
@@ -128,6 +133,15 @@ var SHA512 = require('nativescript-toolbox/crypto-js/sha512');
 
 ```typescript
 var YAML = require('nativescript-toolbox/js-yaml');
+```
+
+#### markdown
+
+```typescript
+import Markdown = require('nativescript-toolbox/markdown').markdown;
+
+var json = Markdown.parse('Vessel     | Captain\n-----------|-------------\nNCC-1701   | James T Kirk\nNCC-1701 A | James T Kirk\nNCC-1701 D | Picard');
+var html = Markdown.toHTML('Vessel     | Captain\n-----------|-------------\nNCC-1701   | James T Kirk\nNCC-1701 A | James T Kirk\nNCC-1701 D | Picard');
 ```
 
 #### Moment

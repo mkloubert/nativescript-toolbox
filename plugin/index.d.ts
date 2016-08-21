@@ -405,6 +405,19 @@ export interface IYamlEncodeOptions {
     styles?: any;
 }
 /**
+ * List of known Markdown dialects
+ */
+export declare enum MarkdownDialect {
+    /**
+     * s. http://daringfireball.net/projects/markdown/syntax
+     */
+    Gruber = 1,
+    /**
+     * s. http://maruku.rubyforge.org/maruku.html
+     */
+    Maruku = 2,
+}
+/**
  * List of known platforms.
  */
 export declare enum Platform {
@@ -416,6 +429,19 @@ export declare enum Platform {
      * iOS
      */
     iOS = 2,
+}
+/**
+ * List of known target formats.
+ */
+export declare enum TargetFormat {
+    /**
+     * HTML
+     */
+    Html = 1,
+    /**
+     * JSON
+     */
+    Json = 2,
 }
 /**
  * Allows the device to go to sleep mode.
@@ -493,6 +519,16 @@ export declare function format(formatStr: string, ...args: any[]): string;
  * @return {String} The formatted string.
  */
 export declare function formatArray(formatStr: string, args: any[]): string;
+/**
+ * Converts Markdown code.
+ *
+ * @param {String} md The Markdown.
+ * @param {TargetFormat} [format] The custom output format.
+ * @param {MarkdownDialect} [dialect] The dialect to use.
+ *
+ * @return {any} The converted data.
+ */
+export declare function fromMarkdown(md: string, format?: string | TargetFormat, dialect?: string | MarkdownDialect): any;
 /**
  * Alias for 'parseXml()'
  */
@@ -618,6 +654,24 @@ export declare function isEnumerable(v: any): boolean;
  * @param {T} [tag] The custom object for the callback.
  */
 export declare function keepAwake<T>(callback?: (result: IResult, tag?: T) => void, tag?: T): void;
+/**
+ * Converts Markdown code to parsable JSON object.
+ *
+ * @oaram {String} md The Markdown code.
+ * @param {MarkdownDialect} [dialect] The custom dialect to use.
+ *
+ * @return {Object} The Markdown as object.
+ */
+export declare function markdownToJson(md: string, dialect?: string | MarkdownDialect): any;
+/**
+ * Converts Markdown code to simple HTML.
+ *
+ * @oaram {String} md The Markdown code.
+ * @param {MarkdownDialect} [dialect] The custom dialect to use.
+ *
+ * @return {String} The Markdown as HTML code.
+ */
+export declare function markdownToHtml(md: string, dialect?: string | MarkdownDialect): string;
 /**
  * Returns the MD5 hash of a value.
  *
@@ -804,3 +858,9 @@ export declare function uuid(separator?: string): string;
  * Prefix for value keys.
  */
 export declare var ValueKeyPrefix: string;
+/**
+ * Vibrates the device.
+ *
+ * @param {number} [msec] The custom number of milliseconds. Default: 500
+ */
+export declare function vibrate(msec?: number): any;

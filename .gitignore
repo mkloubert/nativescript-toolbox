@@ -10,3 +10,4 @@
 /plugin/routed-values/*.map
 /demo/app/*.map
 /plugin/xmlobjects/*.map
+/demo/.vscode

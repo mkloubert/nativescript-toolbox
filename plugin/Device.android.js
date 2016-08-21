@@ -358,3 +358,22 @@ function runOnUIThread(uiAction, state, onError) {
     return false;
 }
 exports.runOnUIThread = runOnUIThread;
+
+// Based on code by anarchicknight
+// 
+// s. https://github.com/anarchicknight/nativescript-vibrate
+function vibrateDevice(msec) {
+    var ctx = getAppContext();
+    if (!TypeUtils.isNullOrUndefined(ctx)) {
+        var service = ctx.getSystemService(android.content.Context.VIBRATOR_SERVICE);
+        if (!TypeUtils.isNullOrUndefined(service)) {
+            if (service.hasVibrator()) {
+                service.vibrate(msec);
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+exports.vibrateDevice = vibrateDevice;
