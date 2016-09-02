@@ -139,7 +139,7 @@ var YAML = require('nativescript-toolbox/js-yaml');
 #### markdown
 
 ```typescript
-import Markdown = require('nativescript-toolbox/markdown').markdown;
+var Markdown = require('nativescript-toolbox/markdown').markdown;
 
 var json = Markdown.parse('Vessel     | Captain\n-----------|-------------\nNCC-1701   | James T Kirk\nNCC-1701 A | James T Kirk\nNCC-1701 D | Picard',
                           'Maruku');
