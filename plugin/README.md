@@ -18,6 +18,7 @@ The module contains the following sub modules:
 | [nativescript-bitmap-factory](https://github.com/mkloubert/nativescript-bitmap-factory) | Create and manipulate bitmap images. |
 | [nativescript-email](https://github.com/EddyVerbruggen/nativescript-email) | An Email plugin for use in your NativeScript app. You can use it to compose emails, edit the draft manually, and send it. |
 | [nativescript-enumerable](https://github.com/mkloubert/nativescript-enumerable) | Provides LINQ style extensions for handling arrays and lists. |
+| [nativescript-lazy](https://github.com/mkloubert/nativescript-lazy) | Provides an OOP version of the build-in lazy function. |
 | [nativescript-routed-values](https://github.com/mkloubert/nativescript-routed-values) | Implement routed value graphs. |
 | [nativescript-sqlite (free)](https://github.com/nathanaela/nativescript-sqlite) | Provides sqlite actions. |
 | [nativescript-stringformat](https://github.com/mkloubert/nativescript-stringformat) | Helpers for handling strings. |
@@ -181,6 +182,12 @@ import Email = require('nativescript-toolbox/email');
 
 ```typescript
 import Enumerable = require('nativescript-toolbox/enumerable');
+```
+
+#### nativescript-lazy
+
+```typescript
+import Lazy = require('nativescript-toolbox/lazy');
 ```
 
 #### nativescript-routed-values

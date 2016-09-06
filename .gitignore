@@ -11,3 +11,4 @@
 /demo/app/*.map
 /plugin/xmlobjects/*.map
 /demo/.vscode
+/plugin/lazy/*.map

@@ -6,6 +6,8 @@ bitmap-factory/*.map
 bitmap-factory/index.ts
 enumerable/*.map
 enumerable/index.ts
+lazy/*.map
+lazy/index.ts
 routed-values/*.map
 routed-values/index.ts
 stringformat/*.map
