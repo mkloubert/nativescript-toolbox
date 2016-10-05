@@ -149,6 +149,31 @@ function setupBitmapClass(bitmapClass) {
         return this;
     };
 
+    // drawArc()
+    bitmapClass.prototype.drawArc = function(size, leftTop, startAngle, sweepAngle, color, fillColor) {
+        if (TypeUtils.isNullOrUndefined(size)) {
+            size = {
+                height: this.height,
+                width: this.width
+            };
+        }
+        
+        if (TypeUtils.isNullOrUndefined(leftTop)) {
+            leftTop = {
+                x: 0,
+                y: 0
+            };
+        }
+
+        size = toSize(size);
+        leftTop = toPoint2D(leftTop);
+        color = this.normalizeColor(color);
+        fillColor = toARGB(fillColor);
+
+        this._drawArc(size, leftTop, startAngle, sweepAngle, color, fillColor);
+        return this;
+    };
+
     // drawRect()
     bitmapClass.prototype.drawRect = function(size, leftTop, color, fillColor) {
         if (TypeUtils.isNullOrUndefined(size)) {

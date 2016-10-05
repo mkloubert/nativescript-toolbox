@@ -145,6 +145,21 @@ export interface IBitmap {
      */
     drawCircle(radius?: number, center?: IPoint2D | string, color?: string | number | IArgb, fillColor?: string | number | IArgb): IBitmap;
     /**
+     * Draws an arc.
+     *
+     * @chainable
+     *
+     * @param {ISize} [size] The size.
+     * @param {IPoint2D} [leftTop] The coordinates of the left/top corner.
+     * @param {number} [startAngle] The starting angle (in degrees) where the arc begins.
+     * @param {number} [sweepAngle] The sweep angle (in degrees) measured clockwise.
+     * @param any [color] The line color.
+     * @param any [fillColor] The fill color.
+     *
+     * @throws At least one input value is invalid.
+     */
+    drawArc(size?: ISize | string, leftTop?: IPoint2D | string, startAngle?: number, sweepAngle?: number, color?: string | number | IArgb, fillColor?: string | number | IArgb): IBitmap;
+    /**
      * Draws a line.
      *
      * @chainable

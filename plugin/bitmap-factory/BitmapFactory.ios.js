@@ -142,6 +142,35 @@ iOSImage.prototype._drawOval = function(size, leftTop, color, fillColor) {
     });
 };
 
+// [INTERNAL] _drawArc()
+iOSImage.prototype._drawArc = function(size, leftTop, startAngle, endAngle, color, fillColor) {
+    color = this.__toIOSColor(color);
+    fillColor = this.__toIOSColor(fillColor);
+
+    // Angles come in degrees, convert to radians for iOS
+    var iosStartAngle = startAngle*(Math.PI/180.0);
+    // We get a sweep angle, add to start angle to get iOS end angle
+    var iosEndAngle = iosStartAngle + endAngle*(Math.PI/180.0);
+
+    this.__onImageContext(function(context, tag, oldImage) {
+        CGContextSetRGBStrokeColor(context,
+                                   color.r, color.g, color.b, color.a);
+
+        var radius = Math.min(size.width, size.height)*0.5
+
+        if (null !== fillColor) {
+            CGContextSetRGBFillColor(context,
+                                     fillColor.r, fillColor.g, fillColor.b, fillColor.a);
+
+        }
+        CGContextMoveToPoint(context, (size.width*0.5)+leftTop.x, (size.height*0.5)+leftTop.y);
+        CGContextAddArc(context, (size.width*0.5)+leftTop.x, (size.height*0.5)+leftTop.y, radius, iosStartAngle, iosEndAngle, 0);
+        if (null !== fillColor) {
+          CGContextFillPath(context);
+        }
+    });
+};
+
 // [INTERNAL] _drawRect()
 iOSImage.prototype._drawRect = function(leftTop, size, color, fillColor) {
     color = this.__toIOSColor(color);

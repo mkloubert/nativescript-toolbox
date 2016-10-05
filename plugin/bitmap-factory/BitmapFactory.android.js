@@ -123,6 +123,40 @@ AndroidBitmap.prototype._drawOval = function(size, leftTop, color, fillColor) {
     }
 };
 
+// [INTERNAL] _drawArc()
+AndroidBitmap.prototype._drawArc = function(size, leftTop, startAngle, sweepAngle, color, fillColor) {
+    var me = this;
+
+    var paintLine = this.__createPaint(color);
+    paintLine.setStyle(android.graphics.Paint.Style.STROKE);
+
+    var paints = [];
+    paints.push(paintLine);
+
+    if (null !== fillColor) {
+        var paintFill = this.__createPaint(fillColor);
+        paintFill.setStyle(android.graphics.Paint.Style.FILL);
+
+        paints.push(paintFill);
+    }
+
+    var drawer = function(r, s, e, u, p) {
+        me.__canvas.drawArc(r, s, e, u, p);
+    };
+
+    for (var i = paints.length; i > 0; i--) {
+        var left = leftTop.x;
+        var top = leftTop.y;
+        var right = left + size.width - 1;
+        var bottom = top + size.height - 1;
+
+        var rect = new android.graphics.RectF(left, top,
+                                              right, bottom);
+
+        drawer(rect, startAngle, sweepAngle, true, paints[i - 1]);
+    }
+};
+
 // [INTERNAL] _drawRect()
 AndroidBitmap.prototype._drawRect = function(size, leftTop, color, fillColor) {
     var paintLine = this.__createPaint(color);
