@@ -172,7 +172,7 @@ iOSImage.prototype._drawArc = function(size, leftTop, startAngle, endAngle, colo
 };
 
 // [INTERNAL] _drawRect()
-iOSImage.prototype._drawRect = function(leftTop, size, color, fillColor) {
+iOSImage.prototype._drawRect = function(size, leftTop, color, fillColor) {
     color = this.__toIOSColor(color);
     fillColor = this.__toIOSColor(fillColor);
 
