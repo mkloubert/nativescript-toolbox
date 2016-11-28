@@ -23,13 +23,14 @@
 var BitmapFactoryCommons = require('./BitmapFactory.commons');
 var TypeUtils = require("utils/types");
 
-function AndroidBitmap(bitmap) {
+function AndroidBitmap(bitmap, opts) {
     if (!(this instanceof AndroidBitmap)) {
         return new AndroidBitmap(bitmap);
     }
 
     this._isDisposed = false;
     this._nativeObject = bitmap;
+    this._options = opts;
     this._c = new android.graphics.Canvas(bitmap);
 }
 exports.BitmapClass = AndroidBitmap;
@@ -375,10 +376,10 @@ function asBitmapObject(v) {
 exports.asBitmapObject = asBitmapObject;
 AndroidBitmap.asBitmap = asBitmapObject;
 
-function createBitmap(width, height) {
+function createBitmap(width, height, opts) {
     var newBitmap = android.graphics.Bitmap.createBitmap(width, height,
                                                          android.graphics.Bitmap.Config.ARGB_8888);
 
-    return new AndroidBitmap(newBitmap);
+    return new AndroidBitmap(newBitmap, opts);
 }
 exports.createBitmap = createBitmap;

@@ -60,14 +60,18 @@ exports.asBitmap = asBitmap;
  *
  * @param {Number} width The width of the new image.
  * @param {Number} [height] The optional height of the new image. If not defined, the width is taken as value.
+ * @param {ICreateBitmapOptions} [opts] Additional options for creating the bitmap.
  *
  * @return {IBitmap} The new bitmap.
  */
-function create(width, height) {
+function create(width, height, opts) {
     if (TypeUtils.isNullOrUndefined(height)) {
         height = width;
     }
-    return BitmapFactory.createBitmap(width, height);
+    if (TypeUtils.isNullOrUndefined(opts)) {
+        opts = {};
+    }
+    return BitmapFactory.createBitmap(width, height, opts);
 }
 exports.create = create;
 //# sourceMappingURL=index.js.map

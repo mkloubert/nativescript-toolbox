@@ -23,19 +23,36 @@
 var BitmapFactoryCommons = require('./BitmapFactory.commons');
 var TypeUtils = require("utils/types");
 
-function iOSImage(uiImage) {
+function iOSImage(uiImage, opts) {
     if (!(this instanceof iOSImage)) {
         return new iOSImage(uiImage);
     }
 
     this._isDisposed = false;
     this._nativeObject = uiImage;
+    this._options = opts;
 }
 exports.BitmapClass = iOSImage;
 
 // [iOS INTERNAL] __CGImage
 Object.defineProperty(iOSImage.prototype, '__CGImage', {
     get: function() { return this._nativeObject.CGImage; }
+});
+
+// [iOS INTERNAL] __doAutoRelease
+Object.defineProperty(iOSImage.prototype, '__doAutoRelease', {
+    get: function() {
+        var autoRelease = true;
+
+        var opts = this._options;
+        if (!TypeUtils.isNullOrUndefined(opts.ios)) {
+            if (!TypeUtils.isNullOrUndefined(opts.ios.autoRelease)) {
+                autoRelease = !!opts.ios.autoRelease;
+            }
+        }
+
+        return autoRelease;
+    }
 });
 
 // [iOS INTERNAL] __onImageContext()
@@ -59,8 +76,25 @@ iOSImage.prototype.__onImageContext = function(action, tag) {
         UIGraphicsEndImageContext();
     }
 
-    CGImageRelease(oldImg.CGImage);
     this._nativeObject = newImage;
+
+    // free memory of old image
+    try {
+        var cImg = oldImg.CGImage;
+        try {
+            if (!TypeUtils.isNullOrUndefined(cImg)) {
+                if (!this.__doAutoRelease) {
+                    CGImageRelease(oldImg.CGImage);  // invoke manually
+                }
+            }
+        }
+        finally {
+            cImg = null;
+        }
+    }
+    finally {
+        oldImg = null;
+    }
 
     return result;
 };
@@ -97,8 +131,26 @@ iOSImage.prototype._crop = function(leftTop, size) {
 
 // _dispose()
 iOSImage.prototype._dispose = function(action, tag) {
-    CGImageRelease(this._nativeObject.CGImage);
-    this._nativeObject = null;
+    var nObj = this._nativeObject;
+    try {
+        if (!TypeUtils.isNullOrUndefined(nObj)) {
+            var cImg = nObj.CGImage;
+            try {
+                if (!TypeUtils.isNullOrUndefined(cImg)) {
+                    if (!this.__doAutoRelease) {
+                        CGImageRelease(cImg);
+                    }
+                }
+            }
+            finally {
+                cImg = null;
+            }
+        }
+    }
+    finally {
+        this._nativeObject = null;
+        nObj = null;
+    }
 };
 
 // [INTERNAL] _drawLine()
@@ -236,7 +288,7 @@ iOSImage.prototype._resize = function(newSize) {
 
     try {
         var ns = CGSizeMake(newSize.width, newSize.height);
-        UIGraphicsBeginImageContextWithOptions(ns);
+        UIGraphicsBeginImageContextWithOptions(ns, false, 0.0);
 
         oldImg.drawInRect(CGRectMake(0, 0,
                                      ns.width, ns.height));
@@ -410,7 +462,7 @@ function asBitmapObject(v) {
 exports.asBitmapObject = asBitmapObject;
 iOSImage.asBitmap = asBitmapObject;
 
-function createBitmap(width, height) {
+function createBitmap(width, height, opts) {
     var img = new interop.Reference();
 
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(width, height), false, 0.0);
@@ -421,6 +473,6 @@ function createBitmap(width, height) {
         throw "Could not create UIImage!";
     }
 
-    return new iOSImage(img);
+    return new iOSImage(img, opts);
 }
 exports.createBitmap = createBitmap;

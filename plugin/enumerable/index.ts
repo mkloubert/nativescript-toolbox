@@ -2227,7 +2227,7 @@ export function fromArray<T>(arr?: T[] | ObservableArray<T> | VirtualArray<T> | 
     if ((arr instanceof ObservableArray) ||
         (arr instanceof VirtualArray)) {
 
-        getter = (i) => arr.getItem(i);
+        getter = (i) => (<any>arr).getItem(i);
     }
     else {
         getter = (i) => arr[i];

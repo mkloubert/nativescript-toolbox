@@ -204,7 +204,6 @@ export interface IBitmap {
      * @param {IPoint2D} [leftTop] The coordinates of the left/top corner.
      * @param {number} [startAngle] The starting angle (in degrees) where the arc begins.
      * @param {number} [sweepAngle] The sweep angle (in degrees) measured clockwise.
-     * @param any [useCenter] Include the center of the oval in the arc.
      * @param any [color] The line color.
      * @param any [fillColor] The fill color.
      *
@@ -433,6 +432,24 @@ export interface IBitmap {
 }
 
 /**
+ * Additional options for creating a bitmap.
+ */
+export interface ICreateBitmapOptions {
+    /**
+     * iOS specific options.
+     */
+    ios?: {
+        /**
+         * Let iOS auto release the underlying CGImage (true) or let
+         * the object call CGImageRelease() manually (false).
+         * 
+         * Default: (true)
+         */
+        autoRelease?: boolean;
+    }
+}
+
+/**
  * Returns a value as bitmap object.
  * 
  * @param any v The input value.
@@ -456,13 +473,18 @@ export function asBitmap(v: any, throwException: boolean = true): IBitmap {
  * 
  * @param {Number} width The width of the new image.
  * @param {Number} [height] The optional height of the new image. If not defined, the width is taken as value.
+ * @param {ICreateBitmapOptions} [opts] Additional options for creating the bitmap.
  * 
  * @return {IBitmap} The new bitmap.
  */
-export function create(width: number, height?: number): IBitmap {
+export function create(width: number, height?: number, opts?: ICreateBitmapOptions): IBitmap {
     if (TypeUtils.isNullOrUndefined(height)) {
         height = width;
     }
 
-    return BitmapFactory.createBitmap(width, height);
+    if (TypeUtils.isNullOrUndefined(opts)) {
+        opts = {};
+    }
+
+    return BitmapFactory.createBitmap(width, height, opts);
 }
