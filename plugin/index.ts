@@ -799,11 +799,12 @@ export function asEnumerable(v: any, throwException: boolean = true): Enumerable
  * 
  * @param {Number} width The width of the new image.
  * @param {Number} [height] The optional height of the new image. If not defined, the width is taken as value.
+ * @param {ICreateBitmapOptions} [opts] Additional options for creating the bitmap.
  * 
  * @return {IBitmap} The new bitmap.
  */
-export function createBitmap(width: number, height?: number): BitmapFactory.IBitmap {
-    return BitmapFactory.create(width, height);
+export function createBitmap(width: number, height?: number, opts?: BitmapFactory.ICreateBitmapOptions): BitmapFactory.IBitmap {
+    return BitmapFactory.create(width, height, opts);
 }
 
 /**

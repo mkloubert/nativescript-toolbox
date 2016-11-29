@@ -315,11 +315,12 @@ exports.asEnumerable = asEnumerable;
  *
  * @param {Number} width The width of the new image.
  * @param {Number} [height] The optional height of the new image. If not defined, the width is taken as value.
+ * @param {ICreateBitmapOptions} [opts] Additional options for creating the bitmap.
  *
  * @return {IBitmap} The new bitmap.
  */
-function createBitmap(width, height) {
-    return BitmapFactory.create(width, height);
+function createBitmap(width, height, opts) {
+    return BitmapFactory.create(width, height, opts);
 }
 exports.createBitmap = createBitmap;
 /**
