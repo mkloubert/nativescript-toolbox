@@ -383,3 +383,15 @@ export declare function asBitmap(v: any, throwException?: boolean): IBitmap;
  * @return {IBitmap} The new bitmap.
  */
 export declare function create(width: number, height?: number, opts?: ICreateBitmapOptions): IBitmap;
+/**
+ * Returns the default options for creating a new bitmap.
+ *
+ * @return {ICreateBitmapOptions} The options.
+ */
+export declare function getDefaultOptions(): ICreateBitmapOptions;
+/**
+ * Sets the default options for creating a new bitmap.
+ *
+ * @param {ICreateBitmapOptions} The new options.
+ */
+export declare function setDefaultOptions(opts: ICreateBitmapOptions): void;

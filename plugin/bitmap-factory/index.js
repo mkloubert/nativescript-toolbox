@@ -68,10 +68,38 @@ function create(width, height, opts) {
     if (TypeUtils.isNullOrUndefined(height)) {
         height = width;
     }
+    if (arguments.length < 3) {
+        opts = getDefaultOptions();
+    }
     if (TypeUtils.isNullOrUndefined(opts)) {
         opts = {};
     }
     return BitmapFactory.createBitmap(width, height, opts);
 }
 exports.create = create;
+/**
+ * Returns the default options for creating a new bitmap.
+ *
+ * @return {ICreateBitmapOptions} The options.
+ */
+function getDefaultOptions() {
+    var opts = BitmapFactory.getDefaultOpts();
+    if (!opts) {
+        opts = {};
+    }
+    return opts;
+}
+exports.getDefaultOptions = getDefaultOptions;
+/**
+ * Sets the default options for creating a new bitmap.
+ *
+ * @param {ICreateBitmapOptions} The new options.
+ */
+function setDefaultOptions(opts) {
+    if (!opts) {
+        opts = {};
+    }
+    BitmapFactory.setDefaultOpts(opts);
+}
+exports.setDefaultOptions = setDefaultOptions;
 //# sourceMappingURL=index.js.map

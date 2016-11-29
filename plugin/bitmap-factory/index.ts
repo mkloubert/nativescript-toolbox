@@ -24,6 +24,7 @@ var BitmapFactory = require("./BitmapFactory");
 import TypeUtils = require("utils/types");
 import ImageSource = require('image-source');
 
+
 /**
  * Describes an object that stores ARGB color data.
  */
@@ -482,9 +483,40 @@ export function create(width: number, height?: number, opts?: ICreateBitmapOptio
         height = width;
     }
 
+    if (arguments.length < 3) {
+        opts = getDefaultOptions();
+    }
+
     if (TypeUtils.isNullOrUndefined(opts)) {
         opts = {};
     }
 
     return BitmapFactory.createBitmap(width, height, opts);
+}
+
+/**
+ * Returns the default options for creating a new bitmap.
+ * 
+ * @return {ICreateBitmapOptions} The options.
+ */
+export function getDefaultOptions(): ICreateBitmapOptions {
+    let opts = BitmapFactory.getDefaultOpts();
+    if (!opts) {
+        opts = {};
+    }
+
+    return opts;
+}
+
+/**
+ * Sets the default options for creating a new bitmap.
+ * 
+ * @param {ICreateBitmapOptions} The new options.
+ */
+export function setDefaultOptions(opts: ICreateBitmapOptions) {
+    if (!opts) {
+        opts = {};
+    }
+
+    BitmapFactory.setDefaultOpts(opts);
 }

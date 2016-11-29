@@ -21,11 +21,23 @@
 // DEALINGS IN THE SOFTWARE.
 
 var BitmapFactoryCommons = require('./BitmapFactory.commons');
+var ImageSource = require('image-source');
 var TypeUtils = require("utils/types");
+
+// default options
+var defaultOptions;
+function getDefaultOpts() {
+    return defaultOptions;
+}
+exports.getDefaultOpts = getDefaultOpts;
+function setDefaultOpts(opts) {
+    defaultOptions = opts;
+}
+exports.setDefaultOpts = setDefaultOpts;
 
 function AndroidBitmap(bitmap, opts) {
     if (!(this instanceof AndroidBitmap)) {
-        return new AndroidBitmap(bitmap);
+        return new AndroidBitmap(bitmap, opts);
     }
 
     this._isDisposed = false;
@@ -348,6 +360,11 @@ function asBitmapObject(v) {
         return bmp;
     }
 
+    var opts = defaultOptions;
+    if (!opts) {
+        opts = {};
+    }
+
     if (typeof v === "string") {
         var decodedBytes = android.util.Base64.decode(v, 0);
         try {
@@ -357,7 +374,7 @@ function asBitmapObject(v) {
             var bmp = android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length,
                                                                      options);
             try {
-                return new AndroidBitmap(bmp);
+                return new AndroidBitmap(bmp, opts);
             }
             catch (e) {
                 bmp.recycle();
@@ -369,6 +386,12 @@ function asBitmapObject(v) {
         finally {
             decodedBytes = null;
         }
+    }
+    else if (v instanceof android.graphics.Bitmap) {
+        return new AndroidBitmap(v, opts);
+    }
+    else if (v instanceof ImageSource.ImageSource) {
+        return new AndroidBitmap(v.android, opts);
     }
 
     return false;

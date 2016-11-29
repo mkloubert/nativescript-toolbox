@@ -21,11 +21,23 @@
 // DEALINGS IN THE SOFTWARE.
 
 var BitmapFactoryCommons = require('./BitmapFactory.commons');
+var ImageSource = require('image-source');
 var TypeUtils = require("utils/types");
+
+// default options
+var defaultOptions;
+function getDefaultOpts() {
+    return defaultOptions;
+}
+exports.getDefaultOpts = getDefaultOpts;
+function setDefaultOpts(opts) {
+    defaultOptions = opts;
+}
+exports.setDefaultOpts = setDefaultOpts;
 
 function iOSImage(uiImage, opts) {
     if (!(this instanceof iOSImage)) {
-        return new iOSImage(uiImage);
+        return new iOSImage(uiImage, opts);
     }
 
     this._isDisposed = false;
@@ -449,12 +461,23 @@ function asBitmapObject(v) {
         return bmp;
     }
 
+    var opts = defaultOptions;
+    if (!opts) {
+        opts = {};
+    }
+
     if (typeof v === "string") {
         var data = NSData.alloc()
                          .initWithBase64Encoding(v);
 
         var img = UIImage.imageWithData(data);
-        return new iOSImage(img);
+        return new iOSImage(img, opts);
+    }
+    else if (v instanceof UIImage) {
+        return new iOSImage(v, opts);
+    }
+    else if (v instanceof ImageSource.ImageSource) {
+        return new iOSImage(v.ios, opts);
     }
 
     return false;
