@@ -98,7 +98,7 @@ export declare class BasicAuth implements IAuthorizer {
      *
      * @property
      */
-    password: string;
+    readonly password: string;
     /** @inheritdoc */
     prepare(reqOpts: HTTP.HttpRequestOptions): void;
     /**
@@ -106,7 +106,7 @@ export declare class BasicAuth implements IAuthorizer {
      *
      * @property
      */
-    username: string;
+    readonly username: string;
 }
 /**
  * An authorizer for bearer authentication.
@@ -126,7 +126,7 @@ export declare class BearerAuth implements IAuthorizer {
      *
      * @property
      */
-    token: string;
+    readonly token: string;
 }
 /**
  * List of known HTTP request methods.

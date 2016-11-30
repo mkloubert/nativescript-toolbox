@@ -55,6 +55,36 @@ export interface IFont {
     size?: number;
 }
 /**
+ * Options for 'makeMutable()' functon.
+ */
+export interface IMakeMutableOptions {
+    /**
+     * Dispose current bitmap or not.
+     *
+     * Default: (false)
+     */
+    disposeCurrent?: boolean;
+    /**
+     * Options for handling temp data / files.
+     */
+    temp?: {
+        /**
+         * This is only used if stradegy is 'Custom' and
+         * is used to define the custom temp directory.
+         *
+         * This can be a string or a native object that represents a file
+         * like java.lang.File on Android.
+         */
+        directory?: any;
+        /**
+         * The stradegy.
+         *
+         * Default: Memory
+         */
+        stradegy?: TempFileStradegy;
+    };
+}
+/**
  * A 2D point.
  */
 export interface IPoint2D {
@@ -92,6 +122,27 @@ export declare enum OutputFormat {
      * JPEG
      */
     JPEG = 2,
+}
+/**
+ * List of temp file stradegies.
+ */
+export declare enum TempFileStradegy {
+    /**
+     * Memory
+     */
+    Memory = 1,
+    /**
+     * Cache directory
+     */
+    CacheDir = 2,
+    /**
+     * External directory
+     */
+    ExternalCacheDir = 3,
+    /**
+     * Custom directory
+     */
+    Custom = 4,
 }
 /**
  * Describes a bitmap.
@@ -389,6 +440,17 @@ export declare function create(width: number, height?: number, opts?: ICreateBit
  * @return {ICreateBitmapOptions} The options.
  */
 export declare function getDefaultOptions(): ICreateBitmapOptions;
+/**
+ * Makes a (native) image / bitmap mutable.
+ *
+ * @param {any} v The (native) object.
+ * @param {IMakeMutableOptions} [opts] The custom options.
+ *
+ * @return {any} The mutable object.
+ *
+ * @throws Native object is invalid.
+ */
+export declare function makeMutable(v: any, opts?: IMakeMutableOptions): any;
 /**
  * Sets the default options for creating a new bitmap.
  *

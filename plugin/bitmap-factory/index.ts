@@ -24,7 +24,6 @@ var BitmapFactory = require("./BitmapFactory");
 import TypeUtils = require("utils/types");
 import ImageSource = require('image-source');
 
-
 /**
  * Describes an object that stores ARGB color data.
  */
@@ -91,6 +90,39 @@ export interface IFont {
 }
 
 /**
+ * Options for 'makeMutable()' functon.
+ */
+export interface IMakeMutableOptions {
+    /**
+     * Dispose current bitmap or not.
+     * 
+     * Default: (false)
+     */
+    disposeCurrent?: boolean;
+
+    /**
+     * Options for handling temp data / files.
+     */
+    temp?: {
+        /**
+         * This is only used if stradegy is 'Custom' and
+         * is used to define the custom temp directory.
+         * 
+         * This can be a string or a native object that represents a file
+         * like java.lang.File on Android.
+         */
+        directory?: any;
+
+        /**
+         * The stradegy.
+         * 
+         * Default: Memory
+         */
+        stradegy?: TempFileStradegy;
+    }
+}
+
+/**
  * A 2D point.
  */
 export interface IPoint2D {
@@ -133,6 +165,31 @@ export enum OutputFormat {
      * JPEG
      */
     JPEG = 2,
+}
+
+/**
+ * List of temp file stradegies.
+ */
+export enum TempFileStradegy {
+    /**
+     * Memory
+     */
+    Memory = 1,
+
+    /**
+     * Cache directory
+     */
+    CacheDir = 2,
+
+    /**
+     * External directory
+     */
+    ExternalCacheDir = 3,
+
+    /**
+     * Custom directory
+     */
+    Custom = 4,
 }
 
 /**
@@ -447,7 +504,7 @@ export interface ICreateBitmapOptions {
          * Default: (true)
          */
         autoRelease?: boolean;
-    }
+    },
 }
 
 /**
@@ -506,6 +563,28 @@ export function getDefaultOptions(): ICreateBitmapOptions {
     }
 
     return opts;
+}
+
+/**
+ * Makes a (native) image / bitmap mutable.
+ * 
+ * @param {any} v The (native) object.
+ * @param {IMakeMutableOptions} [opts] The custom options.
+ * 
+ * @return {any} The mutable object.
+ * 
+ * @throws Native object is invalid.
+ */
+export function makeMutable(v: any, opts?: IMakeMutableOptions): any {
+    if (TypeUtils.isNullOrUndefined(v)) {
+        return v;
+    }
+
+    if (!opts) {
+        opts = {};
+    }
+
+    return BitmapFactory.makeBitmapMutable(v, opts);
 }
 
 /**

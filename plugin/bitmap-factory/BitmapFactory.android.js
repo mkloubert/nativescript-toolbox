@@ -20,6 +20,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+var Application = require('application');
 var BitmapFactoryCommons = require('./BitmapFactory.commons');
 var ImageSource = require('image-source');
 var TypeUtils = require("utils/types");
@@ -47,7 +48,7 @@ function AndroidBitmap(bitmap, opts) {
 }
 exports.BitmapClass = AndroidBitmap;
 
-// [ANDROID INTERNAL] __context
+// [ANDROID INTERNAL] __canvas
 Object.defineProperty(AndroidBitmap.prototype, '__canvas', {
     get: function() { return this._c; }
 });
@@ -406,3 +407,139 @@ function createBitmap(width, height, opts) {
     return new AndroidBitmap(newBitmap, opts);
 }
 exports.createBitmap = createBitmap;
+
+function makeBitmapMutable(bitmap, opts) {
+    if (bitmap instanceof ImageSource.ImageSource) {
+        return new makeBitmapMutable(bitmap.android, opts);
+    }
+
+    if (bitmap instanceof AndroidBitmap) {
+        return new makeBitmapMutable(bitmap.nativeObject, opts);
+    }
+
+    if (!(bitmap instanceof android.graphics.Bitmap)) {
+        throw "No valid bitmap object!";
+    }
+
+    var ctx = Application.android.context;
+
+    var disposeCurrent = false;
+    if (!TypeUtils.isNullOrUndefined(opts.disposeCurrent)) {
+        disposeCurrent = opts.disposeCurrent;
+    }
+
+    var customCacheDir;
+    var stradegy = 1;
+    if (!TypeUtils.isNullOrUndefined(opts.temp)) {
+        if (!TypeUtils.isNullOrUndefined(opts.temp.directory)) {
+            customCacheDir = opts.temp.directory;
+        }
+
+        if (!TypeUtils.isNullOrUndefined(opts.temp.stradegy)) {
+            stradegy = parseInt(('' + opts.temp.stradegy).trim());
+        }
+    }
+
+    var mutable;
+
+    var disposeOldBitmap = function() {
+        if (!disposeCurrent) {
+            return;
+        }
+
+        try {
+            bitmap.recycle();
+            bitmap = null;
+
+            java.lang.System.gc();
+        }
+        catch (e) { /* ignore */ }
+    };
+
+    var createFromTempFile = function(dir) {
+        if (!dir.exists()) {
+            throw "'" + dir.getAbsolutePath() + "' does NOT exist!";
+        }
+
+        if (!dir.isDirectory()) {
+            throw "'" + dir.getAbsolutePath() + "' is no valid directory!";
+        }
+
+        var tempFile = java.io.File.createTempFile("nsbmpfac", "dat", dir);
+        try {
+            var randomAccessFile = new java.io.RandomAccessFile(tempFile, "rw");
+            try {
+                var width = bitmap.getWidth();
+                var height = bitmap.getHeight();
+                var cfg = bitmap.getConfig();
+
+                var channel = randomAccessFile.getChannel();
+                try {
+                    var map = channel.map(java.nio.channels.FileChannel.MapMode.READ_WRITE, 0, bitmap.getRowBytes() * height);
+
+                    bitmap.copyPixelsToBuffer(map);
+                    disposeOldBitmap();
+
+                    mutable = android.graphics.Bitmap.createBitmap(width, height, cfg);
+
+                    map.position(0);
+                    mutable.copyPixelsFromBuffer(map);
+                }
+                finally {
+                    channel.close();
+                }
+            }
+            finally {
+                randomAccessFile.close();
+            }
+        }
+        finally {
+            try {
+                tempFile.delete();
+            }
+            catch (e) {
+                try {
+                    tempFile.deleteOnExit();
+                }
+                catch (e) { /* ignore */ };
+            }
+        }
+    };
+
+    switch (stradegy) {
+        case 2:
+            // cache directory
+            var cacheDir = ctx.getCacheDir();
+            createFromTempFile(cacheDir);
+            break;
+
+        case 3:
+            // external cache directory
+            var extCacheDir = ctx.getExternalCacheDir();
+            createFromTempFile(extCacheDir);
+            break;
+
+        case 4:
+            // custom cache directory
+            var customDir = customCacheDir;
+            if (TypeUtils.isNullOrUndefined(customDir)) {
+                customDir = ctx.getCacheDir();
+            }
+
+            if (!(customDir instanceof java.io.File)) {
+                customDir = new java.io.File('' + customDir);
+            }
+
+            createFromTempFile(customDir);
+            break;
+
+        default:
+            // memory
+            mutable = bitmap.copy(bitmap.getConfig(), true);
+            disposeOldBitmap();
+            break;
+    }
+
+    return mutable;
+}
+exports.makeBitmapMutable = makeBitmapMutable;

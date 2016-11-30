@@ -37,6 +37,28 @@ var TypeUtils = require("utils/types");
 })(exports.OutputFormat || (exports.OutputFormat = {}));
 var OutputFormat = exports.OutputFormat;
 /**
+ * List of temp file stradegies.
+ */
+(function (TempFileStradegy) {
+    /**
+     * Memory
+     */
+    TempFileStradegy[TempFileStradegy["Memory"] = 1] = "Memory";
+    /**
+     * Cache directory
+     */
+    TempFileStradegy[TempFileStradegy["CacheDir"] = 2] = "CacheDir";
+    /**
+     * External directory
+     */
+    TempFileStradegy[TempFileStradegy["ExternalCacheDir"] = 3] = "ExternalCacheDir";
+    /**
+     * Custom directory
+     */
+    TempFileStradegy[TempFileStradegy["Custom"] = 4] = "Custom";
+})(exports.TempFileStradegy || (exports.TempFileStradegy = {}));
+var TempFileStradegy = exports.TempFileStradegy;
+/**
  * Returns a value as bitmap object.
  *
  * @param any v The input value.
@@ -90,6 +112,26 @@ function getDefaultOptions() {
     return opts;
 }
 exports.getDefaultOptions = getDefaultOptions;
+/**
+ * Makes a (native) image / bitmap mutable.
+ *
+ * @param {any} v The (native) object.
+ * @param {IMakeMutableOptions} [opts] The custom options.
+ *
+ * @return {any} The mutable object.
+ *
+ * @throws Native object is invalid.
+ */
+function makeMutable(v, opts) {
+    if (TypeUtils.isNullOrUndefined(v)) {
+        return v;
+    }
+    if (!opts) {
+        opts = {};
+    }
+    return BitmapFactory.makeBitmapMutable(v, opts);
+}
+exports.makeMutable = makeMutable;
 /**
  * Sets the default options for creating a new bitmap.
  *
