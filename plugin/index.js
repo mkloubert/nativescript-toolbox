@@ -662,6 +662,7 @@ function invokeForConnectivity(cfg, tag) {
         return callback({
             code: code,
             error: error,
+            tag: tag,
             type: type,
         });
     }
@@ -1075,7 +1076,7 @@ exports.showStatusBar = showStatusBar;
  */
 function startMonitoringForConnectivity(cfg, tag) {
     Connectivity.startMonitoring(function () {
-        invokeForConnectivity(cfg);
+        invokeForConnectivity(cfg, tag);
     });
 }
 exports.startMonitoringForConnectivity = startMonitoringForConnectivity;

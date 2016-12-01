@@ -154,6 +154,10 @@ export interface IInvokeForConnectivityConfig<T> {
  */
 export interface IInvokeForConnectivityResult<T> extends IResult {
     /**
+     * The custom object for the callback.
+     */
+    tag?: T;
+    /**
      * The type
      */
     type?: number;

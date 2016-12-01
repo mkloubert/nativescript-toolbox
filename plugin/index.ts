@@ -217,6 +217,11 @@ export interface IInvokeForConnectivityConfig<T> {
  */
 export interface IInvokeForConnectivityResult<T> extends IResult {
     /**
+     * The custom object for the callback.
+     */
+    tag?: T;
+
+    /**
      * The type
      */
     type?: number;
@@ -1191,6 +1196,7 @@ export function invokeForConnectivity<T>(cfg: IInvokeForConnectivityConfig<T>,
         return callback({
             code: code,
             error: error,
+            tag: tag,
             type: type,
         });
     }
@@ -1630,7 +1636,7 @@ export function startMonitoringForConnectivity<T>(cfg: IInvokeForConnectivityCon
                                                   tag?: T) {
 
     Connectivity.startMonitoring(() => {
-        invokeForConnectivity(cfg);
+        invokeForConnectivity(cfg, tag);
     });
 }
 
