@@ -312,6 +312,28 @@ iOSImage.prototype._resize = function(newSize) {
     }
 };
 
+// [INTERNAL] _rotate()
+iOSImage.prototype._rotate = function(degrees) {
+    radians = degrees * Math.PI / 180.0;
+
+    var oldImg = this._nativeObject;
+
+    try {
+        UIGraphicsBeginImageContext(oldImg.size);
+
+        var context = UIGraphicsGetCurrentContext();
+
+        CGContextRotateCTM(context, radians);
+
+        oldImg.drawAtPoint(CGPointMake(0, 0));
+
+        return UIGraphicsGetImageFromCurrentImageContext();
+    }
+    finally {
+         UIGraphicsEndImageContext();
+    }
+};
+
 // [INTERNAL] _setPoint()
 iOSImage.prototype._setPoint = function(coordinates, color) {
     color = this.__toIOSColor(color);

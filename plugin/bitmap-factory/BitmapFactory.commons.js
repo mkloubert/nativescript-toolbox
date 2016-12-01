@@ -309,6 +309,17 @@ function setupBitmapClass(bitmapClass) {
                              height: this.height * ratio });
     };
 
+    // rotate()
+    bitmapClass.prototype.rotate = function(degrees) {
+        if (TypeUtils.isNullOrUndefined(degrees)) {
+            degrees = 90;
+        }
+
+        degrees = parseFloat(('' + degrees).trim());
+
+        return bitmapClass.asBitmap(this._rotate(degrees));
+    };
+
     // setPoint
     bitmapClass.prototype.setPoint = function(coordinates, color) {
         if (TypeUtils.isNullOrUndefined(coordinates)) {

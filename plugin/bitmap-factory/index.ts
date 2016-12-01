@@ -20,6 +20,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Application = require("application");
 var BitmapFactory = require("./BitmapFactory");
 import TypeUtils = require("utils/types");
 import ImageSource = require('image-source');
@@ -199,7 +200,7 @@ export interface IBitmap {
     /**
      * Get the android specific object provided by 'application' module.
      */
-    android: any;
+    android: Application.AndroidApplication;
 
     /**
      * Clones that bitmap.
@@ -230,12 +231,12 @@ export interface IBitmap {
      * Disposes the bitmap. Similar to the IDisposable pattern of .NET Framework.
      * 
      * @param {Function} [action] The action to invoke BEFORE bitmap is disposed.
-     * @param any [tag] An optional value for the action.
+     * @param {T} [tag] An optional value for the action.
      * 
-     * @return any The result of the action (if defined).
+     * @return {TResult} The result of the action (if defined).
      */
-    dispose(action?: (bmp: IBitmap, tag?: any) => void,
-            tag?: any);
+    dispose<T, TResult>(action?: (bmp: IBitmap, tag?: T) => TResult,
+                        tag?: T): TResult;
 
     /**
      * Draws a circle.
@@ -317,7 +318,7 @@ export interface IBitmap {
      */
     drawRect(size?: ISize | string,
              leftTop?: IPoint2D | string,
-             color?: string | number | IArgb, fillColor?: string | number | IArgb);
+             color?: string | number | IArgb, fillColor?: string | number | IArgb): IBitmap;
 
     /**
      * Gets the color of a point.
@@ -338,7 +339,7 @@ export interface IBitmap {
     /**
      * Get the iOS specific object provided by 'application' module.
      */
-    ios: any;
+    ios: Application.iOSApplication;
 
     /**
      * Inserts another image into that bitmap.
@@ -411,7 +412,18 @@ export interface IBitmap {
     resizeWidth(newWidth: number): IBitmap;
 
     /**
+     * Rotates the image.
+     * 
+     * @param {number} [degrees] The number of degrees to rotate. Default: 90. 
+     * 
+     * @return {IBitmap} The rotated image.
+     */
+    rotate(degrees?: number): IBitmap;
+
+    /**
      * Sets a pixel / point.
+     * 
+     * @chainable
      * 
      * @param {IPoint2D} [coordinates] The coordinate where to draw the point.
      * @param {IArgb} [color] The color of the point.
@@ -419,7 +431,7 @@ export interface IBitmap {
      * @throws At least one input value is invalid.
      */
     setPoint(coordinates?: IPoint2D | string,
-             color?: string | number | IArgb);
+             color?: string | number | IArgb): IBitmap;
 
     /**
      * Gets the size.

@@ -218,6 +218,20 @@ AndroidBitmap.prototype._insert = function(other, leftTop) {
                              null);
 };
 
+// [INTERNAL] _rotate()
+AndroidBitmap.prototype._rotate = function(degrees) {
+    var matrix = new android.graphics.Matrix();
+    matrix.postRotate(degrees);
+
+    return android.graphics.Bitmap.createBitmap(
+        this._nativeObject,
+        0, 0,
+        this.width, this.height,
+        matrix,
+        true
+    );
+};
+
 // [INTERNAL] _resize()
 AndroidBitmap.prototype._resize = function(newSize) {
     var resizedImage = android.graphics.Bitmap.createScaledBitmap(this._nativeObject,
