@@ -22,8 +22,9 @@
 
 import Application = require("application");
 var BitmapFactory = require("./BitmapFactory");
-import TypeUtils = require("utils/types");
 import ImageSource = require('image-source');
+import TypeUtils = require("utils/types");
+
 
 /**
  * Describes an object that stores ARGB color data.

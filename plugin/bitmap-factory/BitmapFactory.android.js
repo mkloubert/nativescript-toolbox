@@ -22,8 +22,10 @@
 
 var Application = require('application');
 var BitmapFactoryCommons = require('./BitmapFactory.commons');
+var FS = require('file-system');
 var ImageSource = require('image-source');
 var TypeUtils = require("utils/types");
+
 
 // default options
 var defaultOptions;
@@ -332,8 +334,37 @@ AndroidBitmap.prototype._writeText = function(txt, leftTop, font) {
 
     if (!TypeUtils.isNullOrUndefined(fontName)) {
         fontName = ('' + fontName).trim();
+
+        var typeFace;
+
         if ('' !== fontName) {
-            var typeFace = android.graphics.Typeface.create(fontName, android.graphics.Typeface.NORMAL);
+            // based on code by Nick Iliev (https://github.com/NickIliev)
+            // s. https://github.com/mkloubert/nativescript-bitmap-factory/issues/7#issuecomment-275691248
+
+            try {
+                var fontAssetPath;
+                var basePath = FS.path.join(FS.knownFolders.currentApp().path, "fonts", fontName);
+                if (FS.File.exists(basePath + ".ttf")) {
+                    fontAssetPath = "/fonts/" + fontName + ".ttf";
+                }
+
+                if (fontAssetPath) {
+                    fontAssetPath = FS.path.join(FS.knownFolders.currentApp().path, fontAssetPath);
+
+                    typeFace = android.graphics.Typeface.createFromFile(fontAssetPath);
+                }
+            }
+            catch (e) {
+                console.log('[nativescript-bitmap-factory] AndroidBitmap._writeText(): ' + e);
+            }
+            
+            if (!typeFace) {
+                // fallback
+                typeFace = android.graphics.Typeface.create(fontName, android.graphics.Typeface.NORMAL);
+            }
+        }
+
+        if (typeFace) {
             paint.setTypeface(typeFace);
         }
     }
