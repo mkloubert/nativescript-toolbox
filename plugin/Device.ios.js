@@ -225,8 +225,10 @@ exports.keepDeviceAwake = keepDeviceAwake;
 // 
 // s. https://github.com/NathanaelA/nativescript-openurl
 function openUri(uri) {
-    if (UIApplication.sharedApplication.canOpenURL(uri)) {
-        return UIApplication.sharedApplication.openURL(uri);
+    var u = NSURL.URLWithString(uri);
+
+    if (UIApplication.sharedApplication.canOpenURL(u)) {
+        return UIApplication.sharedApplication.openURL(u);
     }
 
     return false;
