@@ -225,8 +225,8 @@ exports.keepDeviceAwake = keepDeviceAwake;
 // 
 // s. https://github.com/NathanaelA/nativescript-openurl
 function openUri(uri) {
-    if (UIApplication.sharedApplication().canOpenURL(uri)) {
-        return UIApplication.sharedApplication().openURL(uri);
+    if (UIApplication.sharedApplication.canOpenURL(uri)) {
+        return UIApplication.sharedApplication.openURL(uri);
     }
 
     return false;
@@ -234,7 +234,14 @@ function openUri(uri) {
 exports.openUri = openUri;
 
 function openWifiSettingsOnDevice() {
-    return openUri('prefs:root=WIFI');
+    var uris = [ 'prefs:root=WIFI', 'App-Prefs:root=WIFI' ];
+    for (var i = 0; i < uris.length; i++) {
+        if (openUri(uris[i])) {
+            return true;
+        }
+    }
+
+    return false;
 }
 exports.openWifiSettingsOnDevice = openWifiSettingsOnDevice;
 
