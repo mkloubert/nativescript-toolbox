@@ -56,7 +56,7 @@ Object.defineProperty(iOSImage.prototype, '__doAutoRelease', {
     get: function() {
         var autoRelease = true;
 
-        var opts = this._options;
+        var opts = this._options || {};
         if (!TypeUtils.isNullOrUndefined(opts.ios)) {
             if (!TypeUtils.isNullOrUndefined(opts.ios.autoRelease)) {
                 autoRelease = !!opts.ios.autoRelease;
