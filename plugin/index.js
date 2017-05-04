@@ -1,3 +1,4 @@
+"use strict";
 // The MIT License (MIT)
 // 
 // Copyright (c) Marcel Joachim Kloubert <marcel.kloubert@gmx.net>
@@ -19,29 +20,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-"use strict";
-var ApiClient = require('./apiclient');
+Object.defineProperty(exports, "__esModule", { value: true });
+var ApiClient = require("./apiclient");
 var AppSettings = require("application-settings");
-var Batch = require('./batch');
-var BitmapFactory = require('./bitmap-factory');
-var Connectivity = require('connectivity');
+var Batch = require("./batch");
+var BitmapFactory = require("./bitmap-factory");
+var Connectivity = require("connectivity");
 var CryptoJS = require('./crypto-js');
 var Device = require('./Device');
-var Enumerable = require('./enumerable');
+var Enumerable = require("./enumerable");
 var Markdown = require('nativescript-toolbox/markdown').markdown;
 var MD5 = require('./crypto-js/md5');
-var Moment = require('./moment');
-var observable_array_1 = require('data/observable-array');
+var Moment = require("./moment");
+var observable_array_1 = require("data/observable-array");
 var SHA1 = require('./crypto-js/sha1');
 var SHA256 = require('./crypto-js/sha256');
 var SHA3 = require('./crypto-js/sha3');
 var SHA384 = require('./crypto-js/sha384');
 var SHA512 = require('./crypto-js/sha512');
 var Sqlite = require('./sqlite');
-var StringFormat = require('./stringformat');
+var StringFormat = require("./stringformat");
 var TypeUtils = require("utils/types");
-var virtual_array_1 = require('data/virtual-array');
-var XmlObjects = require('./xmlobjects');
+var virtual_array_1 = require("data/virtual-array");
+var XmlObjects = require("./xmlobjects");
 var Yaml = require('./js-yaml');
 /**
  * Stores the application name.
@@ -50,6 +51,7 @@ exports.AppName = 'NativeScript Toolbox';
 /**
  * List of device orientations.
  */
+var DeviceOrientation;
 (function (DeviceOrientation) {
     /**
      * Landscape
@@ -59,11 +61,11 @@ exports.AppName = 'NativeScript Toolbox';
      * Portrait
      */
     DeviceOrientation[DeviceOrientation["Portrait"] = 1] = "Portrait";
-})(exports.DeviceOrientation || (exports.DeviceOrientation = {}));
-var DeviceOrientation = exports.DeviceOrientation;
+})(DeviceOrientation = exports.DeviceOrientation || (exports.DeviceOrientation = {}));
 /**
  * List of known Markdown dialects
  */
+var MarkdownDialect;
 (function (MarkdownDialect) {
     /**
      * s. http://daringfireball.net/projects/markdown/syntax
@@ -73,11 +75,11 @@ var DeviceOrientation = exports.DeviceOrientation;
      * s. http://maruku.rubyforge.org/maruku.html
      */
     MarkdownDialect[MarkdownDialect["Maruku"] = 2] = "Maruku";
-})(exports.MarkdownDialect || (exports.MarkdownDialect = {}));
-var MarkdownDialect = exports.MarkdownDialect;
+})(MarkdownDialect = exports.MarkdownDialect || (exports.MarkdownDialect = {}));
 /**
  * List of known platforms.
  */
+var Platform;
 (function (Platform) {
     /**
      * Android
@@ -87,8 +89,7 @@ var MarkdownDialect = exports.MarkdownDialect;
      * iOS
      */
     Platform[Platform["iOS"] = 2] = "iOS";
-})(exports.Platform || (exports.Platform = {}));
-var Platform = exports.Platform;
+})(Platform = exports.Platform || (exports.Platform = {}));
 var SQLiteConnection = (function () {
     function SQLiteConnection(conn, name) {
         this._conn = conn;
@@ -247,6 +248,7 @@ var SQLiteConnection = (function () {
 /**
  * List of known target formats.
  */
+var TargetFormat;
 (function (TargetFormat) {
     /**
      * HTML
@@ -256,8 +258,7 @@ var SQLiteConnection = (function () {
      * JSON
      */
     TargetFormat[TargetFormat["Json"] = 2] = "Json";
-})(exports.TargetFormat || (exports.TargetFormat = {}));
-var TargetFormat = exports.TargetFormat;
+})(TargetFormat = exports.TargetFormat || (exports.TargetFormat = {}));
 /**
  * Allows the device to go to sleep mode.
  *

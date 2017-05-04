@@ -1,3 +1,4 @@
+"use strict";
 // The MIT License (MIT)
 // 
 // Copyright (c) Marcel Joachim Kloubert <marcel.kloubert@gmx.net>
@@ -19,7 +20,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var HTTP = require("http");
 var TypeUtils = require("utils/types");
 var Xml = require("xml");
@@ -98,7 +99,7 @@ var AggregateAuthorizer = (function () {
     AggregateAuthorizer.prototype.addAuthorizers = function () {
         var authorizers = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            authorizers[_i - 0] = arguments[_i];
+            authorizers[_i] = arguments[_i];
         }
         for (var i = 0; i < authorizers.length; i++) {
             this._authorizers
@@ -118,71 +119,71 @@ exports.AggregateAuthorizer = AggregateAuthorizer;
 var ApiClient = (function (_super) {
     __extends(ApiClient, _super);
     function ApiClient(cfg) {
-        _super.call(this);
-        this.beforeSendActions = [];
-        this.formatProviders = [];
-        this.ifEntries = [];
-        this.logActions = [];
-        this.baseUrl = cfg.baseUrl;
-        this.headers = cfg.headers;
-        this.route = cfg.route;
-        this.routeParams = cfg.routeParams;
-        this.params = cfg.params;
-        this.authorizer = cfg.authorizer;
+        var _this = _super.call(this) || this;
+        _this.beforeSendActions = [];
+        _this.formatProviders = [];
+        _this.ifEntries = [];
+        _this.logActions = [];
+        _this.baseUrl = cfg.baseUrl;
+        _this.headers = cfg.headers;
+        _this.route = cfg.route;
+        _this.routeParams = cfg.routeParams;
+        _this.params = cfg.params;
+        _this.authorizer = cfg.authorizer;
         // beforeSend()
         if (!TypeUtils.isNullOrUndefined(cfg.beforeSend)) {
-            this.beforeSend(cfg.beforeSend);
+            _this.beforeSend(cfg.beforeSend);
         }
         // success action
         if (!TypeUtils.isNullOrUndefined(cfg.success)) {
-            this.successAction = cfg.success;
+            _this.successAction = cfg.success;
         }
         // error action
         if (!TypeUtils.isNullOrUndefined(cfg.error)) {
-            this.errorAction = cfg.error;
+            _this.errorAction = cfg.error;
         }
         // complete action
         if (!TypeUtils.isNullOrUndefined(cfg.complete)) {
-            this.completeAction = cfg.complete;
+            _this.completeAction = cfg.complete;
         }
         // notFound()
         if (!TypeUtils.isNullOrUndefined(cfg.notFound)) {
-            this.notFound(cfg.notFound);
+            _this.notFound(cfg.notFound);
         }
         // unauthorized()
         if (!TypeUtils.isNullOrUndefined(cfg.unauthorized)) {
-            this.unauthorized(cfg.unauthorized);
+            _this.unauthorized(cfg.unauthorized);
         }
         // forbidden()
         if (!TypeUtils.isNullOrUndefined(cfg.forbidden)) {
-            this.forbidden(cfg.forbidden);
+            _this.forbidden(cfg.forbidden);
         }
         // succeededRequest()
         if (!TypeUtils.isNullOrUndefined(cfg.succeededRequest)) {
-            this.succeededRequest(cfg.succeededRequest);
+            _this.succeededRequest(cfg.succeededRequest);
         }
         // redirection()
         if (!TypeUtils.isNullOrUndefined(cfg.redirection)) {
-            this.redirection(cfg.redirection);
+            _this.redirection(cfg.redirection);
         }
         // clientError()
         if (!TypeUtils.isNullOrUndefined(cfg.clientError)) {
-            this.clientError(cfg.clientError);
+            _this.clientError(cfg.clientError);
         }
         // serverError()
         if (!TypeUtils.isNullOrUndefined(cfg.serverError)) {
-            this.serverError(cfg.serverError);
+            _this.serverError(cfg.serverError);
         }
         // ok()
         if (!TypeUtils.isNullOrUndefined(cfg.ok)) {
-            this.ok(cfg.ok);
+            _this.ok(cfg.ok);
         }
         // status code
         for (var p in cfg) {
             var statusCode = parseInt(p);
             if (!isNaN(statusCode)) {
                 if (statusCode >= 200 && statusCode <= 599) {
-                    this.status(statusCode, cfg[p]);
+                    _this.status(statusCode, cfg[p]);
                 }
             }
         }
@@ -191,7 +192,7 @@ var ApiClient = (function (_super) {
             for (var i = 0; i < cfg.ifStatus.length; i++) {
                 var ise = cfg.ifStatus[i];
                 if (!TypeUtils.isNullOrUndefined(ise)) {
-                    this.ifStatus(ise.predicate, ise.action);
+                    _this.ifStatus(ise.predicate, ise.action);
                 }
             }
         }
@@ -200,10 +201,11 @@ var ApiClient = (function (_super) {
             for (var i = 0; i < cfg.if.length; i++) {
                 var ie = cfg.if[i];
                 if (!TypeUtils.isNullOrUndefined(ie)) {
-                    this.if(ie.predicate, ie.action);
+                    _this.if(ie.predicate, ie.action);
                 }
             }
         }
+        return _this;
     }
     ApiClient.prototype.addFormatProvider = function (provider) {
         if (!TypeUtils.isNullOrUndefined(provider)) {
@@ -648,12 +650,13 @@ var ApiClient = (function (_super) {
 var ApiClientCompleteContext = (function (_super) {
     __extends(ApiClientCompleteContext, _super);
     function ApiClientCompleteContext(client, request, result, err, tag) {
-        _super.call(this);
-        this._client = client;
-        this._request = request;
-        this._result = result;
-        this._error = err;
-        this._tag = tag;
+        var _this = _super.call(this) || this;
+        _this._client = client;
+        _this._request = request;
+        _this._result = result;
+        _this._error = err;
+        _this._tag = tag;
+        return _this;
     }
     Object.defineProperty(ApiClientCompleteContext.prototype, "client", {
         get: function () {
@@ -701,13 +704,14 @@ var ApiClientCompleteContext = (function (_super) {
 var ApiClientError = (function (_super) {
     __extends(ApiClientError, _super);
     function ApiClientError(client, request, error, ctx, tag) {
-        _super.call(this);
-        this.handled = false;
-        this._client = client;
-        this._request = request;
-        this._error = error;
-        this._context = ctx;
-        this._tag = tag;
+        var _this = _super.call(this) || this;
+        _this.handled = false;
+        _this._client = client;
+        _this._request = request;
+        _this._error = error;
+        _this._context = ctx;
+        _this._tag = tag;
+        return _this;
     }
     Object.defineProperty(ApiClientError.prototype, "client", {
         get: function () {
@@ -755,6 +759,7 @@ var ApiClientError = (function (_super) {
 /**
  * List of API client result contextes.
  */
+var ApiClientResultContext;
 (function (ApiClientResultContext) {
     /**
      * "success" action.
@@ -764,11 +769,11 @@ var ApiClientError = (function (_super) {
      * "completed" action.
      */
     ApiClientResultContext[ApiClientResultContext["Complete"] = 1] = "Complete";
-})(exports.ApiClientResultContext || (exports.ApiClientResultContext = {}));
-var ApiClientResultContext = exports.ApiClientResultContext;
+})(ApiClientResultContext = exports.ApiClientResultContext || (exports.ApiClientResultContext = {}));
 /**
  * List of API client error contextes.
  */
+var ApiClientErrorContext;
 (function (ApiClientErrorContext) {
     /**
      * Error in HTTP client.
@@ -778,16 +783,16 @@ var ApiClientResultContext = exports.ApiClientResultContext;
      * "Unhandled" exception.
      */
     ApiClientErrorContext[ApiClientErrorContext["Exception"] = 1] = "Exception";
-})(exports.ApiClientErrorContext || (exports.ApiClientErrorContext = {}));
-var ApiClientErrorContext = exports.ApiClientErrorContext;
+})(ApiClientErrorContext = exports.ApiClientErrorContext || (exports.ApiClientErrorContext = {}));
 var ApiClientResult = (function (_super) {
     __extends(ApiClientResult, _super);
     function ApiClientResult(client, request, response, tag) {
-        _super.call(this);
-        this._client = client;
-        this._request = request;
-        this._reponse = response;
-        this._tag = tag;
+        var _this = _super.call(this) || this;
+        _this._client = client;
+        _this._request = request;
+        _this._reponse = response;
+        _this._tag = tag;
+        return _this;
     }
     Object.defineProperty(ApiClientResult.prototype, "client", {
         get: function () {
@@ -987,6 +992,7 @@ var FormatProviderContext = (function () {
 /**
  * List of known HTTP request methods.
  */
+var HttpMethod;
 (function (HttpMethod) {
     HttpMethod[HttpMethod["GET"] = 0] = "GET";
     HttpMethod[HttpMethod["POST"] = 1] = "POST";
@@ -997,8 +1003,7 @@ var FormatProviderContext = (function () {
     HttpMethod[HttpMethod["TRACE"] = 6] = "TRACE";
     HttpMethod[HttpMethod["OPTIONS"] = 7] = "OPTIONS";
     HttpMethod[HttpMethod["CONNECT"] = 8] = "CONNECT";
-})(exports.HttpMethod || (exports.HttpMethod = {}));
-var HttpMethod = exports.HttpMethod;
+})(HttpMethod = exports.HttpMethod || (exports.HttpMethod = {}));
 var HttpRequest = (function () {
     function HttpRequest(client, reqOpts) {
         this._client = client;
@@ -1044,6 +1049,7 @@ var HttpRequest = (function () {
 /**
  * List of known HTTP request / content types.
  */
+var HttpRequestType;
 (function (HttpRequestType) {
     /**
      * Raw / binary
@@ -1061,11 +1067,11 @@ var HttpRequest = (function () {
      * Text / string
      */
     HttpRequestType[HttpRequestType["Text"] = 3] = "Text";
-})(exports.HttpRequestType || (exports.HttpRequestType = {}));
-var HttpRequestType = exports.HttpRequestType;
+})(HttpRequestType = exports.HttpRequestType || (exports.HttpRequestType = {}));
 /**
  * List of known HTTP status codes.
  */
+var HttpStatusCode;
 (function (HttpStatusCode) {
     HttpStatusCode[HttpStatusCode["Accepted"] = 202] = "Accepted";
     HttpStatusCode[HttpStatusCode["BadGateway"] = 502] = "BadGateway";
@@ -1109,11 +1115,11 @@ var HttpRequestType = exports.HttpRequestType;
     HttpStatusCode[HttpStatusCode["Unused"] = 306] = "Unused";
     HttpStatusCode[HttpStatusCode["UpgradeRequired"] = 426] = "UpgradeRequired";
     HttpStatusCode[HttpStatusCode["UseProxy"] = 305] = "UseProxy";
-})(exports.HttpStatusCode || (exports.HttpStatusCode = {}));
-var HttpStatusCode = exports.HttpStatusCode;
+})(HttpStatusCode = exports.HttpStatusCode || (exports.HttpStatusCode = {}));
 /**
  * List of log categories.
  */
+var LogCategory;
 (function (LogCategory) {
     LogCategory[LogCategory["Emergency"] = 1] = "Emergency";
     LogCategory[LogCategory["Alert"] = 2] = "Alert";
@@ -1124,8 +1130,7 @@ var HttpStatusCode = exports.HttpStatusCode;
     LogCategory[LogCategory["Info"] = 7] = "Info";
     LogCategory[LogCategory["Debug"] = 8] = "Debug";
     LogCategory[LogCategory["Trace"] = 9] = "Trace";
-})(exports.LogCategory || (exports.LogCategory = {}));
-var LogCategory = exports.LogCategory;
+})(LogCategory = exports.LogCategory || (exports.LogCategory = {}));
 var LogMessage = (function () {
     function LogMessage(source, time, msg, tag, category, priority) {
         this._source = source;
@@ -1182,17 +1187,18 @@ var LogMessage = (function () {
 /**
  * List of log priorities.
  */
+var LogPriority;
 (function (LogPriority) {
     LogPriority[LogPriority["VeryHigh"] = 1] = "VeryHigh";
     LogPriority[LogPriority["High"] = 2] = "High";
     LogPriority[LogPriority["Medium"] = 3] = "Medium";
     LogPriority[LogPriority["Low"] = 4] = "Low";
     LogPriority[LogPriority["VeryLow"] = 5] = "VeryLow";
-})(exports.LogPriority || (exports.LogPriority = {}));
-var LogPriority = exports.LogPriority;
+})(LogPriority = exports.LogPriority || (exports.LogPriority = {}));
 /**
  * List of log (message) source.
  */
+var LogSource;
 (function (LogSource) {
     /**
      * From API client.
@@ -1210,8 +1216,7 @@ var LogPriority = exports.LogPriority;
      * From IApiClientResult object
      */
     LogSource[LogSource["Result"] = 3] = "Result";
-})(exports.LogSource || (exports.LogSource = {}));
-var LogSource = exports.LogSource;
+})(LogSource = exports.LogSource || (exports.LogSource = {}));
 /**
  * OAuth authorizer
  */
@@ -1255,7 +1260,7 @@ var OAuth = (function () {
     OAuth.prototype.setMany = function () {
         var fields = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            fields[_i - 0] = arguments[_i];
+            fields[_i] = arguments[_i];
         }
         for (var i = 0; i < fields.length; i++) {
             var fieldObj = getOwnProperties(fields[i]);
@@ -1285,25 +1290,26 @@ var TwitterOAuth = (function (_super) {
      * @param {String} tokenSecret The token secret.
      */
     function TwitterOAuth(consumerKey, consumerSecret, token, tokenSecret) {
-        _super.call(this);
+        var _this = _super.call(this) || this;
         /**
          * Gets or sets the value for "oauth_signature_method".
          */
-        this.signatureMethod = 'HMAC-SHA1';
+        _this.signatureMethod = 'HMAC-SHA1';
         /**
          * Gets or sets the value for "oauth_version".
          */
-        this.version = '1.0';
-        this._consumerKey = consumerKey;
-        this._consumerSecret = consumerSecret;
-        this._token = token;
-        this._tokenSecret = tokenSecret;
+        _this.version = '1.0';
+        _this._consumerKey = consumerKey;
+        _this._consumerSecret = consumerSecret;
+        _this._token = token;
+        _this._tokenSecret = tokenSecret;
         // initial value for 'nonce' property
         var NONCE_CHARS = '0123456789abcdef';
-        this.nonce = '';
+        _this.nonce = '';
         for (var i = 0; i < 32; i++) {
-            this.nonce += NONCE_CHARS[Math.floor(Math.random() * NONCE_CHARS.length) % NONCE_CHARS.length];
+            _this.nonce += NONCE_CHARS[Math.floor(Math.random() * NONCE_CHARS.length) % NONCE_CHARS.length];
         }
+        return _this;
     }
     /** @inheritdoc */
     TwitterOAuth.prototype.prepare = function (reqOpts) {

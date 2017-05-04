@@ -1,3 +1,4 @@
+"use strict";
 // The MIT License (MIT)
 // 
 // Copyright (c) Marcel Joachim Kloubert <marcel.kloubert@gmx.net>
@@ -19,11 +20,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-"use strict";
-var observable_1 = require('data/observable');
-var observable_array_1 = require('data/observable-array');
-var TypeUtils = require('utils/types');
-var Xml = require('xml');
+Object.defineProperty(exports, "__esModule", { value: true });
+var observable_1 = require("data/observable");
+var observable_array_1 = require("data/observable-array");
+var TypeUtils = require("utils/types");
+var Xml = require("xml");
 /**
  * A XML name.
  */
@@ -119,7 +120,7 @@ exports.XName = XName;
 var XObject = (function (_super) {
     __extends(XObject, _super);
     function XObject() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(XObject.prototype, "document", {
         /**
@@ -183,7 +184,7 @@ exports.XAttribute = XAttribute;
 var XNode = (function (_super) {
     __extends(XNode, _super);
     function XNode() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return XNode;
 }(XObject));
@@ -194,7 +195,7 @@ exports.XNode = XNode;
 var XText = (function (_super) {
     __extends(XText, _super);
     function XText() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     /** @inheritdoc */
     XText.prototype.toString = function () {
@@ -209,7 +210,7 @@ exports.XText = XText;
 var XCData = (function (_super) {
     __extends(XCData, _super);
     function XCData() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     /** @inheritdoc */
     XCData.prototype.toString = function () {
@@ -224,7 +225,7 @@ exports.XCData = XCData;
 var XComment = (function (_super) {
     __extends(XComment, _super);
     function XComment() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     /** @inheritdoc */
     XComment.prototype.toString = function () {
@@ -239,8 +240,9 @@ exports.XComment = XComment;
 var XContainer = (function (_super) {
     __extends(XContainer, _super);
     function XContainer() {
-        _super.apply(this, arguments);
-        this._nodes = new observable_array_1.ObservableArray();
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this._nodes = new observable_array_1.ObservableArray();
+        return _this;
     }
     /**
      * Adds content.
@@ -330,8 +332,9 @@ exports.XContainer = XContainer;
 var XContainerWithAttributes = (function (_super) {
     __extends(XContainerWithAttributes, _super);
     function XContainerWithAttributes() {
-        _super.apply(this, arguments);
-        this._attributes = [];
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this._attributes = [];
+        return _this;
     }
     /** @inheritdoc */
     XContainerWithAttributes.prototype.add = function (content) {
@@ -407,12 +410,13 @@ var XElement = (function (_super) {
      * @throws Name is invalid.
      */
     function XElement(name) {
-        _super.call(this);
-        this._elements = new observable_array_1.ObservableArray();
+        var _this = _super.call(this) || this;
+        _this._elements = new observable_array_1.ObservableArray();
         if (!(name instanceof XName)) {
             name = new XName(name);
         }
-        this._name = name;
+        _this._name = name;
+        return _this;
     }
     /** @inheritdoc */
     XElement.prototype.add = function (content) {
@@ -515,8 +519,9 @@ exports.XElement = XElement;
 var XDocument = (function (_super) {
     __extends(XDocument, _super);
     function XDocument() {
-        _super.apply(this, arguments);
-        this._root = null;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this._root = null;
+        return _this;
     }
     /** @inheritdoc */
     XDocument.prototype.add = function (content) {
