@@ -79,7 +79,6 @@ The module provides the following function that are short hands for the included
 | invokeForConnectivity | Invokes logic for a specific connectivity type. Requires permissions on Android ([android.permission.ACCESS_NETWORK_STATE](https://developer.android.com/reference/android/Manifest.permission.html#ACCESS_NETWORK_STATE)), e.g. |
 | invokeForOrientation | Invokes a callback for specific orientation mode. |
 | invokeForPlatform | Invokes an action for a specific platform. |
-| isDebug | Checks if the app is in debug mode or not. |
 | isEnumerable | Checks if a value is a sequence. |
 | keepAwake | Keeps the device awake (based on [nativescript-insomnia](https://github.com/EddyVerbruggen/nativescript-insomnia)). |
 | markdownToHtml | Short hand for 'fromMarkdown()' with HTML as target format. |
