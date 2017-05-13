@@ -1,3 +1,4 @@
+"use strict";
 // The MIT License (MIT)
 // 
 // Copyright (c) Marcel Joachim Kloubert <marcel.kloubert@gmx.net>
@@ -19,7 +20,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Observable = require("data/observable");
 var TypeUtils = require("utils/types");
 /**
@@ -33,6 +34,7 @@ exports.VALUE_PROPERTY = 'value';
 /**
  * List of router stradegies.
  */
+var RouterStradegy;
 (function (RouterStradegy) {
     /**
      * Take the value from parent (if greater)
@@ -42,11 +44,11 @@ exports.VALUE_PROPERTY = 'value';
      * Take the value from parent (if smaller)
      */
     RouterStradegy[RouterStradegy["Descending"] = 1] = "Descending";
-})(exports.RouterStradegy || (exports.RouterStradegy = {}));
-var RouterStradegy = exports.RouterStradegy;
+})(RouterStradegy = exports.RouterStradegy || (exports.RouterStradegy = {}));
 /**
  * List of values that represent the state of a traffic light.
  */
+var TraficLightState;
 (function (TraficLightState) {
     /**
      * None (gray)
@@ -68,8 +70,7 @@ var RouterStradegy = exports.RouterStradegy;
      * Fatal error (yellow / red)
      **/
     TraficLightState[TraficLightState["FatalError"] = 4] = "FatalError";
-})(exports.TraficLightState || (exports.TraficLightState = {}));
-var TraficLightState = exports.TraficLightState;
+})(TraficLightState = exports.TraficLightState || (exports.TraficLightState = {}));
 /**
  * A routed value.
  */
@@ -83,19 +84,19 @@ var RoutedValue = (function (_super) {
      */
     function RoutedValue(stradegy, comparer) {
         if (stradegy === void 0) { stradegy = RouterStradegy.Ascending; }
-        _super.call(this);
+        var _this = _super.call(this) || this;
         /**
          * Stores the children.
          */
-        this._children = [];
+        _this._children = [];
         /**
          * Stores the parents.
          */
-        this._parents = [];
-        this._stradegy = stradegy;
-        this._comparer = comparer;
-        if (TypeUtils.isNullOrUndefined(this._comparer)) {
-            this._comparer = function (x, y) {
+        _this._parents = [];
+        _this._stradegy = stradegy;
+        _this._comparer = comparer;
+        if (TypeUtils.isNullOrUndefined(_this._comparer)) {
+            _this._comparer = function (x, y) {
                 if (x < y) {
                     return -1;
                 }
@@ -105,6 +106,7 @@ var RoutedValue = (function (_super) {
                 return 0;
             };
         }
+        return _this;
     }
     /**
      * Adds a list of children.
@@ -116,7 +118,7 @@ var RoutedValue = (function (_super) {
     RoutedValue.prototype.addChildren = function () {
         var children = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            children[_i - 0] = arguments[_i];
+            children[_i] = arguments[_i];
         }
         return this.addChildArray(children);
     };
@@ -194,7 +196,7 @@ var RoutedValue = (function (_super) {
     RoutedValue.prototype.addParents = function () {
         var parents = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            parents[_i - 0] = arguments[_i];
+            parents[_i] = arguments[_i];
         }
         return this.addParentArray(parents);
     };
@@ -364,8 +366,9 @@ exports.RoutedValue = RoutedValue;
 var RoutedNumber = (function (_super) {
     __extends(RoutedNumber, _super);
     function RoutedNumber() {
-        _super.call(this);
-        this._innerValue = 0;
+        var _this = _super.call(this) || this;
+        _this._innerValue = 0;
+        return _this;
     }
     return RoutedNumber;
 }(RoutedValue));
@@ -376,7 +379,7 @@ exports.RoutedNumber = RoutedNumber;
 var TrafficLight = (function (_super) {
     __extends(TrafficLight, _super);
     function TrafficLight() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return TrafficLight;
 }(RoutedValue));
