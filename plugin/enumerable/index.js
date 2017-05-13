@@ -1,3 +1,4 @@
+"use strict";
 // The MIT License (MIT)
 // 
 // Copyright (c) Marcel Joachim Kloubert <marcel.kloubert@gmx.net>
@@ -19,7 +20,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var observable_1 = require("data/observable");
 var observable_array_1 = require("data/observable-array");
 var TypeUtils = require("utils/types");
@@ -216,7 +217,7 @@ var Sequence = (function () {
     Sequence.prototype.defaultIfEmpty = function () {
         var defaultItems = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            defaultItems[_i - 0] = arguments[_i];
+            defaultItems[_i] = arguments[_i];
         }
         if (!this.isValid) {
             return fromArray(arguments);
@@ -843,10 +844,11 @@ exports.Sequence = Sequence;
 var ArrayEnumerable = (function (_super) {
     __extends(ArrayEnumerable, _super);
     function ArrayEnumerable(arr, getter) {
-        _super.call(this);
-        this._arr = arr;
-        this._getter = getter;
-        this.reset();
+        var _this = _super.call(this) || this;
+        _this._arr = arr;
+        _this._getter = getter;
+        _this.reset();
+        return _this;
     }
     ArrayEnumerable.prototype.getCurrent = function () {
         return this._getter(this._index);
@@ -925,9 +927,10 @@ var Grouping = (function (_super) {
      * @param {IEnumerable} seq The items of the grouping.
      */
     function Grouping(key, seq) {
-        _super.call(this);
-        this._key = key;
-        this._seq = seq;
+        var _this = _super.call(this) || this;
+        _this._key = key;
+        _this._seq = seq;
+        return _this;
     }
     /** @inheritdoc */
     Grouping.prototype.getCurrent = function () {
@@ -963,12 +966,13 @@ exports.Grouping = Grouping;
 var ObjectEnumerable = (function (_super) {
     __extends(ObjectEnumerable, _super);
     function ObjectEnumerable(obj) {
-        _super.call(this);
-        this._properties = [];
+        var _this = _super.call(this) || this;
+        _this._properties = [];
         for (var p in obj) {
-            this._properties.push(p);
+            _this._properties.push(p);
         }
-        this.reset();
+        _this.reset();
+        return _this;
     }
     ObjectEnumerable.prototype.getCurrent = function () {
         return this._obj[this.itemKey];
@@ -1012,15 +1016,15 @@ var OrderedSequence = (function (_super) {
      * @param {Function} comparer The comparer to use.
      */
     function OrderedSequence(seq, selector, comparer) {
-        _super.call(this);
-        var me = this;
-        this._orderComparer = toComparerSafe(comparer);
+        var _this = _super.call(this) || this;
+        var me = _this;
+        _this._orderComparer = toComparerSafe(comparer);
         if (true === selector) {
             selector = function (x) { return x; };
         }
-        this._orderSelector = asFunc(selector);
-        this._originalItems = seq.toArray();
-        this._items = fromArray(this._originalItems.map(function (x) {
+        _this._orderSelector = asFunc(selector);
+        _this._originalItems = seq.toArray();
+        _this._items = fromArray(_this._originalItems.map(function (x) {
             return {
                 sortBy: me.selector(x),
                 value: x
@@ -1030,6 +1034,7 @@ var OrderedSequence = (function (_super) {
         }).map(function (x) {
             return x.value;
         }));
+        return _this;
     }
     Object.defineProperty(OrderedSequence.prototype, "comparer", {
         /**
@@ -1197,7 +1202,7 @@ exports.asFunc = asFunc;
 function create() {
     var items = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        items[_i - 0] = arguments[_i];
+        items[_i] = arguments[_i];
     }
     return fromArray(items);
 }

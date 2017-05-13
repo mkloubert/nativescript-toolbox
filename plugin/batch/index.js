@@ -1,3 +1,4 @@
+"use strict";
 // The MIT License (MIT)
 // 
 // Copyright (c) Marcel Joachim Kloubert <marcel.kloubert@gmx.net>
@@ -19,7 +20,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var observable_1 = require("data/observable");
 var observable_array_1 = require("data/observable-array");
 var TypeUtils = require("utils/types");
@@ -36,7 +37,7 @@ var Batch = (function () {
     Batch.prototype.addItems = function () {
         var items = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            items[_i - 0] = arguments[_i];
+            items[_i] = arguments[_i];
         }
         for (var i = 0; i < items.length; i++) {
             this._items
@@ -354,7 +355,7 @@ var BatchOperation = (function () {
     BatchOperation.prototype.addItems = function () {
         var items = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            items[_i - 0] = arguments[_i];
+            items[_i] = arguments[_i];
         }
         for (var i = 0; i < items.length; i++) {
             this._batch.items
@@ -664,6 +665,7 @@ var BatchOperationContext = (function () {
                 l(ctx);
             }
             catch (e) {
+                // ignore
             }
         }
         return this;
@@ -749,6 +751,7 @@ var BatchOperationContext = (function () {
 /**
  * List of batch operation execution types.
  */
+var BatchOperationExecutionContext;
 (function (BatchOperationExecutionContext) {
     /**
      * Global "before" action.
@@ -782,11 +785,11 @@ var BatchOperationContext = (function () {
      * Global "cancelled" action.
      */
     BatchOperationExecutionContext[BatchOperationExecutionContext["cancelled"] = 7] = "cancelled";
-})(exports.BatchOperationExecutionContext || (exports.BatchOperationExecutionContext = {}));
-var BatchOperationExecutionContext = exports.BatchOperationExecutionContext;
+})(BatchOperationExecutionContext = exports.BatchOperationExecutionContext || (exports.BatchOperationExecutionContext = {}));
 /**
  * List of invoke stradegies.
  */
+var InvokeStrategy;
 (function (InvokeStrategy) {
     /**
      * Automatic
@@ -796,8 +799,7 @@ var BatchOperationExecutionContext = exports.BatchOperationExecutionContext;
      * From batch operation.
      */
     InvokeStrategy[InvokeStrategy["Manually"] = 1] = "Manually";
-})(exports.InvokeStrategy || (exports.InvokeStrategy = {}));
-var InvokeStrategy = exports.InvokeStrategy;
+})(InvokeStrategy = exports.InvokeStrategy || (exports.InvokeStrategy = {}));
 /**
  * Creates a new batch.
  *

@@ -3,5 +3,7 @@
     <Label text="Tap the button" class="title"/>
     <Button text="TAP" tap="{{ onTap }}" />
     <Label text="{{ message }}" class="message" textWrap="true"/>
+
+    <Button text="Open WIFI settings" tap="{{ onOpenWifiTap }}" />
   </StackLayout>
 </Page>

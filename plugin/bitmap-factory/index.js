@@ -1,3 +1,4 @@
+"use strict";
 // The MIT License (MIT)
 // 
 // Copyright (c) Marcel Joachim Kloubert <marcel.kloubert@gmx.net>
@@ -19,12 +20,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var BitmapFactory = require("./BitmapFactory");
 var TypeUtils = require("utils/types");
 /**
  * List of outout formats.
  */
+var OutputFormat;
 (function (OutputFormat) {
     /**
      * PNG
@@ -34,11 +36,11 @@ var TypeUtils = require("utils/types");
      * JPEG
      */
     OutputFormat[OutputFormat["JPEG"] = 2] = "JPEG";
-})(exports.OutputFormat || (exports.OutputFormat = {}));
-var OutputFormat = exports.OutputFormat;
+})(OutputFormat = exports.OutputFormat || (exports.OutputFormat = {}));
 /**
  * List of temp file stradegies.
  */
+var TempFileStradegy;
 (function (TempFileStradegy) {
     /**
      * Memory
@@ -56,8 +58,7 @@ var OutputFormat = exports.OutputFormat;
      * Custom directory
      */
     TempFileStradegy[TempFileStradegy["Custom"] = 4] = "Custom";
-})(exports.TempFileStradegy || (exports.TempFileStradegy = {}));
-var TempFileStradegy = exports.TempFileStradegy;
+})(TempFileStradegy = exports.TempFileStradegy || (exports.TempFileStradegy = {}));
 /**
  * Returns a value as bitmap object.
  *
